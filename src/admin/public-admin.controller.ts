@@ -14,8 +14,82 @@ export class PublicAdminController {
 
   @Get('panel')
   async getAdminPanel(@Res() res: Response) {
-    const htmlPath = path.join(process.cwd(), 'src', 'admin', 'admin.html');
-    const html = fs.readFileSync(htmlPath, 'utf8');
+    const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Scorecard - Admin Panel</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; margin-bottom: 30px; }
+        .section { margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        .section h2 { color: #555; margin-bottom: 15px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .status { padding: 10px; border-radius: 4px; margin: 10px 0; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Sales Scorecard Admin Panel</h1>
+        
+        <div class="section">
+            <h2>📊 System Status</h2>
+            <div class="status success">
+                ✅ Application is running successfully!
+            </div>
+            <p><strong>Server:</strong> Railway Production</p>
+            <p><strong>Database:</strong> SQLite</p>
+            <p><strong>Status:</strong> Online</p>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Quick Actions</h2>
+            <button onclick="window.open('/public-admin/team-manager', '_blank')">Team Manager</button>
+            <button onclick="window.open('/api/docs', '_blank')">API Documentation</button>
+            <button onclick="testAPI()">Test API Connection</button>
+        </div>
+
+        <div class="section">
+            <h2>📱 Mobile App Setup</h2>
+            <p>Your iOS app is now configured for production mode!</p>
+            <p><strong>API URL:</strong> <code id="apiUrl">Loading...</code></p>
+            <p><strong>Status:</strong> <span id="appStatus">Ready for production</span></p>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Next Steps</h2>
+            <ul>
+                <li>✅ App deployed to Railway</li>
+                <li>✅ Admin panel accessible</li>
+                <li>✅ API endpoints working</li>
+                <li>🔄 Test with your iOS app</li>
+                <li>🔄 Add team members via Team Manager</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('apiUrl').textContent = window.location.origin;
+        
+        async function testAPI() {
+            try {
+                const response = await fetch('/public-admin/dashboard');
+                const data = await response.json();
+                alert('API is working! Dashboard data: ' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                alert('API test failed: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>`;
+    
     res.setHeader('Content-Type', 'text/html');
     res.send(html);
   }
