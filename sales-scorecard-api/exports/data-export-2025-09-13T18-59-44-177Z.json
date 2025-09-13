@@ -1,0 +1,550 @@
+{
+  "users": [
+    {
+      "id": "cmfi80ld20000eb1nvjhe4led",
+      "email": "demo@instorm.bg",
+      "displayName": "demo",
+      "role": "ADMIN",
+      "isActive": true,
+      "createdAt": "2025-09-13T12:06:40.934Z",
+      "updatedAt": "2025-09-13T12:06:40.934Z"
+    },
+    {
+      "id": "cmfil1s6v000al8n1n6ssltis",
+      "email": "sarah.johnson@company.com",
+      "displayName": "Sarah Johnson",
+      "role": "REGIONAL_SALES_MANAGER",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:31.448Z",
+      "updatedAt": "2025-09-13T18:11:31.448Z"
+    },
+    {
+      "id": "cmfil1s6w000dl8n1iivmnhiv",
+      "email": "mike.chen@company.com",
+      "displayName": "Mike Chen",
+      "role": "SALES_LEAD",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:31.449Z",
+      "updatedAt": "2025-09-13T18:11:31.449Z"
+    },
+    {
+      "id": "cmfil1s6y000ml8n1p7ucjn0y",
+      "email": "lisa.rodriguez@company.com",
+      "displayName": "Lisa Rodriguez",
+      "role": "SALES_LEAD",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:31.451Z",
+      "updatedAt": "2025-09-13T18:11:31.451Z"
+    },
+    {
+      "id": "cmfil1vui000wl8n1580ym8tv",
+      "email": "james.park@company.com",
+      "displayName": "James Park",
+      "role": "REGIONAL_SALES_MANAGER",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:36.187Z",
+      "updatedAt": "2025-09-13T18:11:36.187Z"
+    },
+    {
+      "id": "cmfil1vuj000zl8n1v2vzl7cj",
+      "email": "yuki.tanaka@company.com",
+      "displayName": "Yuki Tanaka",
+      "role": "SALES_LEAD",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:36.188Z",
+      "updatedAt": "2025-09-13T18:11:36.188Z"
+    },
+    {
+      "id": "cmfil1vul0018l8n1i1zu6ens",
+      "email": "raj.patel@company.com",
+      "displayName": "Raj Patel",
+      "role": "SALES_LEAD",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:36.190Z",
+      "updatedAt": "2025-09-13T18:11:36.190Z"
+    }
+  ],
+  "regions": [
+    {
+      "id": "cmfhdajo40018i93w0lvrkehz",
+      "name": "North America",
+      "createdAt": "2025-09-12T21:46:37.204Z",
+      "updatedAt": "2025-09-12T21:46:37.204Z"
+    },
+    {
+      "id": "cmfhevhr9001hi93wsn3tm0l4",
+      "name": "North America",
+      "createdAt": "2025-09-12T22:30:54.117Z",
+      "updatedAt": "2025-09-12T22:30:54.117Z"
+    },
+    {
+      "id": "cmfhexhnb001qi93waouvzozg",
+      "name": "North America",
+      "createdAt": "2025-09-12T22:32:27.287Z",
+      "updatedAt": "2025-09-12T22:32:27.287Z"
+    },
+    {
+      "id": "cmfijejmz0000l0qca8k52sev",
+      "name": "North America",
+      "createdAt": "2025-09-13T17:25:27.653Z",
+      "updatedAt": "2025-09-13T17:25:27.653Z"
+    },
+    {
+      "id": "cmfijf3bp000il0qcyp5vadom",
+      "name": "North America",
+      "createdAt": "2025-09-13T17:25:53.174Z",
+      "updatedAt": "2025-09-13T17:25:53.174Z"
+    },
+    {
+      "id": "cmfikbarr0000p5eyxmsfwuw6",
+      "name": "North America",
+      "createdAt": "2025-09-13T17:50:55.815Z",
+      "updatedAt": "2025-09-13T17:50:55.815Z"
+    },
+    {
+      "id": "cmfil1od10000l8n1wth04cjo",
+      "name": "North America",
+      "createdAt": "2025-09-13T18:11:26.486Z",
+      "updatedAt": "2025-09-13T18:11:26.486Z"
+    },
+    {
+      "id": "cmfil1s6u0009l8n14gac8zd3",
+      "name": "Europe",
+      "createdAt": "2025-09-13T18:11:31.447Z",
+      "updatedAt": "2025-09-13T18:11:31.447Z"
+    },
+    {
+      "id": "cmfil1vuh000vl8n1bqz0kj4x",
+      "name": "Asia Pacific",
+      "createdAt": "2025-09-13T18:11:36.186Z",
+      "updatedAt": "2025-09-13T18:11:36.186Z"
+    }
+  ],
+  "teams": [
+    {
+      "id": "cmfil1od30002l8n1hbsx4st0",
+      "name": "Enterprise Sales",
+      "regionId": "cmfil1od10000l8n1wth04cjo",
+      "createdAt": "2025-09-13T18:11:26.487Z",
+      "updatedAt": "2025-09-13T18:11:26.487Z",
+      "managerId": null
+    },
+    {
+      "id": "cmfil1s6x000fl8n1uh5gujx5",
+      "name": "Enterprise Sales",
+      "regionId": "cmfil1s6u0009l8n14gac8zd3",
+      "createdAt": "2025-09-13T18:11:31.449Z",
+      "updatedAt": "2025-09-13T18:11:31.449Z",
+      "managerId": "cmfil1s6w000dl8n1iivmnhiv"
+    },
+    {
+      "id": "cmfil1s6z000ol8n1ciangyd9",
+      "name": "SMB Sales",
+      "regionId": "cmfil1s6u0009l8n14gac8zd3",
+      "createdAt": "2025-09-13T18:11:31.451Z",
+      "updatedAt": "2025-09-13T18:11:31.451Z",
+      "managerId": "cmfil1s6y000ml8n1p7ucjn0y"
+    },
+    {
+      "id": "cmfil1vuk0011l8n13fy4kt85",
+      "name": "Enterprise Solutions",
+      "regionId": "cmfil1vuh000vl8n1bqz0kj4x",
+      "createdAt": "2025-09-13T18:11:36.188Z",
+      "updatedAt": "2025-09-13T18:11:36.188Z",
+      "managerId": "cmfil1vuj000zl8n1v2vzl7cj"
+    },
+    {
+      "id": "cmfil1vul001al8n1n33igsld",
+      "name": "Mid-Market Sales",
+      "regionId": "cmfil1vuh000vl8n1bqz0kj4x",
+      "createdAt": "2025-09-13T18:11:36.190Z",
+      "updatedAt": "2025-09-13T18:11:36.190Z",
+      "managerId": "cmfil1vul0018l8n1i1zu6ens"
+    }
+  ],
+  "salespeople": [
+    {
+      "id": "cmfil1od30004l8n116facife",
+      "firstName": "John",
+      "lastName": "Smith",
+      "email": "john.smith@company.com",
+      "teamId": "cmfil1od30002l8n1hbsx4st0",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:26.488Z",
+      "updatedAt": "2025-09-13T18:11:26.488Z"
+    },
+    {
+      "id": "cmfil1od40006l8n1rmwqis1f",
+      "firstName": "Sarah",
+      "lastName": "Johnson",
+      "email": "sarah.johnson@company.com",
+      "teamId": "cmfil1od30002l8n1hbsx4st0",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:26.488Z",
+      "updatedAt": "2025-09-13T18:11:26.488Z"
+    },
+    {
+      "id": "cmfil1od40008l8n1ubvvymmr",
+      "firstName": "Mike",
+      "lastName": "Davis",
+      "email": "mike.davis@company.com",
+      "teamId": "cmfil1od30002l8n1hbsx4st0",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:26.489Z",
+      "updatedAt": "2025-09-13T18:11:26.489Z"
+    },
+    {
+      "id": "cmfil1s6x000hl8n1vvo6a3q0",
+      "firstName": "John",
+      "lastName": "Smith",
+      "email": "john.smith@company.com",
+      "teamId": "cmfil1s6x000fl8n1uh5gujx5",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:31.450Z",
+      "updatedAt": "2025-09-13T18:11:31.450Z"
+    },
+    {
+      "id": "cmfil1s6x000jl8n19u8yqu9s",
+      "firstName": "Emma",
+      "lastName": "Wilson",
+      "email": "emma.wilson@company.com",
+      "teamId": "cmfil1s6x000fl8n1uh5gujx5",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:31.450Z",
+      "updatedAt": "2025-09-13T18:11:31.450Z"
+    },
+    {
+      "id": "cmfil1s6y000ll8n1jwfw0zks",
+      "firstName": "David",
+      "lastName": "Brown",
+      "email": "david.brown@company.com",
+      "teamId": "cmfil1s6x000fl8n1uh5gujx5",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:31.450Z",
+      "updatedAt": "2025-09-13T18:11:31.450Z"
+    },
+    {
+      "id": "cmfil1s6z000ql8n19t0fg0ff",
+      "firstName": "Anna",
+      "lastName": "Garcia",
+      "email": "anna.garcia@company.com",
+      "teamId": "cmfil1s6z000ol8n1ciangyd9",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:31.452Z",
+      "updatedAt": "2025-09-13T18:11:31.452Z"
+    },
+    {
+      "id": "cmfil1s70000sl8n1nb76hbf7",
+      "firstName": "Tom",
+      "lastName": "Anderson",
+      "email": "tom.anderson@company.com",
+      "teamId": "cmfil1s6z000ol8n1ciangyd9",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:31.452Z",
+      "updatedAt": "2025-09-13T18:11:31.452Z"
+    },
+    {
+      "id": "cmfil1s70000ul8n1ku93m8lr",
+      "firstName": "Sophie",
+      "lastName": "Martin",
+      "email": "sophie.martin@company.com",
+      "teamId": "cmfil1s6z000ol8n1ciangyd9",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:31.452Z",
+      "updatedAt": "2025-09-13T18:11:31.452Z"
+    },
+    {
+      "id": "cmfil1vuk0013l8n15eoio11h",
+      "firstName": "Hiroshi",
+      "lastName": "Sato",
+      "email": "hiroshi.sato@company.com",
+      "teamId": "cmfil1vuk0011l8n13fy4kt85",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:36.189Z",
+      "updatedAt": "2025-09-13T18:11:36.189Z"
+    },
+    {
+      "id": "cmfil1vuk0015l8n1bqjtiibq",
+      "firstName": "Min-jun",
+      "lastName": "Kim",
+      "email": "min-jun.kim@company.com",
+      "teamId": "cmfil1vuk0011l8n13fy4kt85",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:36.189Z",
+      "updatedAt": "2025-09-13T18:11:36.189Z"
+    },
+    {
+      "id": "cmfil1vul0017l8n1brb9cg79",
+      "firstName": "Priya",
+      "lastName": "Sharma",
+      "email": "priya.sharma@company.com",
+      "teamId": "cmfil1vuk0011l8n13fy4kt85",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:36.189Z",
+      "updatedAt": "2025-09-13T18:11:36.189Z"
+    },
+    {
+      "id": "cmfil1vum001cl8n1b83anu6e",
+      "firstName": "Chen",
+      "lastName": "Wei",
+      "email": "chen.wei@company.com",
+      "teamId": "cmfil1vul001al8n1n33igsld",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:36.190Z",
+      "updatedAt": "2025-09-13T18:11:36.190Z"
+    },
+    {
+      "id": "cmfil1vum001el8n1sgwfm6oh",
+      "firstName": "Aisha",
+      "lastName": "Al-Rashid",
+      "email": "aisha.al-rashid@company.com",
+      "teamId": "cmfil1vul001al8n1n33igsld",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:36.191Z",
+      "updatedAt": "2025-09-13T18:11:36.191Z"
+    },
+    {
+      "id": "cmfil1vum001gl8n1q54hie6t",
+      "firstName": "Marcus",
+      "lastName": "Johnson",
+      "email": "marcus.johnson@company.com",
+      "teamId": "cmfil1vul001al8n1n33igsld",
+      "isActive": true,
+      "createdAt": "2025-09-13T18:11:36.191Z",
+      "updatedAt": "2025-09-13T18:11:36.191Z"
+    }
+  ],
+  "behaviorCategories": [
+    {
+      "id": "cmfhbbei60000i93wh0nvfl7j",
+      "name": "Discovery",
+      "order": 1,
+      "weight": 0.25,
+      "createdAt": "2025-09-12T20:51:17.934Z",
+      "updatedAt": "2025-09-12T20:51:17.934Z"
+    },
+    {
+      "id": "cmfhbbeib000bi93w6yk0afmt",
+      "name": "Solution Positioning",
+      "order": 2,
+      "weight": 0.25,
+      "createdAt": "2025-09-12T20:51:17.940Z",
+      "updatedAt": "2025-09-12T20:51:17.940Z"
+    },
+    {
+      "id": "cmfhbbeid000mi93w8x3j0s0r",
+      "name": "Closing & Next Steps",
+      "order": 3,
+      "weight": 0.25,
+      "createdAt": "2025-09-12T20:51:17.942Z",
+      "updatedAt": "2025-09-12T20:51:17.942Z"
+    },
+    {
+      "id": "cmfhbbeif000xi93wrzr6dlpb",
+      "name": "Professionalism",
+      "order": 4,
+      "weight": 0.25,
+      "createdAt": "2025-09-12T20:51:17.944Z",
+      "updatedAt": "2025-09-12T20:51:17.944Z"
+    }
+  ],
+  "behaviorItems": [
+    {
+      "id": "cmfhbbei90002i93wqmxel6wr",
+      "name": "Asks open-ended questions",
+      "order": 1,
+      "isActive": true,
+      "categoryId": "cmfhbbei60000i93wh0nvfl7j",
+      "createdAt": "2025-09-12T20:51:17.937Z",
+      "updatedAt": "2025-09-12T20:51:17.937Z"
+    },
+    {
+      "id": "cmfhbbei90004i93whtuvx5xt",
+      "name": "Uncovers customer pain points",
+      "order": 2,
+      "isActive": true,
+      "categoryId": "cmfhbbei60000i93wh0nvfl7j",
+      "createdAt": "2025-09-12T20:51:17.938Z",
+      "updatedAt": "2025-09-12T20:51:17.938Z"
+    },
+    {
+      "id": "cmfhbbeia0006i93w7culljhl",
+      "name": "Identifies decision makers",
+      "order": 3,
+      "isActive": true,
+      "categoryId": "cmfhbbei60000i93wh0nvfl7j",
+      "createdAt": "2025-09-12T20:51:17.939Z",
+      "updatedAt": "2025-09-12T20:51:17.939Z"
+    },
+    {
+      "id": "cmfhbbeib0008i93wxk4i83mg",
+      "name": "Understands customer needs",
+      "order": 4,
+      "isActive": true,
+      "categoryId": "cmfhbbei60000i93wh0nvfl7j",
+      "createdAt": "2025-09-12T20:51:17.939Z",
+      "updatedAt": "2025-09-12T20:51:17.939Z"
+    },
+    {
+      "id": "cmfhbbeib000ai93wzocvgdfl",
+      "name": "Confirms success criteria",
+      "order": 5,
+      "isActive": true,
+      "categoryId": "cmfhbbei60000i93wh0nvfl7j",
+      "createdAt": "2025-09-12T20:51:17.939Z",
+      "updatedAt": "2025-09-12T20:51:17.939Z"
+    },
+    {
+      "id": "cmfhbbeic000di93wq98qaoum",
+      "name": "Tailors solution to customer context",
+      "order": 1,
+      "isActive": true,
+      "categoryId": "cmfhbbeib000bi93w6yk0afmt",
+      "createdAt": "2025-09-12T20:51:17.940Z",
+      "updatedAt": "2025-09-12T20:51:17.940Z"
+    },
+    {
+      "id": "cmfhbbeic000fi93w8yrx1eg0",
+      "name": "Articulates clear value proposition",
+      "order": 2,
+      "isActive": true,
+      "categoryId": "cmfhbbeib000bi93w6yk0afmt",
+      "createdAt": "2025-09-12T20:51:17.941Z",
+      "updatedAt": "2025-09-12T20:51:17.941Z"
+    },
+    {
+      "id": "cmfhbbeic000hi93wdn80myp7",
+      "name": "Demonstrates product knowledge",
+      "order": 3,
+      "isActive": true,
+      "categoryId": "cmfhbbeib000bi93w6yk0afmt",
+      "createdAt": "2025-09-12T20:51:17.941Z",
+      "updatedAt": "2025-09-12T20:51:17.941Z"
+    },
+    {
+      "id": "cmfhbbeid000ji93w673is9tf",
+      "name": "Handles objections effectively",
+      "order": 4,
+      "isActive": true,
+      "categoryId": "cmfhbbeib000bi93w6yk0afmt",
+      "createdAt": "2025-09-12T20:51:17.941Z",
+      "updatedAt": "2025-09-12T20:51:17.941Z"
+    },
+    {
+      "id": "cmfhbbeid000li93wf310mosg",
+      "name": "Shows ROI and business impact",
+      "order": 5,
+      "isActive": true,
+      "categoryId": "cmfhbbeib000bi93w6yk0afmt",
+      "createdAt": "2025-09-12T20:51:17.942Z",
+      "updatedAt": "2025-09-12T20:51:17.942Z"
+    },
+    {
+      "id": "cmfhbbeie000oi93wjxs1vuo2",
+      "name": "Makes clear asks",
+      "order": 1,
+      "isActive": true,
+      "categoryId": "cmfhbbeid000mi93w8x3j0s0r",
+      "createdAt": "2025-09-12T20:51:17.942Z",
+      "updatedAt": "2025-09-12T20:51:17.942Z"
+    },
+    {
+      "id": "cmfhbbeie000qi93wjvuec2r8",
+      "name": "Identifies next steps",
+      "order": 2,
+      "isActive": true,
+      "categoryId": "cmfhbbeid000mi93w8x3j0s0r",
+      "createdAt": "2025-09-12T20:51:17.942Z",
+      "updatedAt": "2025-09-12T20:51:17.942Z"
+    },
+    {
+      "id": "cmfhbbeie000si93w0d7j8zke",
+      "name": "Sets mutual commitments",
+      "order": 3,
+      "isActive": true,
+      "categoryId": "cmfhbbeid000mi93w8x3j0s0r",
+      "createdAt": "2025-09-12T20:51:17.943Z",
+      "updatedAt": "2025-09-12T20:51:17.943Z"
+    },
+    {
+      "id": "cmfhbbeif000ui93wrr5rlffh",
+      "name": "Follows up appropriately",
+      "order": 4,
+      "isActive": true,
+      "categoryId": "cmfhbbeid000mi93w8x3j0s0r",
+      "createdAt": "2025-09-12T20:51:17.943Z",
+      "updatedAt": "2025-09-12T20:51:17.943Z"
+    },
+    {
+      "id": "cmfhbbeif000wi93wnw9hi5fa",
+      "name": "Manages timeline expectations",
+      "order": 5,
+      "isActive": true,
+      "categoryId": "cmfhbbeid000mi93w8x3j0s0r",
+      "createdAt": "2025-09-12T20:51:17.943Z",
+      "updatedAt": "2025-09-12T20:51:17.943Z"
+    },
+    {
+      "id": "cmfhbbeig000zi93wclzoc8ux",
+      "name": "Arrives prepared",
+      "order": 1,
+      "isActive": true,
+      "categoryId": "cmfhbbeif000xi93wrzr6dlpb",
+      "createdAt": "2025-09-12T20:51:17.944Z",
+      "updatedAt": "2025-09-12T20:51:17.944Z"
+    },
+    {
+      "id": "cmfhbbeig0011i93wwvkfujzr",
+      "name": "Manages time effectively",
+      "order": 2,
+      "isActive": true,
+      "categoryId": "cmfhbbeif000xi93wrzr6dlpb",
+      "createdAt": "2025-09-12T20:51:17.944Z",
+      "updatedAt": "2025-09-12T20:51:17.944Z"
+    },
+    {
+      "id": "cmfhbbeig0013i93wxelxr1ja",
+      "name": "Maintains professional demeanor",
+      "order": 3,
+      "isActive": true,
+      "categoryId": "cmfhbbeif000xi93wrzr6dlpb",
+      "createdAt": "2025-09-12T20:51:17.945Z",
+      "updatedAt": "2025-09-12T20:51:17.945Z"
+    },
+    {
+      "id": "cmfhbbeig0015i93werqrduqs",
+      "name": "Listens actively",
+      "order": 4,
+      "isActive": true,
+      "categoryId": "cmfhbbeif000xi93wrzr6dlpb",
+      "createdAt": "2025-09-12T20:51:17.945Z",
+      "updatedAt": "2025-09-12T20:51:17.945Z"
+    },
+    {
+      "id": "cmfhbbeih0017i93w07qv2lfq",
+      "name": "Communicates clearly",
+      "order": 5,
+      "isActive": true,
+      "categoryId": "cmfhbbeif000xi93wrzr6dlpb",
+      "createdAt": "2025-09-12T20:51:17.945Z",
+      "updatedAt": "2025-09-12T20:51:17.945Z"
+    }
+  ],
+  "evaluations": [],
+  "evaluationItems": [],
+  "userRegions": [
+    {
+      "id": "cmfil1s6w000cl8n19jrfe77i",
+      "userId": "cmfil1s6v000al8n1n6ssltis",
+      "regionId": "cmfil1s6u0009l8n14gac8zd3"
+    },
+    {
+      "id": "cmfil1vuj000yl8n1icuo54bm",
+      "userId": "cmfil1vui000wl8n1580ym8tv",
+      "regionId": "cmfil1vuh000vl8n1bqz0kj4x"
+    }
+  ],
+  "userTeams": [],
+  "auditLogs": [],
+  "invites": []
+}

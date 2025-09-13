@@ -1,0 +1,718 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DE9E2F952E74C29E002AE610 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2F8E2E74C29E002AE610 /* KeychainService.swift */; };
+		DE9E2F962E74C29E002AE610 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2F922E74C29E002AE610 /* LoginView.swift */; };
+		DE9E2F982E74C29E002AE610 /* NewEvaluationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2F932E74C29E002AE610 /* NewEvaluationView.swift */; };
+		DE9E2F992E74C29E002AE610 /* EvaluationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2F912E74C29E002AE610 /* EvaluationsView.swift */; };
+		DE9E2F9A2E74C29E002AE610 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2F882E74C29E002AE610 /* ContentView.swift */; };
+		DE9E2F9B2E74C29E002AE610 /* Evaluation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2F892E74C29E002AE610 /* Evaluation.swift */; };
+		DE9E2F9C2E74C29E002AE610 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2F8A2E74C29E002AE610 /* User.swift */; };
+		DE9E2F9F2E74C29E002AE610 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2F872E74C29E002AE610 /* App.swift */; };
+		DE9E2FA22E74CE6E002AE610 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FA02E74CE6E002AE610 /* APIService.swift */; };
+		DE9E2FA32E74CE6E002AE610 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FA12E74CE6E002AE610 /* AuthManager.swift */; };
+		DE9E2FA72E74D2BC002AE610 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FA62E74D2BC002AE610 /* DashboardView.swift */; };
+		DE9E2FA92E74D9E9002AE610 /* EvaluationsHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FA82E74D9D6002AE610 /* EvaluationsHistoryView.swift */; };
+		DE9E2FAB2E74DC87002AE610 /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FAA2E74DC7A002AE610 /* AnalyticsView.swift */; };
+		DE9E2FAD2E74DF7C002AE610 /* ExportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FAC2E74DF75002AE610 /* ExportView.swift */; };
+		DE9E2FAF2E74E17F002AE610 /* TeamManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FAE2E74E161002AE610 /* TeamManagementView.swift */; };
+		DE9E2FB12E74E1E2002AE610 /* AdminSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FB02E74E1E0002AE610 /* AdminSettingsView.swift */; };
+		DE9E2FB32E74E37A002AE610 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FB22E74E364002AE610 /* Team.swift */; };
+		DE9E2FB52E74E388002AE610 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FB42E74E37E002AE610 /* Region.swift */; };
+		DE9E2FBA2E74E65C002AE610 /* RoleBasedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FB92E74E650002AE610 /* RoleBasedView.swift */; };
+		DE9E2FC12E74E987002AE610 /* SalesScorecardModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FBF2E74E987002AE610 /* SalesScorecardModel.xcdatamodeld */; };
+		DE9E2FC32E74EC54002AE610 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9E2FC22E74EC49002AE610 /* CoreDataService.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DE9E2F6B2E74C182002AE610 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DE9E2F542E74C181002AE610 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DE9E2F5B2E74C181002AE610;
+			remoteInfo = "Sales Scorecard";
+		};
+		DE9E2F752E74C182002AE610 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DE9E2F542E74C181002AE610 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DE9E2F5B2E74C181002AE610;
+			remoteInfo = "Sales Scorecard";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DE9E2F5C2E74C181002AE610 /* Sales Scorecard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sales Scorecard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE9E2F6A2E74C182002AE610 /* Sales ScorecardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sales ScorecardTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE9E2F742E74C182002AE610 /* Sales ScorecardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sales ScorecardUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE9E2F872E74C29E002AE610 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		DE9E2F882E74C29E002AE610 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		DE9E2F892E74C29E002AE610 /* Evaluation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Evaluation.swift; sourceTree = "<group>"; };
+		DE9E2F8A2E74C29E002AE610 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		DE9E2F8E2E74C29E002AE610 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		DE9E2F912E74C29E002AE610 /* EvaluationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvaluationsView.swift; sourceTree = "<group>"; };
+		DE9E2F922E74C29E002AE610 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		DE9E2F932E74C29E002AE610 /* NewEvaluationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEvaluationView.swift; sourceTree = "<group>"; };
+		DE9E2FA02E74CE6E002AE610 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		DE9E2FA12E74CE6E002AE610 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		DE9E2FA62E74D2BC002AE610 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		DE9E2FA82E74D9D6002AE610 /* EvaluationsHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvaluationsHistoryView.swift; sourceTree = "<group>"; };
+		DE9E2FAA2E74DC7A002AE610 /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
+		DE9E2FAC2E74DF75002AE610 /* ExportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportView.swift; sourceTree = "<group>"; };
+		DE9E2FAE2E74E161002AE610 /* TeamManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamManagementView.swift; sourceTree = "<group>"; };
+		DE9E2FB02E74E1E0002AE610 /* AdminSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminSettingsView.swift; sourceTree = "<group>"; };
+		DE9E2FB22E74E364002AE610 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
+		DE9E2FB42E74E37E002AE610 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
+		DE9E2FB92E74E650002AE610 /* RoleBasedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleBasedView.swift; sourceTree = "<group>"; };
+		DE9E2FC02E74E987002AE610 /* SalesScorecardModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SalesScorecardModel.xcdatamodel; sourceTree = "<group>"; };
+		DE9E2FC22E74EC49002AE610 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		DE9E2F5E2E74C181002AE610 /* Sales Scorecard */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Sales Scorecard";
+			sourceTree = "<group>";
+		};
+		DE9E2F6D2E74C182002AE610 /* Sales ScorecardTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Sales ScorecardTests";
+			sourceTree = "<group>";
+		};
+		DE9E2F772E74C182002AE610 /* Sales ScorecardUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Sales ScorecardUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DE9E2F592E74C181002AE610 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE9E2F672E74C182002AE610 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE9E2F712E74C182002AE610 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DE9E2F532E74C181002AE610 = {
+			isa = PBXGroup;
+			children = (
+				DE9E2FBF2E74E987002AE610 /* SalesScorecardModel.xcdatamodeld */,
+				DE9E2F872E74C29E002AE610 /* App.swift */,
+				DE9E2F882E74C29E002AE610 /* ContentView.swift */,
+				DE9E2F8B2E74C29E002AE610 /* Models */,
+				DE9E2F8F2E74C29E002AE610 /* Services */,
+				DE9E2F942E74C29E002AE610 /* Views */,
+				DE9E2F5E2E74C181002AE610 /* Sales Scorecard */,
+				DE9E2F6D2E74C182002AE610 /* Sales ScorecardTests */,
+				DE9E2F772E74C182002AE610 /* Sales ScorecardUITests */,
+				DE9E2F5D2E74C181002AE610 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DE9E2F5D2E74C181002AE610 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DE9E2F5C2E74C181002AE610 /* Sales Scorecard.app */,
+				DE9E2F6A2E74C182002AE610 /* Sales ScorecardTests.xctest */,
+				DE9E2F742E74C182002AE610 /* Sales ScorecardUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DE9E2F8B2E74C29E002AE610 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DE9E2FB42E74E37E002AE610 /* Region.swift */,
+				DE9E2FB22E74E364002AE610 /* Team.swift */,
+				DE9E2F892E74C29E002AE610 /* Evaluation.swift */,
+				DE9E2F8A2E74C29E002AE610 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DE9E2F8F2E74C29E002AE610 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				DE9E2FC22E74EC49002AE610 /* CoreDataService.swift */,
+				DE9E2FA02E74CE6E002AE610 /* APIService.swift */,
+				DE9E2FA12E74CE6E002AE610 /* AuthManager.swift */,
+				DE9E2F8E2E74C29E002AE610 /* KeychainService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		DE9E2F942E74C29E002AE610 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DE9E2FB92E74E650002AE610 /* RoleBasedView.swift */,
+				DE9E2FB02E74E1E0002AE610 /* AdminSettingsView.swift */,
+				DE9E2FAE2E74E161002AE610 /* TeamManagementView.swift */,
+				DE9E2FAC2E74DF75002AE610 /* ExportView.swift */,
+				DE9E2FAA2E74DC7A002AE610 /* AnalyticsView.swift */,
+				DE9E2FA82E74D9D6002AE610 /* EvaluationsHistoryView.swift */,
+				DE9E2FA62E74D2BC002AE610 /* DashboardView.swift */,
+				DE9E2F912E74C29E002AE610 /* EvaluationsView.swift */,
+				DE9E2F922E74C29E002AE610 /* LoginView.swift */,
+				DE9E2F932E74C29E002AE610 /* NewEvaluationView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DE9E2F5B2E74C181002AE610 /* Sales Scorecard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE9E2F7E2E74C182002AE610 /* Build configuration list for PBXNativeTarget "Sales Scorecard" */;
+			buildPhases = (
+				DE9E2F582E74C181002AE610 /* Sources */,
+				DE9E2F592E74C181002AE610 /* Frameworks */,
+				DE9E2F5A2E74C181002AE610 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				DE9E2F5E2E74C181002AE610 /* Sales Scorecard */,
+			);
+			name = "Sales Scorecard";
+			packageProductDependencies = (
+			);
+			productName = "Sales Scorecard";
+			productReference = DE9E2F5C2E74C181002AE610 /* Sales Scorecard.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DE9E2F692E74C182002AE610 /* Sales ScorecardTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE9E2F812E74C182002AE610 /* Build configuration list for PBXNativeTarget "Sales ScorecardTests" */;
+			buildPhases = (
+				DE9E2F662E74C182002AE610 /* Sources */,
+				DE9E2F672E74C182002AE610 /* Frameworks */,
+				DE9E2F682E74C182002AE610 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DE9E2F6C2E74C182002AE610 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DE9E2F6D2E74C182002AE610 /* Sales ScorecardTests */,
+			);
+			name = "Sales ScorecardTests";
+			packageProductDependencies = (
+			);
+			productName = "Sales ScorecardTests";
+			productReference = DE9E2F6A2E74C182002AE610 /* Sales ScorecardTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DE9E2F732E74C182002AE610 /* Sales ScorecardUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE9E2F842E74C182002AE610 /* Build configuration list for PBXNativeTarget "Sales ScorecardUITests" */;
+			buildPhases = (
+				DE9E2F702E74C182002AE610 /* Sources */,
+				DE9E2F712E74C182002AE610 /* Frameworks */,
+				DE9E2F722E74C182002AE610 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DE9E2F762E74C182002AE610 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DE9E2F772E74C182002AE610 /* Sales ScorecardUITests */,
+			);
+			name = "Sales ScorecardUITests";
+			packageProductDependencies = (
+			);
+			productName = "Sales ScorecardUITests";
+			productReference = DE9E2F742E74C182002AE610 /* Sales ScorecardUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DE9E2F542E74C181002AE610 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					DE9E2F5B2E74C181002AE610 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					DE9E2F692E74C182002AE610 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = DE9E2F5B2E74C181002AE610;
+					};
+					DE9E2F732E74C182002AE610 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = DE9E2F5B2E74C181002AE610;
+					};
+				};
+			};
+			buildConfigurationList = DE9E2F572E74C181002AE610 /* Build configuration list for PBXProject "Sales Scorecard" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DE9E2F532E74C181002AE610;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = DE9E2F5D2E74C181002AE610 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DE9E2F5B2E74C181002AE610 /* Sales Scorecard */,
+				DE9E2F692E74C182002AE610 /* Sales ScorecardTests */,
+				DE9E2F732E74C182002AE610 /* Sales ScorecardUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DE9E2F5A2E74C181002AE610 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE9E2F682E74C182002AE610 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE9E2F722E74C182002AE610 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DE9E2F582E74C181002AE610 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE9E2F952E74C29E002AE610 /* KeychainService.swift in Sources */,
+				DE9E2F962E74C29E002AE610 /* LoginView.swift in Sources */,
+				DE9E2F982E74C29E002AE610 /* NewEvaluationView.swift in Sources */,
+				DE9E2FA92E74D9E9002AE610 /* EvaluationsHistoryView.swift in Sources */,
+				DE9E2FA22E74CE6E002AE610 /* APIService.swift in Sources */,
+				DE9E2FA32E74CE6E002AE610 /* AuthManager.swift in Sources */,
+				DE9E2FBA2E74E65C002AE610 /* RoleBasedView.swift in Sources */,
+				DE9E2FC32E74EC54002AE610 /* CoreDataService.swift in Sources */,
+				DE9E2FB12E74E1E2002AE610 /* AdminSettingsView.swift in Sources */,
+				DE9E2FAD2E74DF7C002AE610 /* ExportView.swift in Sources */,
+				DE9E2FB32E74E37A002AE610 /* Team.swift in Sources */,
+				DE9E2FC12E74E987002AE610 /* SalesScorecardModel.xcdatamodeld in Sources */,
+				DE9E2FB52E74E388002AE610 /* Region.swift in Sources */,
+				DE9E2F992E74C29E002AE610 /* EvaluationsView.swift in Sources */,
+				DE9E2FA72E74D2BC002AE610 /* DashboardView.swift in Sources */,
+				DE9E2F9A2E74C29E002AE610 /* ContentView.swift in Sources */,
+				DE9E2F9B2E74C29E002AE610 /* Evaluation.swift in Sources */,
+				DE9E2FAF2E74E17F002AE610 /* TeamManagementView.swift in Sources */,
+				DE9E2F9C2E74C29E002AE610 /* User.swift in Sources */,
+				DE9E2FAB2E74DC87002AE610 /* AnalyticsView.swift in Sources */,
+				DE9E2F9F2E74C29E002AE610 /* App.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE9E2F662E74C182002AE610 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE9E2F702E74C182002AE610 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DE9E2F6C2E74C182002AE610 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DE9E2F5B2E74C181002AE610 /* Sales Scorecard */;
+			targetProxy = DE9E2F6B2E74C182002AE610 /* PBXContainerItemProxy */;
+		};
+		DE9E2F762E74C182002AE610 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DE9E2F5B2E74C181002AE610 /* Sales Scorecard */;
+			targetProxy = DE9E2F752E74C182002AE610 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		DE9E2F7C2E74C182002AE610 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DE9E2F7D2E74C182002AE610 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		DE9E2F7F2E74C182002AE610 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 978WPZMFC4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Sales Scorecard";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.instorm.sales-scorecard.Sales-Scorecard";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Debug;
+		};
+		DE9E2F802E74C182002AE610 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 978WPZMFC4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Sales Scorecard";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.instorm.sales-scorecard.Sales-Scorecard";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Release;
+		};
+		DE9E2F822E74C182002AE610 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.instorm.sales-scorecard.Sales-ScorecardTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sales Scorecard.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Sales Scorecard";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Debug;
+		};
+		DE9E2F832E74C182002AE610 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.instorm.sales-scorecard.Sales-ScorecardTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sales Scorecard.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Sales Scorecard";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Release;
+		};
+		DE9E2F852E74C182002AE610 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.instorm.sales-scorecard.Sales-ScorecardUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = "Sales Scorecard";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Debug;
+		};
+		DE9E2F862E74C182002AE610 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.instorm.sales-scorecard.Sales-ScorecardUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = "Sales Scorecard";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DE9E2F572E74C181002AE610 /* Build configuration list for PBXProject "Sales Scorecard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE9E2F7C2E74C182002AE610 /* Debug */,
+				DE9E2F7D2E74C182002AE610 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DE9E2F7E2E74C182002AE610 /* Build configuration list for PBXNativeTarget "Sales Scorecard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE9E2F7F2E74C182002AE610 /* Debug */,
+				DE9E2F802E74C182002AE610 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DE9E2F812E74C182002AE610 /* Build configuration list for PBXNativeTarget "Sales ScorecardTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE9E2F822E74C182002AE610 /* Debug */,
+				DE9E2F832E74C182002AE610 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DE9E2F842E74C182002AE610 /* Build configuration list for PBXNativeTarget "Sales ScorecardUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE9E2F852E74C182002AE610 /* Debug */,
+				DE9E2F862E74C182002AE610 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		DE9E2FBF2E74E987002AE610 /* SalesScorecardModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				DE9E2FC02E74E987002AE610 /* SalesScorecardModel.xcdatamodel */,
+			);
+			currentVersion = DE9E2FC02E74E987002AE610 /* SalesScorecardModel.xcdatamodel */;
+			path = SalesScorecardModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = DE9E2F542E74C181002AE610 /* Project object */;
+}

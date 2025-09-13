@@ -1,0 +1,205 @@
+// Production Prisma schema with PostgreSQL
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  displayName String
+  role        String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  evaluations     Evaluation[]
+  managedTeams    Team[]       @relation("TeamManager")
+  managedRegions  Region[]     @relation("RegionManager")
+  userRegions     UserRegion[]
+  userTeams       UserTeam[]
+  auditLogs       AuditLog[]
+
+  @@map("users")
+}
+
+model Region {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  teams      Team[]
+  managers   User[]   @relation("RegionManager")
+  userRegions UserRegion[]
+
+  @@map("regions")
+}
+
+model Team {
+  id       String   @id @default(cuid())
+  name     String
+  regionId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  region      Region    @relation(fields: [regionId], references: [id])
+  salespeople Salesperson[]
+  manager     User?     @relation("TeamManager", fields: [managerId], references: [id])
+  managerId   String?
+  userTeams   UserTeam[]
+
+  @@map("teams")
+}
+
+model Salesperson {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String?
+  teamId    String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  team        Team         @relation(fields: [teamId], references: [id])
+  evaluations Evaluation[]
+
+  @@map("salespeople")
+}
+
+model BehaviorCategory {
+  id        String   @id @default(cuid())
+  name      String
+  order     Int
+  weight    Float    @default(1.0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  items BehaviorItem[]
+
+  @@map("behavior_categories")
+}
+
+model BehaviorItem {
+  id         String   @id @default(cuid())
+  name       String
+  order      Int
+  isActive   Boolean  @default(true)
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  category       BehaviorCategory @relation(fields: [categoryId], references: [id])
+  evaluationItems EvaluationItem[]
+
+  @@map("behavior_items")
+}
+
+model Evaluation {
+  id            String   @id @default(cuid())
+  salespersonId String
+  managerId     String
+  visitDate     DateTime
+  customerName  String?
+  location      String?
+  overallComment String?
+  overallScore  Float?
+  version       Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  salesperson Salesperson      @relation(fields: [salespersonId], references: [id])
+  manager     User             @relation(fields: [managerId], references: [id])
+  items       EvaluationItem[]
+
+  @@map("evaluations")
+}
+
+model EvaluationItem {
+  id             String   @id @default(cuid())
+  evaluationId   String
+  behaviorItemId String
+  rating         Int?
+  comment        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  evaluation   Evaluation   @relation(fields: [evaluationId], references: [id])
+  behaviorItem BehaviorItem @relation(fields: [behaviorItemId], references: [id])
+
+  @@unique([evaluationId, behaviorItemId])
+  @@map("evaluation_items")
+}
+
+model UserRegion {
+  id       String @id @default(cuid())
+  userId   String
+  regionId String
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  region Region @relation(fields: [regionId], references: [id])
+
+  @@unique([userId, regionId])
+  @@map("user_regions")
+}
+
+model UserTeam {
+  id     String @id @default(cuid())
+  userId String
+  teamId String
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])
+  @@map("user_teams")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  entity    String
+  entityId  String?
+  payload   String?
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}
+
+model Invite {
+  id        String    @id @default(cuid())
+  email     String
+  role      String
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@map("invites")
+}
+
+// UserRole enum values as strings for PostgreSQL compatibility
+// ADMIN, SALES_DIRECTOR, REGIONAL_SALES_MANAGER, SALES_MANAGER, SALES_LEAD, SALESPERSON
