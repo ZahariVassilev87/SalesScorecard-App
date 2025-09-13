@@ -236,8 +236,8 @@
                 <h2>🔗 API Information</h2>
                 <p>Use these endpoints to manage your scoring system:</p>
                 <div class="api-info">
-                    <strong>Base URL:</strong> http://localhost:3000<br>
-                    <strong>API Docs:</strong> <a href="http://localhost:3000/api/docs" target="_blank">http://localhost:3000/api/docs</a><br>
+                    <strong>Base URL:</strong> <span id="baseUrl">Loading...</span><br>
+                    <strong>API Docs:</strong> <a href="#" id="apiDocsLink" target="_blank">Loading...</a><br>
                     <strong>Scoring Categories:</strong> GET /scoring/categories<br>
                     <strong>Create Category:</strong> POST /scoring/categories<br>
                     <strong>Behavior Items:</strong> GET /scoring/items<br>
@@ -258,7 +258,7 @@
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:3000';
+        const API_BASE = window.location.origin;
         
         // Show alert function
         function showAlert(message, type = 'success') {
@@ -367,6 +367,11 @@
         
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
+            // Update API URLs dynamically
+            document.getElementById('baseUrl').textContent = API_BASE;
+            document.getElementById('apiDocsLink').href = `${API_BASE}/api/docs`;
+            document.getElementById('apiDocsLink').textContent = `${API_BASE}/api/docs`;
+            
             loadDashboard();
             loadSystemInfo();
         });
