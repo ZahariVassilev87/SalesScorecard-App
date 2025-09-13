@@ -1,0 +1,13 @@
+{
+  "name": "sales-scorecard",
+  "version": "1.0.0",
+  "description": "Sales Scorecard - Team Management and Evaluation System",
+  "scripts": {
+    "start": "cd sales-scorecard-api && npm start",
+    "build": "cd sales-scorecard-api && npm run build",
+    "install": "cd sales-scorecard-api && npm install"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
