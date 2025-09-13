@@ -5,8 +5,8 @@
   },
   "deploy": {
     "startCommand": "npm run start:dev",
-    "healthcheckPath": "/",
-    "healthcheckTimeout": 100,
+    "healthcheckPath": "/public-admin/panel",
+    "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }

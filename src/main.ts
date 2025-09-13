@@ -30,6 +30,15 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
+  // Add a simple health check endpoint
+  app.getHttpAdapter().get('/', (req, res) => {
+    res.json({ 
+      status: 'ok', 
+      message: 'Sales Scorecard API is running',
+      timestamp: new Date().toISOString()
+    });
+  });
+
   const port = process.env.PORT || 3000;
   await app.listen(port);
   
