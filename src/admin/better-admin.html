@@ -978,21 +978,29 @@
                 // Build HTML
                 let html = '';
                 regionsMap.forEach((region, regionId) => {
+                    // Get regional manager from the first team's region data
+                    const firstTeam = region.teams[0];
+                    const regionalManager = firstTeam?.region?.managers?.[0];
+                    const regionalManagerName = regionalManager ? regionalManager.displayName : 'No Regional Manager';
+                    
                     html += `
                         <div class="region-card">
                             <div class="region-header">🌍 ${region.name}</div>
+                            <div class="regional-manager" style="background: #e3f2fd; padding: 10px; margin: 10px 0; border-radius: 6px; border-left: 4px solid #2196f3;">
+                                <strong>🏢 Regional Manager:</strong> ${regionalManagerName}
+                            </div>
                     `;
                     
                     region.teams.forEach(team => {
-                        const managerName = team.manager ? team.manager.displayName : 'No Manager';
+                        const managerName = team.manager ? team.manager.displayName : 'No Sales Lead';
                         const salespeople = team.salespeople || [];
                         
                         html += `
                             <div class="team-item">
                                 <div class="team-name">👥 ${team.name}</div>
                                 <div class="team-members">
-                                    <strong>Manager:</strong> ${managerName}<br>
-                                    <strong>Salespeople (${salespeople.length}):</strong>
+                                    <strong>📋 Sales Lead:</strong> ${managerName}<br>
+                                    <strong>👨‍💼 Salespeople (${salespeople.length}):</strong>
                                     <div class="member-list">
                         `;
                         

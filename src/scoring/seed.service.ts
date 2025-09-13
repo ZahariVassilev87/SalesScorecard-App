@@ -236,7 +236,11 @@ export class SeedService {
   async getTeams() {
     return this.prisma.team.findMany({
       include: {
-        region: true,
+        region: {
+          include: {
+            managers: true,
+          },
+        },
         manager: true,
         salespeople: true,
       },
