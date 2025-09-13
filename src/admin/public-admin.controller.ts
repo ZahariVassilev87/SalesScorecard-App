@@ -12,6 +12,26 @@ export class PublicAdminController {
     private seedService: SeedService,
   ) {}
 
+  @Get('test')
+  async getTest() {
+    return { message: 'Admin controller is working!', timestamp: new Date().toISOString() };
+  }
+
+  @Get('panel-json')
+  async getAdminPanelJson() {
+    return { 
+      status: 'success',
+      message: 'Admin panel is accessible',
+      timestamp: new Date().toISOString(),
+      endpoints: {
+        panel: '/public-admin/panel',
+        teamManager: '/public-admin/team-manager',
+        dashboard: '/public-admin/dashboard',
+        test: '/public-admin/test'
+      }
+    };
+  }
+
   @Get('panel')
   async getAdminPanel(@Res() res: Response) {
     const html = `
