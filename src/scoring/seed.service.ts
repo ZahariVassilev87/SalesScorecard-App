@@ -157,14 +157,9 @@ export class SeedService {
           email: managerEmail || `${managerName.toLowerCase().replace(' ', '.')}@company.com`,
           displayName: managerName,
           role: 'REGIONAL_SALES_MANAGER',
-        },
-      });
-
-      // Link regional manager to region
-      await this.prisma.userRegion.create({
-        data: {
-          userId: regionalManager.id,
-          regionId: region.id,
+          managedRegions: {
+            connect: { id: region.id }
+          }
         },
       });
 
