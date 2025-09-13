@@ -4,6 +4,6 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "cd sales-scorecard-api && npm run start:dev"
+    "startCommand": "chmod +x start.sh && ./start.sh"
   }
 }
