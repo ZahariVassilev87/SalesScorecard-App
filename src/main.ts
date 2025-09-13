@@ -49,6 +49,19 @@ async function bootstrap() {
     res.json({ 
       status: 'ok', 
       message: 'Sales Scorecard API is running',
+      timestamp: new Date().toISOString(),
+      endpoints: {
+        admin: '/public-admin/panel',
+        test: '/public-admin/test',
+        docs: '/api/docs'
+      }
+    });
+  });
+
+  // Add a direct test endpoint
+  app.getHttpAdapter().get('/test-admin', (req, res) => {
+    res.json({ 
+      message: 'Direct admin test endpoint working!',
       timestamp: new Date().toISOString()
     });
   });
