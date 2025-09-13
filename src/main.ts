@@ -20,10 +20,6 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
-  // Initialize database
-  const prismaService = app.get(PrismaService);
-  await prismaService.onModuleInit();
-
   // Enable CORS for mobile app
   app.enableCors({
     origin: true,
@@ -74,7 +70,7 @@ async function bootstrap() {
 
   const port = process.env.PORT || 8080;
   
-  // Ensure we're listening on the correct interface
+  // Ensure we're listening on the correct interface for Railway deployment
   await app.listen(port, '0.0.0.0', () => {
     console.log(`🚀 Sales Scorecard API running on port ${port}`);
     console.log(`📚 API Documentation: http://localhost:${port}/api/docs`);
