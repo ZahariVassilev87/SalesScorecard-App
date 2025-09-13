@@ -1,3 +1,4 @@
+# Updated Dockerfile with Prisma generation
 FROM node:18-alpine
 
 WORKDIR /app
