@@ -67,10 +67,13 @@ async function bootstrap() {
   });
 
   const port = process.env.PORT || 3000;
-  await app.listen(port, '0.0.0.0');
   
-  console.log(`🚀 Sales Scorecard API running on port ${port}`);
-  console.log(`📚 API Documentation: http://localhost:${port}/api/docs`);
+  // Ensure we're listening on the correct interface
+  await app.listen(port, '0.0.0.0', () => {
+    console.log(`🚀 Sales Scorecard API running on port ${port}`);
+    console.log(`📚 API Documentation: http://localhost:${port}/api/docs`);
+    console.log(`🌐 External access: http://0.0.0.0:${port}`);
+  });
 }
 
 bootstrap();
