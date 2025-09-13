@@ -1,11 +1,11 @@
 [phases.setup]
-nixPkgs = ['nodejs', 'npm']
+nixPkgs = ["nodejs_18", "npm"]
 
 [phases.install]
-cmds = ['npm ci']
+cmds = ["cd sales-scorecard-api && npm ci"]
 
 [phases.build]
-cmds = ['npm run build']
+cmds = ["cd sales-scorecard-api && npx prisma generate"]
 
 [start]
-cmd = 'npm run start:prod'
+cmd = "cd sales-scorecard-api && npm run start:dev"
