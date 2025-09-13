@@ -4,6 +4,20 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+  // Set default environment variables if not provided
+  if (!process.env.DATABASE_URL) {
+    process.env.DATABASE_URL = 'file:./dev.db';
+  }
+  if (!process.env.JWT_SECRET) {
+    process.env.JWT_SECRET = 'your-super-secret-jwt-key-here';
+  }
+  if (!process.env.NODE_ENV) {
+    process.env.NODE_ENV = 'production';
+  }
+  if (!process.env.PORT) {
+    process.env.PORT = '3000';
+  }
+
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS for mobile app
