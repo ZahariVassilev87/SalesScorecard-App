@@ -14,7 +14,7 @@ export class PublicAdminController {
 
   @Get('panel')
   async getAdminPanel(@Res() res: Response) {
-    const htmlPath = path.join(__dirname, 'admin.html');
+    const htmlPath = path.join(process.cwd(), 'src', 'admin', 'admin.html');
     const html = fs.readFileSync(htmlPath, 'utf8');
     res.setHeader('Content-Type', 'text/html');
     res.send(html);
@@ -22,7 +22,7 @@ export class PublicAdminController {
 
   @Get('team-manager')
   async getTeamManager(@Res() res: Response) {
-    const htmlPath = path.join(__dirname, 'better-admin.html');
+    const htmlPath = path.join(process.cwd(), 'src', 'admin', 'better-admin.html');
     const html = fs.readFileSync(htmlPath, 'utf8');
     res.setHeader('Content-Type', 'text/html');
     res.send(html);

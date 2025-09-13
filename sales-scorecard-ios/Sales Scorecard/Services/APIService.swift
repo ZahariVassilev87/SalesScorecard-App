@@ -1,8 +1,8 @@
 import Foundation
 
 class APIService {
-    private let baseURL = "http://localhost:3000" // For iOS Simulator
-    private let isDevelopmentMode = true // Keep true since Office 365 has security policy issues
+    private let baseURL = "https://your-railway-url.railway.app" // Production URL
+    private let isDevelopmentMode = false // Production mode
     
     func sendMagicLink(email: String, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/auth/magic-link") else {
