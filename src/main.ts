@@ -62,7 +62,9 @@ async function bootstrap() {
   app.getHttpAdapter().get('/test-admin', (req, res) => {
     res.json({ 
       message: 'Direct admin test endpoint working!',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      port: process.env.PORT || 3000,
+      host: req.headers.host
     });
   });
 
