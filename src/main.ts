@@ -20,6 +20,10 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
+  // Initialize database
+  const prismaService = app.get(PrismaService);
+  await prismaService.onModuleInit();
+
   // Enable CORS for mobile app
   app.enableCors({
     origin: true,
