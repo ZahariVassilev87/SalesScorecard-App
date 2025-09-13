@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Scorecard - Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section h2 {
+            margin-bottom: 1.5rem;
+            color: #1d1d1f;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .api-info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Sales Scorecard</h1>
+            <p>Admin Panel - Configure Your Scoring System</p>
+        </div>
+        
+        <div id="loading" class="loading">
+            <h3>Loading dashboard...</h3>
+        </div>
+        
+        <div id="dashboard" class="hidden">
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalCategories">-</div>
+                    <div class="stat-label">Behavior Categories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalItems">-</div>
+                    <div class="stat-label">Behavior Items</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalUsers">-</div>
+                    <div class="stat-label">Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalEvaluations">-</div>
+                    <div class="stat-label">Evaluations</div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="section">
+                <h2>🚀 Quick Actions</h2>
+                <button class="btn btn-success" onclick="seedDefaultStructure()">
+                    Create Default Scoring Structure
+                </button>
+                <button class="btn btn-warning" onclick="createSampleData()">
+                    Create Sample Data
+                </button>
+                <button class="btn" onclick="refreshDashboard()">
+                    Refresh Dashboard
+                </button>
+            </div>
+            
+            <!-- API Information -->
+            <div class="section">
+                <h2>🔗 API Information</h2>
+                <p>Use these endpoints to manage your scoring system:</p>
+                <div class="api-info">
+                    <strong>Base URL:</strong> http://localhost:3000<br>
+                    <strong>API Docs:</strong> <a href="http://localhost:3000/api/docs" target="_blank">http://localhost:3000/api/docs</a><br>
+                    <strong>Scoring Categories:</strong> GET /scoring/categories<br>
+                    <strong>Create Category:</strong> POST /scoring/categories<br>
+                    <strong>Behavior Items:</strong> GET /scoring/items<br>
+                    <strong>Create Item:</strong> POST /scoring/items
+                </div>
+            </div>
+            
+            <!-- System Info -->
+            <div class="section">
+                <h2>ℹ️ System Information</h2>
+                <div id="systemInfo">
+                    <p>Loading system information...</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="alertContainer"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        
+        // Show alert function
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alertContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+        
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_BASE}/public-admin/dashboard`);
+                if (!response.ok) {
+                    throw new Error('Failed to load dashboard');
+                }
+                const data = await response.json();
+                
+                document.getElementById('totalCategories').textContent = data.totalCategories;
+                document.getElementById('totalItems').textContent = data.totalItems;
+                document.getElementById('totalUsers').textContent = data.totalUsers;
+                document.getElementById('totalEvaluations').textContent = data.totalEvaluations;
+                
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showAlert('Failed to load dashboard. Make sure the API server is running.', 'error');
+            }
+        }
+        
+        // Load system info
+        async function loadSystemInfo() {
+            try {
+                // For now, just show basic info since we don't have a public system endpoint
+                const systemInfoDiv = document.getElementById('systemInfo');
+                systemInfoDiv.innerHTML = `
+                    <p><strong>Version:</strong> 1.0.0</p>
+                    <p><strong>Environment:</strong> development</p>
+                    <p><strong>Database:</strong> SQLite</p>
+                    <p><strong>Status:</strong> Running</p>
+                `;
+            } catch (error) {
+                console.error('Error loading system info:', error);
+            }
+        }
+        
+        // Seed default structure
+        async function seedDefaultStructure() {
+            try {
+                const response = await fetch(`${API_BASE}/public-admin/seed/default`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to create default structure');
+                }
+                
+                const data = await response.json();
+                showAlert(`✅ ${data.message}. Created ${data.categories} categories with ${data.items} items.`);
+                loadDashboard();
+            } catch (error) {
+                console.error('Error seeding default structure:', error);
+                showAlert('❌ Failed to create default structure. Make sure you have admin access.', 'error');
+            }
+        }
+        
+        // Create sample data
+        async function createSampleData() {
+            try {
+                const response = await fetch(`${API_BASE}/public-admin/seed/sample-data`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to create sample data');
+                }
+                
+                const data = await response.json();
+                showAlert(`✅ ${data.message}. Created ${data.salespeople} salespeople in ${data.team} team.`);
+                loadDashboard();
+            } catch (error) {
+                console.error('Error creating sample data:', error);
+                showAlert('❌ Failed to create sample data. Make sure you have admin access.', 'error');
+            }
+        }
+        
+        // Refresh dashboard
+        function refreshDashboard() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            loadDashboard();
+            loadSystemInfo();
+        }
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboard();
+            loadSystemInfo();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+# Railway Production Environment Variables
+# Copy these to your Railway project environment variables
+
+# Database (Railway will provide this automatically)
+# DATABASE_URL="postgresql://postgres:password@host:5432/railway"
+
+# JWT Secret (Generate a secure secret)
+JWT_SECRET="your-super-secure-jwt-secret-for-production-change-this"
+
+# Email Configuration (SendGrid)
+SMTP_HOST="smtp.sendgrid.net"
+SMTP_PORT="587"
+SMTP_USER="apikey"
+SMTP_PASS="your-sendgrid-api-key"
+SMTP_FROM="Sales Scorecard <vassilev.zahari@gmail.com>"
+SMTP_SECURE="false"
+SMTP_TLS="true"
+
+# Frontend URL (Your production domain)
+FRONTEND_URL="https://your-app-name.railway.app"
+
+# Allowed email domains
+ALLOWED_DOMAINS="instorm.io,instorm.bg,metro.bg,gmail.com"
+
+# Server
+PORT="3000"
+NODE_ENV="production"
