@@ -569,4 +569,13 @@ export class SeedService {
 
     return { directors };
   }
+
+  async getAllRegions() {
+    const regions = await this.prisma.region.findMany({
+      include: {
+        managers: true
+      }
+    });
+    return { regions };
+  }
 }

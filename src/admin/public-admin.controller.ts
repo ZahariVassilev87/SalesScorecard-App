@@ -208,6 +208,11 @@ export class PublicAdminController {
   }
 
   // Sales Director Management Endpoints
+  @Get('regions')
+  async getAllRegions() {
+    return this.seedService.getAllRegions();
+  }
+
   @Get('regions/:regionId/directors')
   async getRegionDirectors(@Param('regionId') regionId: string) {
     return this.seedService.getRegionDirectors(regionId);
