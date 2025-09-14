@@ -1,11 +1,11 @@
 {
   "name": "sales-scorecard-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sales Scorecard Backend API",
   "main": "dist/main.js",
   "scripts": {
     "prisma:generate": "npx prisma generate",
-    "build": "echo 'Using custom build script' && chmod +x build.sh && ./build.sh",
+    "build": "echo 'FORCE REBUILD - Using NEW build script' && chmod +x build-new.sh && ./build-new.sh",
     "build:force": "echo 'Forcing rebuild with new schema' && chmod +x build.sh && ./build.sh",
     "start": "node dist/main.js",
     "start:dev": "ts-node src/main.ts",

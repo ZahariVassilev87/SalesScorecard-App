@@ -3,6 +3,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
+// FORCE REBUILD - Invite-Only Registration System v1.0.1
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
