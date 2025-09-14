@@ -107,9 +107,9 @@ struct LoginView: View {
                         // Create a test user for development
                         let testUser = User(
                             id: "test-1",
-                            email: "test@instorm.bg",
-                            displayName: "Test User",
-                            role: "ADMIN",
+                            email: "zahari.vasilev@instorm.bg",
+                            displayName: "Zahari Vasilev",
+                            role: "SALES_DIRECTOR",
                             isActive: true,
                             createdAt: "2024-01-01T00:00:00Z",
                             updatedAt: "2024-01-01T00:00:00Z",
