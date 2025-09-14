@@ -1,11 +1,11 @@
 {
-  "name": "sales-scorecard-api",
-  "version": "1.0.1",
+  "name": "sales-scorecard-api-v2",
+  "version": "2.0.0",
   "description": "Sales Scorecard Backend API",
   "main": "dist/main.js",
   "scripts": {
     "prisma:generate": "npx prisma generate",
-    "build": "echo 'FORCE REBUILD - Using NEW build script' && chmod +x build-new.sh && ./build-new.sh",
+    "build": "echo 'FINAL BUILD - v2.0.0 with invite-only registration' && chmod +x build-final.sh && ./build-final.sh",
     "build:force": "echo 'Forcing rebuild with new schema' && chmod +x build.sh && ./build.sh",
     "start": "node dist/main.js",
     "start:dev": "ts-node src/main.ts",
