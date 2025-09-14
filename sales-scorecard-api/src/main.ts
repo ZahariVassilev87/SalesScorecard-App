@@ -3,7 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
-// FINAL BUILD - Invite-Only Registration System v2.0.0 - FORCE CACHE INVALIDATION
+// FORCE NEW DEPLOYMENT - Invite-Only Registration System v2.0.0 - CACHE INVALIDATION
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
