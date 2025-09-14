@@ -103,16 +103,16 @@ struct LoginView: View {
                 
                 // Test Mode Button (for simulator testing)
                 if !showTokenInput {
-                    Button("Test Mode - Skip Authentication") {
-                        // Create a test user for development
+                    Button("Test Mode - Use Real Data") {
+                        // Create a test user for development with real Sales Director data
                         let testUser = User(
-                            id: "test-1",
+                            id: "cmfjpdcka000c139kbbc4iglx", // Real Sales Director ID from admin panel
                             email: "zahari.vasilev@instorm.bg",
-                            displayName: "Zahari Vasilev",
+                            displayName: "Zahari",
                             role: "SALES_DIRECTOR",
                             isActive: true,
-                            createdAt: "2024-01-01T00:00:00Z",
-                            updatedAt: "2024-01-01T00:00:00Z",
+                            createdAt: "2025-09-14T13:00:15.706Z",
+                            updatedAt: "2025-09-14T13:00:15.706Z",
                             managedRegions: nil
                         )
                         authManager.currentUser = testUser
