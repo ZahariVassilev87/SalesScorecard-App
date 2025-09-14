@@ -76,6 +76,34 @@ export class AuthService {
     return { message: 'Magic link sent to your email' };
   }
 
+  async testEmail(email: string): Promise<{ message: string; error?: string }> {
+    try {
+      // Test email configuration
+      await this.transporter.verify();
+      
+      // Send a simple test email
+      await this.transporter.sendMail({
+        from: process.env.SMTP_FROM || 'Sales Scorecard <noreply@instorm.bg>',
+        to: email,
+        subject: 'Test Email - Sales Scorecard',
+        html: `
+          <h2>Test Email</h2>
+          <p>This is a test email to verify the email configuration is working.</p>
+          <p>If you receive this email, the SMTP configuration is correct.</p>
+          <p>Timestamp: ${new Date().toISOString()}</p>
+        `,
+      });
+
+      return { message: 'Test email sent successfully' };
+    } catch (error) {
+      console.error('Email test error:', error);
+      return { 
+        message: 'Email test failed', 
+        error: error.message 
+      };
+    }
+  }
+
   async verifyMagicLink(token: string): Promise<{ access_token: string; user: any }> {
     try {
       // Parse token to get email

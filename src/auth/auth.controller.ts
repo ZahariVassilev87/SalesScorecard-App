@@ -34,6 +34,12 @@ export class AuthController {
     return this.authService.verifyMagicLink(verifyMagicLinkDto.token);
   }
 
+  @Post('test-email')
+  @ApiOperation({ summary: 'Test email configuration' })
+  async testEmail(@Body() body: { email: string }) {
+    return this.authService.testEmail(body.email);
+  }
+
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get current user profile' })
