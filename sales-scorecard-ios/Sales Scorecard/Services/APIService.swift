@@ -1,7 +1,7 @@
 import Foundation
 
 class APIService {
-    private let baseURL = "https://salesscorecard-app-production.up.railway.app" // Production URL
+    private let baseURL = "https://salesscorecard-app-production.up.railway.app" // P
     private let isDevelopmentMode = false // Production mode
     
     func sendMagicLink(email: String, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -271,6 +271,98 @@ class APIService {
             do {
                 let salespeople = try JSONDecoder().decode([Salesperson].self, from: data)
                 completion(.success(salespeople))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    
+    // MARK: - New Hierarchy API Methods
+    func getTeams(token: String, completion: @escaping (Result<[Team], Error>) -> Void) {
+        guard let url = URL(string: "\(baseURL)/public-admin/teams") else {
+            completion(.failure(APIError.invalidURL))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(APIError.noData))
+                return
+            }
+            
+            do {
+                let teams = try JSONDecoder().decode([Team].self, from: data)
+                completion(.success(teams))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    
+    func getRegions(token: String, completion: @escaping (Result<[Region], Error>) -> Void) {
+        guard let url = URL(string: "\(baseURL)/public-admin/regions") else {
+            completion(.failure(APIError.invalidURL))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(APIError.noData))
+                return
+            }
+            
+            do {
+                let regions = try JSONDecoder().decode([Region].self, from: data)
+                completion(.success(regions))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    
+    func getSalesDirectors(token: String, completion: @escaping (Result<[User], Error>) -> Void) {
+        guard let url = URL(string: "\(baseURL)/public-admin/directors") else {
+            completion(.failure(APIError.invalidURL))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(APIError.noData))
+                return
+            }
+            
+            do {
+                let response = try JSONDecoder().decode([String: [User]].self, from: data)
+                let directors = response["directors"] ?? []
+                completion(.success(directors))
             } catch {
                 completion(.failure(error))
             }

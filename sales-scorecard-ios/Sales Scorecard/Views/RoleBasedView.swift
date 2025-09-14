@@ -10,7 +10,7 @@ struct RoleBasedView: View {
                 AdminTabView()
             case "SALES_DIRECTOR":
                 DirectorTabView()
-            case "SALES_MANAGER":
+            case "REGIONAL_SALES_MANAGER":
                 ManagerTabView()
             case "SALES_LEAD":
                 LeadTabView()
@@ -60,10 +60,16 @@ struct AdminTabView: View {
     }
 }
 
-// Sales Director sees management tools
+// Sales Director sees comprehensive management tools
 struct DirectorTabView: View {
     var body: some View {
         TabView {
+            SalesDirectorDashboardView()
+                .tabItem {
+                    Image(systemName: "house")
+                    Text("Dashboard")
+                }
+            
             AnalyticsView()
                 .tabItem {
                     Image(systemName: "chart.bar")
@@ -85,7 +91,7 @@ struct DirectorTabView: View {
             TeamManagementView()
                 .tabItem {
                     Image(systemName: "person.2")
-                    Text("Team")
+                    Text("Teams")
                 }
         }
     }
