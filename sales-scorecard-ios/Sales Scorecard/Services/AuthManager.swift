@@ -6,6 +6,7 @@ class AuthManager: ObservableObject {
     @Published var currentUser: User?
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var authToken: String?
     
     private let apiService = APIService()
     private let keychainService = KeychainService()
@@ -20,6 +21,7 @@ class AuthManager: ObservableObject {
     
     func checkAuthStatus() {
         if let token = keychainService.getToken() {
+            authToken = token
             // Validate token with backend
             validateToken(token)
         }
@@ -53,6 +55,7 @@ class AuthManager: ObservableObject {
                 switch result {
                 case .success(let authResponse):
                     self?.keychainService.saveToken(authResponse.token)
+                    self?.authToken = authResponse.token
                     self?.currentUser = authResponse.user
                     self?.isAuthenticated = true
                 case .failure(let error):
@@ -67,6 +70,7 @@ class AuthManager: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let user):
+                    self?.authToken = token
                     self?.currentUser = user
                     self?.isAuthenticated = true
                 case .failure:
@@ -79,6 +83,7 @@ class AuthManager: ObservableObject {
     
     func logout() {
         keychainService.deleteToken()
+        authToken = nil
         currentUser = nil
         isAuthenticated = false
     }
