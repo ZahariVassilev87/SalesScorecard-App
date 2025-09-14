@@ -17,8 +17,5 @@ else
     npx prisma db push
 fi
 
-echo "🔧 Generating Prisma client..."
-npx prisma generate
-
 echo "🏃 Starting the application..."
 npm run start:prod
