@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci && npm cache clean --force
 
 # Copy source code
 COPY . .
@@ -16,8 +16,8 @@ COPY . .
 # Generate Prisma client
 RUN npx prisma generate
 
-# Build the application
-RUN npm run build
+# Build the application using TypeScript compiler
+RUN npx tsc
 
 # Production stage
 FROM node:18-alpine AS production
