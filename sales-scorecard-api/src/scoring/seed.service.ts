@@ -448,4 +448,23 @@ export class SeedService {
   async getEvaluationsCount(): Promise<number> {
     return this.prisma.evaluation.count();
   }
+
+  async getPendingRegistrations() {
+    return this.prisma.user.findMany({
+      where: {
+        isRegistered: false,
+      },
+      select: {
+        id: true,
+        email: true,
+        displayName: true,
+        role: true,
+        isActive: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
 }

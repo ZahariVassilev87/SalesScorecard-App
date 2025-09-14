@@ -142,4 +142,9 @@ export class PublicAdminController {
       // Don't expose actual values for security
     };
   }
+
+  @Get('pending-registrations')
+  async getPendingRegistrations() {
+    return this.seedService.getPendingRegistrations();
+  }
 }

@@ -15,6 +15,30 @@ export class VerifyMagicLinkDto {
   token: string;
 }
 
+export class CheckEmailDto {
+  @IsEmail()
+  email: string;
+}
+
+export class RegisterUserDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  password: string;
+
+  @IsString()
+  displayName?: string;
+}
+
+export class LoginUserDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  password: string;
+}
+
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
@@ -45,5 +69,30 @@ export class AuthController {
       displayName: user.displayName,
       role: user.role,
     };
+  }
+
+  @Post('check-email')
+  @ApiOperation({ summary: 'Check if email is eligible for registration' })
+  @ApiResponse({ status: 200, description: 'Email eligibility checked' })
+  async checkEmailEligibility(@Body() checkEmailDto: CheckEmailDto) {
+    return this.authService.checkEmailEligibility(checkEmailDto.email);
+  }
+
+  @Post('register')
+  @ApiOperation({ summary: 'Register new user with email and password' })
+  @ApiResponse({ status: 200, description: 'User registered successfully' })
+  async registerUser(@Body() registerUserDto: RegisterUserDto) {
+    return this.authService.registerUser(
+      registerUserDto.email,
+      registerUserDto.password,
+      registerUserDto.displayName
+    );
+  }
+
+  @Post('login')
+  @ApiOperation({ summary: 'Login user with email and password' })
+  @ApiResponse({ status: 200, description: 'User logged in successfully' })
+  async loginUser(@Body() loginUserDto: LoginUserDto) {
+    return this.authService.loginUser(loginUserDto.email, loginUserDto.password);
   }
 }

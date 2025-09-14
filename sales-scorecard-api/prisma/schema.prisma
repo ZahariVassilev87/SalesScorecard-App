@@ -16,6 +16,8 @@ model User {
   displayName String
   role        String
   isActive    Boolean  @default(true)
+  password    String?  // For password-based authentication
+  isRegistered Boolean @default(false) // Track if user has completed registration
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

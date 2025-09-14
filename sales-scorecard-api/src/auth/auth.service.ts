@@ -4,6 +4,7 @@ import { PrismaService } from '../common/prisma/prisma.service';
 // UserRole enum removed for SQLite compatibility
 import * as nodemailer from 'nodemailer';
 import * as crypto from 'crypto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -261,6 +262,147 @@ export class AuthService {
         success: false,
         message: `Email test failed: ${error.message}`
       };
+    }
+  }
+
+  // New invite-only registration methods
+  async checkEmailEligibility(email: string): Promise<{ eligible: boolean; message: string; user?: any }> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (!user) {
+        return {
+          eligible: false,
+          message: 'Email not found. Contact your admin to get access to the system.'
+        };
+      }
+
+      if (user.isRegistered) {
+        return {
+          eligible: false,
+          message: 'Account already exists. Please sign in instead.'
+        };
+      }
+
+      return {
+        eligible: true,
+        message: 'Email is eligible for registration.',
+        user: {
+          id: user.id,
+          email: user.email,
+          displayName: user.displayName,
+          role: user.role
+        }
+      };
+    } catch (error) {
+      console.error('Error checking email eligibility:', error);
+      return {
+        eligible: false,
+        message: 'Error checking email eligibility.'
+      };
+    }
+  }
+
+  async registerUser(email: string, password: string, displayName?: string): Promise<{ access_token: string; user: any }> {
+    try {
+      // Check if email is eligible
+      const eligibilityCheck = await this.checkEmailEligibility(email);
+      if (!eligibilityCheck.eligible) {
+        throw new BadRequestException(eligibilityCheck.message);
+      }
+
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Update the user with password and mark as registered
+      const updatedUser = await this.prisma.user.update({
+        where: { email },
+        data: {
+          password: hashedPassword,
+          isRegistered: true,
+          displayName: displayName || eligibilityCheck.user.displayName,
+        },
+      });
+
+      // Generate JWT token
+      const payload = { 
+        sub: updatedUser.id, 
+        email: updatedUser.email, 
+        role: updatedUser.role 
+      };
+      const access_token = this.jwtService.sign(payload);
+
+      return {
+        access_token,
+        user: {
+          id: updatedUser.id,
+          email: updatedUser.email,
+          displayName: updatedUser.displayName,
+          role: updatedUser.role,
+          isActive: updatedUser.isActive,
+          createdAt: updatedUser.createdAt,
+          updatedAt: updatedUser.updatedAt,
+        }
+      };
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw error;
+    }
+  }
+
+  async loginUser(email: string, password: string): Promise<{ access_token: string; user: any }> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException('Invalid email or password');
+      }
+
+      if (!user.isRegistered) {
+        throw new UnauthorizedException('Account not registered. Please complete registration first.');
+      }
+
+      if (!user.password) {
+        throw new UnauthorizedException('Account not properly set up. Contact your admin.');
+      }
+
+      // Verify password
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        throw new UnauthorizedException('Invalid email or password');
+      }
+
+      if (!user.isActive) {
+        throw new UnauthorizedException('Account is deactivated. Contact your admin.');
+      }
+
+      // Generate JWT token
+      const payload = { 
+        sub: user.id, 
+        email: user.email, 
+        role: user.role 
+      };
+      const access_token = this.jwtService.sign(payload);
+
+      return {
+        access_token,
+        user: {
+          id: user.id,
+          email: user.email,
+          displayName: user.displayName,
+          role: user.role,
+          isActive: user.isActive,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+        }
+      };
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
     }
   }
 }
