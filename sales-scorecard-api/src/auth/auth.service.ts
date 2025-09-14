@@ -37,6 +37,12 @@ export class AuthService {
       throw new BadRequestException('Email domain not allowed');
     }
 
+    // For testing: if SMTP is not working, return a mock response
+    if (process.env.SKIP_EMAIL === 'true') {
+      console.log(`Mock email sent to ${email} - SMTP disabled for testing`);
+      return { message: 'Mock email sent (SMTP disabled for testing)' };
+    }
+
     // Check if user exists in organizational structure
     const existingUser = await this.findUserInOrganization(email);
     const isNewUser = !existingUser;
