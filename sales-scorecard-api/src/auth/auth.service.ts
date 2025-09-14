@@ -222,6 +222,7 @@ export class AuthService {
   }
 
   async testEmail(email: string): Promise<{ success: boolean; message: string }> {
+    // Force rebuild - testEmail method for SendGrid debugging
     try {
       // Test the email transporter configuration
       await this.transporter.verify();
