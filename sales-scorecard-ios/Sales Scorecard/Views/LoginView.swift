@@ -116,6 +116,7 @@ struct LoginView: View {
                             managedRegions: nil
                         )
                         authManager.currentUser = testUser
+                        authManager.authToken = "test-token" // Provide a dummy token for API calls
                         authManager.isAuthenticated = true
                     }
                     .foregroundColor(.orange)

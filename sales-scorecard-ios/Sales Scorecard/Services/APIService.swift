@@ -287,7 +287,7 @@ class APIService {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        // No authentication needed for public admin endpoints
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
@@ -317,7 +317,7 @@ class APIService {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        // No authentication needed for public admin endpoints
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
@@ -347,7 +347,7 @@ class APIService {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        // No authentication needed for public admin endpoints
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {

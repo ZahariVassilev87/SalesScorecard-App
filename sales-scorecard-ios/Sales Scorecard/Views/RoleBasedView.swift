@@ -64,11 +64,11 @@ struct AdminTabView: View {
 struct DirectorTabView: View {
     var body: some View {
         TabView {
-            // SalesDirectorDashboardView() // Temporarily commented out until added to Xcode project
-            //     .tabItem {
-            //         Image(systemName: "house")
-            //         Text("Dashboard")
-            //     }
+            SalesDirectorDashboardView()
+                .tabItem {
+                    Image(systemName: "house")
+                    Text("Dashboard")
+                }
             
             AnalyticsView()
                 .tabItem {
