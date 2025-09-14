@@ -581,6 +581,9 @@
                 <button class="tab-button" onclick="showTab('manage')">
                     <span class="tab-icon">⚙️</span>Manage Teams
                 </button>
+                <button class="tab-button" onclick="showTab('directors')">
+                    <span class="tab-icon">👔</span>Sales Directors
+                </button>
                 <button class="tab-button" onclick="showTab('delete')">
                     <span class="tab-icon">🗑️</span>Delete Data
                 </button>
@@ -724,6 +727,48 @@
                             </div>
                             <button class="btn btn-success" onclick="addTeamMember()">➕ Add Member</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sales Directors Tab -->
+            <div id="directors" class="tab-content">
+                <div class="section">
+                    <h2>👔 Sales Directors Management</h2>
+                    <p>Assign Sales Directors to regions. Sales Directors can oversee multiple regions and have access to comprehensive analytics.</p>
+                    
+                    <div class="form-group">
+                        <label for="selectedRegionForDirector">Select Region:</label>
+                        <select id="selectedRegionForDirector" onchange="loadRegionDirectors()">
+                            <option value="">Choose a region...</option>
+                        </select>
+                    </div>
+                    
+                    <div id="directorManagement" class="hidden">
+                        <div class="section">
+                            <h3>Current Sales Directors for <span id="selectedRegionName">Region</span></h3>
+                            <div id="currentDirectors" class="members-list">
+                                <!-- Current directors will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div class="add-member">
+                            <h4>Add New Sales Director:</h4>
+                            <div class="form-group">
+                                <input type="text" id="newDirectorName" placeholder="Full Name (e.g., John Smith)" />
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="newDirectorEmail" placeholder="Email (e.g., john.smith@company.com)" />
+                            </div>
+                            <button class="btn btn-success" onclick="addSalesDirector()">➕ Add Sales Director</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2>📊 Sales Directors Overview</h2>
+                    <div id="directorsOverview" class="team-overview">
+                        <p>Loading sales directors overview...</p>
                     </div>
                 </div>
             </div>
@@ -1334,6 +1379,194 @@
             }
         }
         
+        // Sales Director Management Functions
+        async function loadRegionsForDirectors() {
+            try {
+                const response = await fetch(`${API_BASE}/public-admin/teams`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch teams');
+                }
+                
+                const teams = await response.json();
+                const regions = [...new Set(teams.map(team => team.region).filter(region => region))];
+                
+                const select = document.getElementById('selectedRegionForDirector');
+                select.innerHTML = '<option value="">Choose a region...</option>';
+                
+                regions.forEach(region => {
+                    const option = document.createElement('option');
+                    option.value = region.id;
+                    option.textContent = region.name;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                showAlert('❌ Error loading regions: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadRegionDirectors() {
+            const selectedRegionId = document.getElementById('selectedRegionForDirector').value;
+            const directorManagement = document.getElementById('directorManagement');
+            
+            if (!selectedRegionId) {
+                directorManagement.classList.add('hidden');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/public-admin/regions/${selectedRegionId}/directors`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch region directors');
+                }
+                
+                const data = await response.json();
+                
+                // Update region name
+                document.getElementById('selectedRegionName').textContent = data.region.name;
+                
+                // Update directors list
+                const directorsContainer = document.getElementById('currentDirectors');
+                directorsContainer.innerHTML = '';
+                
+                if (data.directors && data.directors.length > 0) {
+                    data.directors.forEach(director => {
+                        const directorElement = document.createElement('div');
+                        directorElement.className = 'member-item';
+                        directorElement.innerHTML = `
+                            <div class="member-info">
+                                <div class="member-name">${director.displayName}</div>
+                                <div class="member-email">${director.email}</div>
+                                <div class="member-role">Sales Director</div>
+                            </div>
+                            <button class="remove-member" onclick="removeSalesDirector('${selectedRegionId}', '${director.id}', '${director.displayName}')">
+                                🗑️ Remove
+                            </button>
+                        `;
+                        directorsContainer.appendChild(directorElement);
+                    });
+                } else {
+                    directorsContainer.innerHTML = '<p style="color: #666; font-style: italic;">No sales directors assigned to this region yet.</p>';
+                }
+                
+                directorManagement.classList.remove('hidden');
+            } catch (error) {
+                showAlert('❌ Error loading region directors: ' + error.message, 'error');
+            }
+        }
+        
+        async function addSalesDirector() {
+            const regionId = document.getElementById('selectedRegionForDirector').value;
+            const directorName = document.getElementById('newDirectorName').value.trim();
+            const directorEmail = document.getElementById('newDirectorEmail').value.trim();
+            
+            if (!regionId || !directorName || !directorEmail) {
+                showAlert('❌ Please select a region and fill in director details', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/public-admin/regions/${regionId}/directors`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: directorName,
+                        email: directorEmail,
+                        role: 'SALES_DIRECTOR',
+                    }),
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    showAlert(`✅ ${result.message}`, 'success');
+                    
+                    // Clear form
+                    document.getElementById('newDirectorName').value = '';
+                    document.getElementById('newDirectorEmail').value = '';
+                    
+                    // Reload directors
+                    loadRegionDirectors();
+                    loadDirectorsOverview();
+                } else {
+                    const error = await response.json();
+                    showAlert('❌ Failed to add sales director: ' + (error.message || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                showAlert('❌ Error adding sales director: ' + error.message, 'error');
+            }
+        }
+        
+        async function removeSalesDirector(regionId, directorId, directorName) {
+            if (!confirm(`⚠️ Are you sure you want to remove ${directorName} as a sales director from this region?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/public-admin/regions/${regionId}/directors/${directorId}`, {
+                    method: 'DELETE',
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    showAlert(`✅ ${result.message}`, 'success');
+                    
+                    // Reload directors
+                    loadRegionDirectors();
+                    loadDirectorsOverview();
+                } else {
+                    const error = await response.json();
+                    showAlert('❌ Failed to remove sales director: ' + (error.message || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                showAlert('❌ Error removing sales director: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadDirectorsOverview() {
+            try {
+                const response = await fetch(`${API_BASE}/public-admin/directors`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch directors overview');
+                }
+                
+                const data = await response.json();
+                const overviewContainer = document.getElementById('directorsOverview');
+                
+                if (data.directors.length === 0) {
+                    overviewContainer.innerHTML = '<p style="color: #666; text-align: center; padding: 20px;">No sales directors found. Add some sales directors to see the overview.</p>';
+                    return;
+                }
+                
+                let html = '';
+                data.directors.forEach(director => {
+                    const regions = director.managedRegions || [];
+                    html += `
+                        <div class="region-card">
+                            <div class="region-header">👔 ${director.displayName}</div>
+                            <div class="team-members">
+                                <strong>Email:</strong> ${director.email}<br>
+                                <strong>Regions (${regions.length}):</strong>
+                                <div class="member-list">
+                    `;
+                    
+                    regions.forEach(region => {
+                        html += `<div class="member-item">• ${region.name}</div>`;
+                    });
+                    
+                    html += `
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                overviewContainer.innerHTML = html;
+            } catch (error) {
+                document.getElementById('directorsOverview').innerHTML = `<p style="color: #dc3545;">Error loading directors overview: ${error.message}</p>`;
+            }
+        }
+        
         // Tab switching functionality
         function showTab(tabName) {
             // Hide all tab contents
@@ -1359,6 +1592,9 @@
                 loadTeamOverview();
             } else if (tabName === 'manage') {
                 loadTeamsForManagement();
+            } else if (tabName === 'directors') {
+                loadRegionsForDirectors();
+                loadDirectorsOverview();
             } else if (tabName === 'delete') {
                 loadTeamsForManagement(); // Also loads deletion dropdowns
             }

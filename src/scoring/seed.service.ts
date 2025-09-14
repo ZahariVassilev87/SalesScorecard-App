@@ -447,4 +447,116 @@ export class SeedService {
   async getEvaluationsCount(): Promise<number> {
     return this.prisma.evaluation.count();
   }
+
+  // Sales Director Management Methods
+  async getRegionDirectors(regionId: string) {
+    const region = await this.prisma.region.findUnique({
+      where: { id: regionId },
+      include: {
+        managers: {
+          where: { role: 'SALES_DIRECTOR' }
+        }
+      }
+    });
+
+    if (!region) {
+      throw new Error('Region not found');
+    }
+
+    return {
+      region: { id: region.id, name: region.name },
+      directors: region.managers
+    };
+  }
+
+  async addRegionDirector(regionId: string, data: { name: string; email: string; role: string }) {
+    // Check if user already exists
+    let user = await this.prisma.user.findUnique({
+      where: { email: data.email }
+    });
+
+    if (!user) {
+      // Create new user
+      user = await this.prisma.user.create({
+        data: {
+          email: data.email,
+          displayName: data.name,
+          role: data.role,
+        },
+      });
+    } else {
+      // Update existing user role if needed
+      if (user.role !== data.role) {
+        user = await this.prisma.user.update({
+          where: { id: user.id },
+          data: { role: data.role }
+        });
+      }
+    }
+
+    // Link user to region
+    await this.prisma.userRegion.upsert({
+      where: {
+        userId_regionId: {
+          userId: user.id,
+          regionId: regionId
+        }
+      },
+      update: {},
+      create: {
+        userId: user.id,
+        regionId: regionId
+      }
+    });
+
+    // Also link via direct relation for compatibility
+    await this.prisma.region.update({
+      where: { id: regionId },
+      data: {
+        managers: {
+          connect: { id: user.id }
+        }
+      }
+    });
+
+    return {
+      message: `Sales Director ${data.name} added successfully to region`,
+      director: user
+    };
+  }
+
+  async removeRegionDirector(regionId: string, directorId: string) {
+    // Remove from UserRegion table
+    await this.prisma.userRegion.deleteMany({
+      where: {
+        userId: directorId,
+        regionId: regionId
+      }
+    });
+
+    // Remove from direct relation
+    await this.prisma.region.update({
+      where: { id: regionId },
+      data: {
+        managers: {
+          disconnect: { id: directorId }
+        }
+      }
+    });
+
+    return {
+      message: 'Sales Director removed successfully from region'
+    };
+  }
+
+  async getAllDirectors() {
+    const directors = await this.prisma.user.findMany({
+      where: { role: 'SALES_DIRECTOR' },
+      include: {
+        managedRegions: true
+      }
+    });
+
+    return { directors };
+  }
 }

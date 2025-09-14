@@ -206,4 +206,31 @@ export class PublicAdminController {
   async deleteEverything() {
     return this.seedService.deleteEverything();
   }
+
+  // Sales Director Management Endpoints
+  @Get('regions/:regionId/directors')
+  async getRegionDirectors(@Param('regionId') regionId: string) {
+    return this.seedService.getRegionDirectors(regionId);
+  }
+
+  @Post('regions/:regionId/directors')
+  async addRegionDirector(
+    @Param('regionId') regionId: string,
+    @Body() body: { name: string; email: string; role: string }
+  ) {
+    return this.seedService.addRegionDirector(regionId, body);
+  }
+
+  @Delete('regions/:regionId/directors/:directorId')
+  async removeRegionDirector(
+    @Param('regionId') regionId: string,
+    @Param('directorId') directorId: string
+  ) {
+    return this.seedService.removeRegionDirector(regionId, directorId);
+  }
+
+  @Get('directors')
+  async getAllDirectors() {
+    return this.seedService.getAllDirectors();
+  }
 }
