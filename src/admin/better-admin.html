@@ -326,6 +326,38 @@
             padding: 15px;
             margin-bottom: 20px;
         }
+
+        .checkbox-group {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f9f9f9;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .region-checkboxes {
+            margin-top: 10px;
+            padding-left: 20px;
+            border-left: 2px solid #007bff;
+        }
+
+        .region-checkboxes label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: normal;
+        }
         
         .member-item {
             display: flex;
@@ -735,41 +767,51 @@
             <div id="directors" class="tab-content">
                 <div class="section">
                     <h2>👔 Sales Directors Management</h2>
-                    <p><strong>Sales Directors manage ALL regions</strong> in the organization and have access to comprehensive analytics across the entire company.</p>
+                    <p>Create and manage Sales Directors who oversee regional managers and have access to comprehensive analytics.</p>
                     
-                    <div class="form-group">
-                        <label for="selectedRegionForDirector">Select Region to View Directors:</label>
-                        <select id="selectedRegionForDirector" onchange="loadRegionDirectors()">
-                            <option value="">Choose a region...</option>
-                        </select>
-                    </div>
-                    
-                    <div id="directorManagement" class="hidden">
-                        <div class="section">
-                            <h3>Sales Directors (Manage All Regions)</h3>
-                            <p><em>Sales Directors have access to all regions in the organization</em></p>
-                            <div id="currentDirectors" class="members-list">
-                                <!-- Current directors will be loaded here -->
+                    <!-- Add New Sales Director Form -->
+                    <div class="add-member">
+                        <h3>➕ Add New Sales Director</h3>
+                        <div class="form-group">
+                            <label for="newDirectorName">Full Name:</label>
+                            <input type="text" id="newDirectorName" placeholder="e.g., John Smith" />
+                        </div>
+                        <div class="form-group">
+                            <label for="newDirectorEmail">Email Address:</label>
+                            <input type="email" id="newDirectorEmail" placeholder="e.g., john.smith@company.com" />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Region Assignment:</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="assignAllRegions" onchange="toggleAllRegions()" />
+                                    <span class="checkmark"></span>
+                                    <strong>Assign to ALL regions</strong>
+                                </label>
+                                <div id="regionCheckboxes" class="region-checkboxes">
+                                    <!-- Region checkboxes will be loaded here -->
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="add-member">
-                            <h4>Add New Sales Director:</h4>
-                            <div class="form-group">
-                                <input type="text" id="newDirectorName" placeholder="Full Name (e.g., John Smith)" />
-                            </div>
-                            <div class="form-group">
-                                <input type="email" id="newDirectorEmail" placeholder="Email (e.g., john.smith@company.com)" />
-                            </div>
-                            <button class="btn btn-success" onclick="addSalesDirector()">➕ Add Sales Director</button>
-                        </div>
+                        <button onclick="addSalesDirector()" class="btn btn-primary">Add Sales Director</button>
                     </div>
                 </div>
                 
+                <!-- Current Sales Directors -->
                 <div class="section">
-                    <h2>📊 Sales Directors Overview</h2>
-                    <div id="directorsOverview" class="team-overview">
-                        <p>Loading sales directors overview...</p>
+                    <h3>📋 Current Sales Directors</h3>
+                    <div id="currentDirectors" class="members-list">
+                        <!-- Current directors will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- All Sales Directors Overview -->
+                <div class="section">
+                    <h3>📊 All Sales Directors Overview</h3>
+                    <div id="directorsOverview" class="members-list">
+                        <!-- All directors will be loaded here -->
                     </div>
                 </div>
             </div>
@@ -1391,81 +1433,109 @@
                 const teams = await response.json();
                 const regions = [...new Set(teams.map(team => team.region).filter(region => region))];
                 
-                const select = document.getElementById('selectedRegionForDirector');
-                select.innerHTML = '<option value="">Choose a region...</option>';
+                const regionCheckboxes = document.getElementById('regionCheckboxes');
+                regionCheckboxes.innerHTML = '';
                 
                 regions.forEach(region => {
-                    const option = document.createElement('option');
-                    option.value = region.id;
-                    option.textContent = region.name;
-                    select.appendChild(option);
+                    const label = document.createElement('label');
+                    label.className = 'checkbox-label';
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.value = region.id;
+                    checkbox.id = `region_${region.id}`;
+                    checkbox.onchange = updateAssignAllCheckbox;
+                    
+                    const span = document.createElement('span');
+                    span.textContent = region.name;
+                    
+                    label.appendChild(checkbox);
+                    label.appendChild(span);
+                    regionCheckboxes.appendChild(label);
                 });
             } catch (error) {
                 showAlert('❌ Error loading regions: ' + error.message, 'error');
             }
         }
         
-        async function loadRegionDirectors() {
-            const selectedRegionId = document.getElementById('selectedRegionForDirector').value;
-            const directorManagement = document.getElementById('directorManagement');
+        function toggleAllRegions() {
+            const assignAllCheckbox = document.getElementById('assignAllRegions');
+            const regionCheckboxes = document.querySelectorAll('#regionCheckboxes input[type="checkbox"]');
             
-            if (!selectedRegionId) {
-                directorManagement.classList.add('hidden');
-                return;
+            regionCheckboxes.forEach(checkbox => {
+                checkbox.checked = assignAllCheckbox.checked;
+            });
+        }
+        
+        function updateAssignAllCheckbox() {
+            const regionCheckboxes = document.querySelectorAll('#regionCheckboxes input[type="checkbox"]');
+            const assignAllCheckbox = document.getElementById('assignAllRegions');
+            
+            const checkedCount = Array.from(regionCheckboxes).filter(cb => cb.checked).length;
+            const totalCount = regionCheckboxes.length;
+            
+            if (checkedCount === 0) {
+                assignAllCheckbox.indeterminate = false;
+                assignAllCheckbox.checked = false;
+            } else if (checkedCount === totalCount) {
+                assignAllCheckbox.indeterminate = false;
+                assignAllCheckbox.checked = true;
+            } else {
+                assignAllCheckbox.indeterminate = true;
+                assignAllCheckbox.checked = false;
             }
-            
+        }
+        
+        async function loadCurrentDirectors() {
             try {
-                const response = await fetch(`${API_BASE}/public-admin/regions/${selectedRegionId}/directors`);
+                const response = await fetch(`${API_BASE}/public-admin/directors`);
                 if (!response.ok) {
-                    throw new Error('Failed to fetch region directors');
+                    throw new Error('Failed to fetch directors');
                 }
                 
                 const data = await response.json();
-                
-                // Update region name
-                document.getElementById('selectedRegionName').textContent = data.region.name;
-                
-                // Update directors list
                 const directorsContainer = document.getElementById('currentDirectors');
-                directorsContainer.innerHTML = '';
                 
                 if (data.directors && data.directors.length > 0) {
-                    data.directors.forEach(director => {
-                        const directorElement = document.createElement('div');
-                        directorElement.className = 'member-item';
-                        directorElement.innerHTML = `
-                            <div class="member-info">
-                                <div class="member-name">${director.displayName}</div>
-                                <div class="member-email">${director.email}</div>
-                                <div class="member-role">Sales Director</div>
+                    directorsContainer.innerHTML = data.directors.map(director => `
+                        <div class="member-item">
+                            <div>
+                                <strong>${director.displayName || director.email}</strong>
+                                <p>${director.email}</p>
+                                <p><em>Manages ${director.managedRegions ? director.managedRegions.length : 0} regions</em></p>
                             </div>
-                            <button class="remove-member" onclick="removeSalesDirector('${selectedRegionId}', '${director.id}', '${director.displayName}')">
-                                🗑️ Remove
-                            </button>
-                        `;
-                        directorsContainer.appendChild(directorElement);
-                    });
+                            <button onclick="removeSalesDirector('${director.id}')" class="btn btn-danger btn-sm">Remove</button>
+                        </div>
+                    `).join('');
                 } else {
-                    directorsContainer.innerHTML = '<p style="color: #666; font-style: italic;">No sales directors assigned to this region yet.</p>';
+                    directorsContainer.innerHTML = '<p>No Sales Directors found.</p>';
                 }
-                
-                directorManagement.classList.remove('hidden');
             } catch (error) {
-                showAlert('❌ Error loading region directors: ' + error.message, 'error');
+                showAlert('❌ Error loading directors: ' + error.message, 'error');
             }
         }
         
         async function addSalesDirector() {
-            const regionId = document.getElementById('selectedRegionForDirector').value;
             const directorName = document.getElementById('newDirectorName').value.trim();
             const directorEmail = document.getElementById('newDirectorEmail').value.trim();
+            const assignAllRegions = document.getElementById('assignAllRegions').checked;
+            const selectedRegions = Array.from(document.querySelectorAll('#regionCheckboxes input[type="checkbox"]:checked')).map(cb => cb.value);
             
-            if (!regionId || !directorName || !directorEmail) {
-                showAlert('❌ Please select a region and fill in director details', 'error');
+            if (!directorName || !directorEmail) {
+                showAlert('❌ Please fill in director name and email', 'error');
+                return;
+            }
+            
+            if (!assignAllRegions && selectedRegions.length === 0) {
+                showAlert('❌ Please select at least one region or choose "Assign to ALL regions"', 'error');
                 return;
             }
             
             try {
+                // For now, we'll use the first selected region or any region for the API call
+                // The backend will handle assigning to all regions
+                const regionId = selectedRegions.length > 0 ? selectedRegions[0] : 'all';
+                
                 const response = await fetch(`${API_BASE}/public-admin/regions/${regionId}/directors`, {
                     method: 'POST',
                     headers: {
@@ -1485,9 +1555,11 @@
                     // Clear form
                     document.getElementById('newDirectorName').value = '';
                     document.getElementById('newDirectorEmail').value = '';
+                    document.getElementById('assignAllRegions').checked = false;
+                    document.querySelectorAll('#regionCheckboxes input[type="checkbox"]').forEach(cb => cb.checked = false);
                     
                     // Reload directors
-                    loadRegionDirectors();
+                    loadCurrentDirectors();
                     loadDirectorsOverview();
                 } else {
                     const error = await response.json();
@@ -1498,13 +1570,14 @@
             }
         }
         
-        async function removeSalesDirector(regionId, directorId, directorName) {
-            if (!confirm(`⚠️ Are you sure you want to remove ${directorName} as a sales director from this region?`)) {
+        async function removeSalesDirector(directorId) {
+            if (!confirm(`⚠️ Are you sure you want to remove this Sales Director from all regions?`)) {
                 return;
             }
             
             try {
-                const response = await fetch(`${API_BASE}/public-admin/regions/${regionId}/directors/${directorId}`, {
+                // Use any region ID since the backend removes from all regions
+                const response = await fetch(`${API_BASE}/public-admin/regions/any/directors/${directorId}`, {
                     method: 'DELETE',
                 });
                 
@@ -1513,7 +1586,7 @@
                     showAlert(`✅ ${result.message}`, 'success');
                     
                     // Reload directors
-                    loadRegionDirectors();
+                    loadCurrentDirectors();
                     loadDirectorsOverview();
                 } else {
                     const error = await response.json();
@@ -1595,6 +1668,7 @@
                 loadTeamsForManagement();
             } else if (tabName === 'directors') {
                 loadRegionsForDirectors();
+                loadCurrentDirectors();
                 loadDirectorsOverview();
             } else if (tabName === 'delete') {
                 loadTeamsForManagement(); // Also loads deletion dropdowns
