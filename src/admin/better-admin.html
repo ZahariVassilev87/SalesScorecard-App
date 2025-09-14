@@ -1516,10 +1516,14 @@
         }
         
         async function addSalesDirector() {
+            console.log('addSalesDirector function called');
+            
             const directorName = document.getElementById('newDirectorName').value.trim();
             const directorEmail = document.getElementById('newDirectorEmail').value.trim();
             const assignAllRegions = document.getElementById('assignAllRegions').checked;
             const selectedRegions = Array.from(document.querySelectorAll('#regionCheckboxes input[type="checkbox"]:checked')).map(cb => cb.value);
+            
+            console.log('Form data:', { directorName, directorEmail, assignAllRegions, selectedRegions });
             
             if (!directorName || !directorEmail) {
                 showAlert('❌ Please fill in director name and email', 'error');
@@ -1532,9 +1536,30 @@
             }
             
             try {
-                // For now, we'll use the first selected region or any region for the API call
-                // The backend will handle assigning to all regions
-                const regionId = selectedRegions.length > 0 ? selectedRegions[0] : 'all';
+                console.log('Starting API call...');
+                
+                // Get a real region ID - use first selected region or get any available region
+                let regionId;
+                if (selectedRegions.length > 0) {
+                    regionId = selectedRegions[0];
+                    console.log('Using selected region ID:', regionId);
+                } else {
+                    console.log('Getting region ID from teams...');
+                    // Get any available region ID
+                    const response = await fetch(`${API_BASE}/public-admin/teams`);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch teams to get region ID');
+                    }
+                    const teams = await response.json();
+                    const regions = [...new Set(teams.map(team => team.region).filter(region => region))];
+                    if (regions.length === 0) {
+                        throw new Error('No regions available. Please create a region first.');
+                    }
+                    regionId = regions[0].id;
+                    console.log('Got region ID from teams:', regionId);
+                }
+                
+                console.log('Making API call to:', `${API_BASE}/public-admin/regions/${regionId}/directors`);
                 
                 const response = await fetch(`${API_BASE}/public-admin/regions/${regionId}/directors`, {
                     method: 'POST',
@@ -1547,6 +1572,8 @@
                         role: 'SALES_DIRECTOR',
                     }),
                 });
+                
+                console.log('API response status:', response.status);
                 
                 if (response.ok) {
                     const result = await response.json();
@@ -1576,20 +1603,31 @@
             }
             
             try {
-                // Use any region ID since the backend removes from all regions
-                const response = await fetch(`${API_BASE}/public-admin/regions/any/directors/${directorId}`, {
+                // Get any available region ID for the API call
+                const response = await fetch(`${API_BASE}/public-admin/teams`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch teams to get region ID');
+                }
+                const teams = await response.json();
+                const regions = [...new Set(teams.map(team => team.region).filter(region => region))];
+                if (regions.length === 0) {
+                    throw new Error('No regions available.');
+                }
+                const regionId = regions[0].id;
+                
+                const deleteResponse = await fetch(`${API_BASE}/public-admin/regions/${regionId}/directors/${directorId}`, {
                     method: 'DELETE',
                 });
                 
-                if (response.ok) {
-                    const result = await response.json();
+                if (deleteResponse.ok) {
+                    const result = await deleteResponse.json();
                     showAlert(`✅ ${result.message}`, 'success');
                     
                     // Reload directors
                     loadCurrentDirectors();
                     loadDirectorsOverview();
                 } else {
-                    const error = await response.json();
+                    const error = await deleteResponse.json();
                     showAlert('❌ Failed to remove sales director: ' + (error.message || 'Unknown error'), 'error');
                 }
             } catch (error) {
