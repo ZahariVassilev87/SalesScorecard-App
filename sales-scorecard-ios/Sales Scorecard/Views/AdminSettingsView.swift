@@ -97,9 +97,9 @@ struct AdminSettingsView: View {
             ]
             
             users = [
-                User(id: "1", email: "admin@company.com", displayName: "Admin User", role: "ADMIN", isActive: true, createdAt: "2024-01-01T00:00:00Z", updatedAt: "2024-01-01T00:00:00Z"),
-                User(id: "2", email: "director@company.com", displayName: "Sales Director", role: "SALES_DIRECTOR", isActive: true, createdAt: "2024-01-01T00:00:00Z", updatedAt: "2024-01-01T00:00:00Z"),
-                User(id: "3", email: "manager@company.com", displayName: "Sales Manager", role: "SALES_MANAGER", isActive: true, createdAt: "2024-01-01T00:00:00Z", updatedAt: "2024-01-01T00:00:00Z")
+                User(id: "1", email: "admin@company.com", displayName: "Admin User", role: "ADMIN", isActive: true, createdAt: "2024-01-01T00:00:00Z", updatedAt: "2024-01-01T00:00:00Z", managedRegions: nil),
+                User(id: "2", email: "director@company.com", displayName: "Sales Director", role: "SALES_DIRECTOR", isActive: true, createdAt: "2024-01-01T00:00:00Z", updatedAt: "2024-01-01T00:00:00Z", managedRegions: nil),
+                User(id: "3", email: "manager@company.com", displayName: "Sales Manager", role: "SALES_MANAGER", isActive: true, createdAt: "2024-01-01T00:00:00Z", updatedAt: "2024-01-01T00:00:00Z", managedRegions: nil)
             ]
             
             isLoading = false

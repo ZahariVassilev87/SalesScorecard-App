@@ -112,7 +112,8 @@ struct LoginView: View {
                             role: "ADMIN",
                             isActive: true,
                             createdAt: "2024-01-01T00:00:00Z",
-                            updatedAt: "2024-01-01T00:00:00Z"
+                            updatedAt: "2024-01-01T00:00:00Z",
+                            managedRegions: nil
                         )
                         authManager.currentUser = testUser
                         authManager.isAuthenticated = true
