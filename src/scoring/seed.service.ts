@@ -494,58 +494,68 @@ export class SeedService {
       }
     }
 
-    // Link user to region
-    await this.prisma.userRegion.upsert({
-      where: {
-        userId_regionId: {
+    // Sales Directors manage ALL regions in the organization
+    // Get all regions and link the Sales Director to all of them
+    const allRegions = await this.prisma.region.findMany();
+    
+    for (const region of allRegions) {
+      // Link user to region (check if already exists first)
+      const existingUserRegion = await this.prisma.userRegion.findFirst({
+        where: {
           userId: user.id,
-          regionId: regionId
+          regionId: region.id
         }
-      },
-      update: {},
-      create: {
-        userId: user.id,
-        regionId: regionId
-      }
-    });
+      });
 
-    // Also link via direct relation for compatibility
-    await this.prisma.region.update({
-      where: { id: regionId },
-      data: {
-        managers: {
-          connect: { id: user.id }
-        }
+      if (!existingUserRegion) {
+        await this.prisma.userRegion.create({
+          data: {
+            userId: user.id,
+            regionId: region.id
+          }
+        });
       }
-    });
+
+      // Also link via direct relation for compatibility
+      await this.prisma.region.update({
+        where: { id: region.id },
+        data: {
+          managers: {
+            connect: { id: user.id }
+          }
+        }
+      });
+    }
 
     return {
-      message: `Sales Director ${data.name} added successfully to region`,
+      message: `Sales Director ${data.name} added successfully and assigned to all regions`,
       director: user
     };
   }
 
   async removeRegionDirector(regionId: string, directorId: string) {
-    // Remove from UserRegion table
+    // Remove Sales Director from ALL regions (since they manage all regions)
     await this.prisma.userRegion.deleteMany({
       where: {
-        userId: directorId,
-        regionId: regionId
+        userId: directorId
       }
     });
 
-    // Remove from direct relation
-    await this.prisma.region.update({
-      where: { id: regionId },
-      data: {
-        managers: {
-          disconnect: { id: directorId }
+    // Remove from all direct relations
+    const allRegions = await this.prisma.region.findMany();
+    for (const region of allRegions) {
+      await this.prisma.region.update({
+        where: { id: region.id },
+        data: {
+          managers: {
+            disconnect: { id: directorId }
+          }
         }
-      }
-    });
+      });
+    }
 
     return {
-      message: 'Sales Director removed successfully from region'
+      message: 'Sales Director removed successfully from all regions'
     };
   }
 

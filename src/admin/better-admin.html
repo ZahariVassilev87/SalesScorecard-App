@@ -735,10 +735,10 @@
             <div id="directors" class="tab-content">
                 <div class="section">
                     <h2>👔 Sales Directors Management</h2>
-                    <p>Assign Sales Directors to regions. Sales Directors can oversee multiple regions and have access to comprehensive analytics.</p>
+                    <p><strong>Sales Directors manage ALL regions</strong> in the organization and have access to comprehensive analytics across the entire company.</p>
                     
                     <div class="form-group">
-                        <label for="selectedRegionForDirector">Select Region:</label>
+                        <label for="selectedRegionForDirector">Select Region to View Directors:</label>
                         <select id="selectedRegionForDirector" onchange="loadRegionDirectors()">
                             <option value="">Choose a region...</option>
                         </select>
@@ -746,7 +746,8 @@
                     
                     <div id="directorManagement" class="hidden">
                         <div class="section">
-                            <h3>Current Sales Directors for <span id="selectedRegionName">Region</span></h3>
+                            <h3>Sales Directors (Manage All Regions)</h3>
+                            <p><em>Sales Directors have access to all regions in the organization</em></p>
                             <div id="currentDirectors" class="members-list">
                                 <!-- Current directors will be loaded here -->
                             </div>
