@@ -220,4 +220,38 @@ export class AuthService {
 
     return user;
   }
+
+  async testEmail(email: string): Promise<{ success: boolean; message: string }> {
+    try {
+      // Test the email transporter configuration
+      await this.transporter.verify();
+      
+      // Send a simple test email
+      const mailOptions = {
+        from: process.env.SMTP_FROM || process.env.SMTP_USER,
+        to: email,
+        subject: 'Sales Scorecard - Email Test',
+        text: 'This is a test email to verify the email service configuration.',
+        html: `
+          <h2>Sales Scorecard - Email Test</h2>
+          <p>This is a test email to verify the email service configuration.</p>
+          <p>If you receive this email, the SendGrid/SMTP configuration is working correctly!</p>
+          <p>Time: ${new Date().toISOString()}</p>
+        `,
+      };
+
+      await this.transporter.sendMail(mailOptions);
+      
+      return {
+        success: true,
+        message: `Test email sent successfully to ${email}`
+      };
+    } catch (error) {
+      console.error('Email test failed:', error);
+      return {
+        success: false,
+        message: `Email test failed: ${error.message}`
+      };
+    }
+  }
 }
