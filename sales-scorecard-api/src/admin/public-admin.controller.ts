@@ -129,4 +129,17 @@ export class PublicAdminController {
       };
     }
   }
+
+  @Get('email-config')
+  async getEmailConfig() {
+    return {
+      smtpHost: process.env.SMTP_HOST ? 'Set' : 'Not Set',
+      smtpPort: process.env.SMTP_PORT ? 'Set' : 'Not Set',
+      smtpUser: process.env.SMTP_USER ? 'Set' : 'Not Set',
+      smtpPass: process.env.SMTP_PASS ? 'Set' : 'Not Set',
+      smtpFrom: process.env.SMTP_FROM ? 'Set' : 'Not Set',
+      allowedDomains: process.env.ALLOWED_DOMAINS ? 'Set' : 'Not Set',
+      // Don't expose actual values for security
+    };
+  }
 }
