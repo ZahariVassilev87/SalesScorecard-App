@@ -55,7 +55,8 @@ class CoreDataService: ObservableObject {
                     role: userEntity.role ?? "",
                     isActive: userEntity.isActive,
                     createdAt: ISO8601DateFormatter().string(from: userEntity.createdAt ?? Date()),
-                    updatedAt: ISO8601DateFormatter().string(from: userEntity.updatedAt ?? Date())
+                    updatedAt: ISO8601DateFormatter().string(from: userEntity.updatedAt ?? Date()),
+                    managedRegions: nil
                 )
             }
         } catch {
