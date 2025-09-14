@@ -5,7 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "prisma:generate": "npx prisma generate",
-    "build": "chmod +x build.sh && ./build.sh",
+    "build": "echo 'Using custom build script' && chmod +x build.sh && ./build.sh",
     "build:force": "echo 'Forcing rebuild with new schema' && chmod +x build.sh && ./build.sh",
     "start": "node dist/main.js",
     "start:dev": "ts-node src/main.ts",

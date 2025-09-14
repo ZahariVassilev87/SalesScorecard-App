@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo "🔧 Building Sales Scorecard API with new invite-only registration schema..."
+echo "🚀 FORCE REBUILD - This should show our custom build script is running!"
 
 # Set default DATABASE_URL if not provided
 export DATABASE_URL=${DATABASE_URL:-"file:./dev.db"}
