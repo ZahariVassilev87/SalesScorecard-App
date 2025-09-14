@@ -2,6 +2,7 @@ import { Controller, Get, Post, Delete, Body, Param, Query, Res } from '@nestjs/
 import { Response } from 'express';
 import { ScoringService } from '../scoring/scoring.service';
 import { SeedService } from '../scoring/seed.service';
+import { AuthService } from '../auth/auth.service';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -10,6 +11,7 @@ export class PublicAdminController {
   constructor(
     private scoringService: ScoringService,
     private seedService: SeedService,
+    private authService: AuthService,
   ) {}
 
   @Get('panel')
@@ -111,5 +113,20 @@ export class PublicAdminController {
   @Delete('delete-everything')
   async deleteEverything() {
     return this.seedService.deleteEverything();
+  }
+
+  @Post('test-email')
+  async testEmail(@Body() body: { email: string }) {
+    try {
+      const result = await this.authService.testEmail(body.email);
+      return { success: true, message: 'Test email sent successfully', result };
+    } catch (error) {
+      return { 
+        success: false, 
+        message: 'Email test failed', 
+        error: error.message,
+        details: error
+      };
+    }
   }
 }
