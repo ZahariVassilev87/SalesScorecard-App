@@ -234,45 +234,6 @@ struct TeamCard: View {
                 }
             }
             
-            // Sales Director
-            if let region = team.region, let managers = region.managers, !managers.isEmpty {
-                let salesDirectors = managers.filter { $0.role == "SALES_DIRECTOR" }
-                if !salesDirectors.isEmpty {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Sales Director:")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.secondary)
-                        
-                        ForEach(salesDirectors) { director in
-                            HStack {
-                                Circle()
-                                    .fill(Color.purple.opacity(0.2))
-                                    .frame(width: 24, height: 24)
-                                    .overlay(
-                                        Text(director.displayName.prefix(1))
-                                            .font(.caption)
-                                            .fontWeight(.semibold)
-                                            .foregroundColor(.purple)
-                                    )
-                                
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(director.displayName)
-                                        .font(.caption)
-                                        .fontWeight(.medium)
-                                    
-                                    Text(director.email)
-                                        .font(.caption2)
-                                        .foregroundColor(.secondary)
-                                }
-                                
-                                Spacer()
-                            }
-                        }
-                    }
-                }
-            }
-            
             // Team Members
             if salespeople.isEmpty {
                 Text("No team members yet")
