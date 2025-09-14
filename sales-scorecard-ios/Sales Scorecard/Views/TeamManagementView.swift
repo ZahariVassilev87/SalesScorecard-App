@@ -1,11 +1,13 @@
 import SwiftUI
 
 struct TeamManagementView: View {
+    @EnvironmentObject var authManager: AuthManager
     @StateObject private var coreDataService = CoreDataService.shared
     @State private var teams: [Team] = []
     @State private var salespeople: [Salesperson] = []
     @State private var isLoading = true
     @State private var selectedTeam: Team?
+    @State private var errorMessage: String?
     
     var body: some View {
         NavigationView {
@@ -13,6 +15,27 @@ struct TeamManagementView: View {
                 if isLoading {
                     ProgressView("Loading team structure...")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if let errorMessage = errorMessage {
+                    VStack(spacing: 16) {
+                        Image(systemName: "exclamationmark.triangle")
+                            .font(.largeTitle)
+                            .foregroundColor(.orange)
+                        
+                        Text("Error")
+                            .font(.headline)
+                        
+                        Text(errorMessage)
+                            .font(.body)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                        
+                        Button("Retry") {
+                            loadTeamData()
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     ScrollView {
                         VStack(spacing: 16) {
@@ -49,18 +72,31 @@ struct TeamManagementView: View {
     
     private func loadTeamData() {
         isLoading = true
+        errorMessage = nil
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            // Load from Core Data
-            self.teams = self.coreDataService.getAllTeams()
-            self.salespeople = self.coreDataService.getAllSalespeople()
-            
-            // If no data exists, create sample data
-            if self.teams.isEmpty {
-                self.createSampleData()
+        guard let token = authManager.authToken else {
+            errorMessage = "No authentication token available"
+            isLoading = false
+            return
+        }
+        
+        let apiService = APIService()
+        
+        // Load teams from API
+        apiService.getTeams(token: token) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let teamsData):
+                    self.teams = teamsData
+                    // Extract salespeople from teams
+                    self.salespeople = teamsData.flatMap { $0.salespeople ?? [] }
+                case .failure(let error):
+                    self.errorMessage = "Failed to load teams: \(error.localizedDescription)"
+                    // Fallback to sample data if API fails
+                    self.createSampleData()
+                }
+                self.isLoading = false
             }
-            
-            self.isLoading = false
         }
     }
     
