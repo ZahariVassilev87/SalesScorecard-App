@@ -5,7 +5,7 @@ nixPkgs = ['nodejs', 'npm']
 cmds = ['npm ci']
 
 [phases.build]
-cmds = ['npm run build']
+cmds = ['chmod +x build.sh', './build.sh']
 
 [start]
 cmd = 'npm run start:prod'
