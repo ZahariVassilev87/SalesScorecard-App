@@ -144,6 +144,12 @@ struct TeamCard: View {
                         .font(.headline)
                         .fontWeight(.semibold)
                     
+                    if let region = team.region {
+                        Text("Region: \(region.name)")
+                            .font(.caption)
+                            .foregroundColor(.blue)
+                    }
+                    
                     Text("\(salespeople.count) members")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -156,6 +162,115 @@ struct TeamCard: View {
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
+            }
+            
+            // Regional Manager
+            if let region = team.region, let managers = region.managers, !managers.isEmpty {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Regional Manager:")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.secondary)
+                    
+                    ForEach(managers.filter { $0.role == "REGIONAL_SALES_MANAGER" }) { manager in
+                        HStack {
+                            Circle()
+                                .fill(Color.blue.opacity(0.2))
+                                .frame(width: 24, height: 24)
+                                .overlay(
+                                    Text(manager.displayName.prefix(1))
+                                        .font(.caption)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.blue)
+                                )
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(manager.displayName)
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                                
+                                Text(manager.email)
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                        }
+                    }
+                }
+            }
+            
+            // Sales Lead
+            if let manager = team.manager {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Sales Lead:")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.secondary)
+                    
+                    HStack {
+                        Circle()
+                            .fill(Color.green.opacity(0.2))
+                            .frame(width: 24, height: 24)
+                            .overlay(
+                                Text(manager.displayName.prefix(1))
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.green)
+                            )
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(manager.displayName)
+                                .font(.caption)
+                                .fontWeight(.medium)
+                            
+                            Text(manager.email)
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Spacer()
+                    }
+                }
+            }
+            
+            // Sales Director
+            if let region = team.region, let managers = region.managers, !managers.isEmpty {
+                let salesDirectors = managers.filter { $0.role == "SALES_DIRECTOR" }
+                if !salesDirectors.isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Sales Director:")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.secondary)
+                        
+                        ForEach(salesDirectors) { director in
+                            HStack {
+                                Circle()
+                                    .fill(Color.purple.opacity(0.2))
+                                    .frame(width: 24, height: 24)
+                                    .overlay(
+                                        Text(director.displayName.prefix(1))
+                                            .font(.caption)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(.purple)
+                                    )
+                                
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(director.displayName)
+                                        .font(.caption)
+                                        .fontWeight(.medium)
+                                    
+                                    Text(director.email)
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                }
+                                
+                                Spacer()
+                            }
+                        }
+                    }
+                }
             }
             
             // Team Members
