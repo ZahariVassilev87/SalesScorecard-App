@@ -3,19 +3,17 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../common/prisma/prisma.service';
 // UserRole enum removed for SQLite compatibility
 import * as nodemailer from 'nodemailer';
-import { Resend } from 'resend';
 import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
   private transporter: nodemailer.Transporter;
-  private resend: Resend;
 
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
   ) {
-    // Configure email transporter (fallback)
+    // Configure email transporter with better timeout settings
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.SMTP_PORT || '587'),
@@ -24,10 +22,10 @@ export class AuthService {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
+      connectionTimeout: 10000, // 10 seconds
+      greetingTimeout: 10000,   // 10 seconds
+      socketTimeout: 10000,     // 10 seconds
     });
-
-    // Configure Resend (primary)
-    this.resend = new Resend(process.env.RESEND_API_KEY);
   }
 
   async sendMagicLink(email: string): Promise<{ message: string }> {
@@ -60,49 +58,23 @@ export class AuthService {
       ? `<p>Welcome to Sales Scorecard! Your account has been automatically set up.</p>`
       : `<p>You're already part of our team! Here's your login code:</p>`;
     
-    // Try Resend first, fallback to SMTP
-    try {
-      if (process.env.RESEND_API_KEY) {
-        await this.resend.emails.send({
-          from: process.env.SMTP_FROM || 'Sales Scorecard <noreply@instorm.bg>',
-          to: [email],
-          subject: emailSubject,
-          html: `
-            <h2>Sales Scorecard Login</h2>
-            ${emailMessage}
-            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; font-family: monospace; font-size: 18px; font-weight: bold; text-align: center; margin: 20px 0;">
-              ${token}
-            </div>
-            <p>Enter this code in your iOS app to sign in.</p>
-            <p>This code will expire in 15 minutes.</p>
-            <p>If you didn't request this code, please ignore this email.</p>
-            <hr>
-            <p><small>Alternative: Click this link to sign in automatically: <a href="${magicLink}">Sign In</a></small></p>
-          `,
-        });
-      } else {
-        throw new Error('Resend API key not configured');
-      }
-    } catch (resendError) {
-      console.log('Resend failed, trying SMTP fallback:', resendError.message);
-      await this.transporter.sendMail({
-        from: process.env.SMTP_FROM || 'Sales Scorecard <noreply@instorm.bg>',
-        to: email,
-        subject: emailSubject,
-        html: `
-          <h2>Sales Scorecard Login</h2>
-          ${emailMessage}
-          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; font-family: monospace; font-size: 18px; font-weight: bold; text-align: center; margin: 20px 0;">
-            ${token}
-          </div>
-          <p>Enter this code in your iOS app to sign in.</p>
-          <p>This code will expire in 15 minutes.</p>
-          <p>If you didn't request this code, please ignore this email.</p>
-          <hr>
-          <p><small>Alternative: Click this link to sign in automatically: <a href="${magicLink}">Sign In</a></small></p>
-        `,
-      });
-    }
+    await this.transporter.sendMail({
+      from: process.env.SMTP_FROM || 'Sales Scorecard <noreply@instorm.bg>',
+      to: email,
+      subject: emailSubject,
+      html: `
+        <h2>Sales Scorecard Login</h2>
+        ${emailMessage}
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; font-family: monospace; font-size: 18px; font-weight: bold; text-align: center; margin: 20px 0;">
+          ${token}
+        </div>
+        <p>Enter this code in your iOS app to sign in.</p>
+        <p>This code will expire in 15 minutes.</p>
+        <p>If you didn't request this code, please ignore this email.</p>
+        <hr>
+        <p><small>Alternative: Click this link to sign in automatically: <a href="${magicLink}">Sign In</a></small></p>
+      `,
+    });
 
     return { message: 'Magic link sent to your email' };
   }
@@ -254,48 +226,29 @@ export class AuthService {
 
   async testEmail(email: string): Promise<{ success: boolean; message: string }> {
     try {
-      // Try Resend first, fallback to SMTP
-      if (process.env.RESEND_API_KEY) {
-        await this.resend.emails.send({
-          from: process.env.SMTP_FROM || 'Sales Scorecard <noreply@instorm.bg>',
-          to: [email],
-          subject: 'Sales Scorecard - Email Test',
-          html: `
-            <h2>Sales Scorecard - Email Test</h2>
-            <p>This is a test email to verify the email service configuration.</p>
-            <p>If you receive this email, the Resend configuration is working correctly!</p>
-            <p>Time: ${new Date().toISOString()}</p>
-          `,
-        });
-        
-        return {
-          success: true,
-          message: `Test email sent successfully to ${email} via Resend`
-        };
-      } else {
-        // Fallback to SMTP
-        await this.transporter.verify();
-        
-        const mailOptions = {
-          from: process.env.SMTP_FROM || process.env.SMTP_USER,
-          to: email,
-          subject: 'Sales Scorecard - Email Test',
-          text: 'This is a test email to verify the email service configuration.',
-          html: `
-            <h2>Sales Scorecard - Email Test</h2>
-            <p>This is a test email to verify the email service configuration.</p>
-            <p>If you receive this email, the SMTP configuration is working correctly!</p>
-            <p>Time: ${new Date().toISOString()}</p>
-          `,
-        };
+      // Test the email transporter configuration
+      await this.transporter.verify();
+      
+      // Send a simple test email
+      const mailOptions = {
+        from: process.env.SMTP_FROM || process.env.SMTP_USER,
+        to: email,
+        subject: 'Sales Scorecard - Email Test',
+        text: 'This is a test email to verify the email service configuration.',
+        html: `
+          <h2>Sales Scorecard - Email Test</h2>
+          <p>This is a test email to verify the email service configuration.</p>
+          <p>If you receive this email, the SMTP configuration is working correctly!</p>
+          <p>Time: ${new Date().toISOString()}</p>
+        `,
+      };
 
-        await this.transporter.sendMail(mailOptions);
-        
-        return {
-          success: true,
-          message: `Test email sent successfully to ${email} via SMTP`
-        };
-      }
+      await this.transporter.sendMail(mailOptions);
+      
+      return {
+        success: true,
+        message: `Test email sent successfully to ${email}`
+      };
     } catch (error) {
       console.error('Email test failed:', error);
       return {
