@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🔧 Building Sales Scorecard API..."
+echo "🔧 Building Sales Scorecard API with new invite-only registration schema..."
 
 # Set default DATABASE_URL if not provided
 export DATABASE_URL=${DATABASE_URL:-"file:./dev.db"}
