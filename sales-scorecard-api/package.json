@@ -1,11 +1,11 @@
 {
-  "name": "sales-scorecard-api-v2",
-  "version": "2.0.0",
+  "name": "sales-scorecard-api-v3",
+  "version": "3.0.0",
   "description": "Sales Scorecard Backend API",
   "main": "dist/main.js",
   "scripts": {
     "prisma:generate": "npx prisma generate",
-    "build": "echo 'FINAL BUILD - v2.0.0 with invite-only registration' && chmod +x build-final.sh && ./build-final.sh",
+    "build": "echo 'PASSWORD AUTH BUILD - v3.0.0 with proper password storage' && npx prisma generate && npx tsc",
     "build:force": "echo 'Forcing rebuild with new schema' && chmod +x build.sh && ./build.sh",
     "start": "node dist/main.js",
     "start:dev": "ts-node src/main.ts",

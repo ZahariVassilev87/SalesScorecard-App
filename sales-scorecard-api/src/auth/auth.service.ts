@@ -266,7 +266,7 @@ export class AuthService {
   }
 
   // New invite-only registration methods (using existing schema)
-  async checkEmailEligibility(email: string): Promise<{ eligible: boolean; message: string; user?: any }> {
+  async checkEmailEligibility(email: string): Promise<{ eligible: boolean; message: string; user?: any; isRegistered?: boolean }> {
     try {
       const user = await this.prisma.user.findUnique({
         where: { email },
@@ -280,10 +280,14 @@ export class AuthService {
       }
 
       // Check if user has a password (indicates they've registered)
-      // We'll use a simple approach: if user exists, they're eligible
+      const isRegistered = !!user.password;
+
       return {
         eligible: true,
-        message: 'Email is eligible for registration.',
+        message: isRegistered 
+          ? 'Email is already registered. You can log in with your password.'
+          : 'Email is eligible for registration. Please set up your password.',
+        isRegistered,
         user: {
           id: user.id,
           email: user.email,
@@ -308,15 +312,23 @@ export class AuthService {
         throw new BadRequestException(eligibilityCheck.message);
       }
 
-      // For now, we'll just generate a token without storing the password
-      // This is a simplified approach that works with the existing schema
-      const user = await this.prisma.user.findUnique({
-        where: { email },
-      });
-
-      if (!user) {
-        throw new BadRequestException('User not found');
+      // Check if user is already registered
+      if (eligibilityCheck.isRegistered) {
+        throw new BadRequestException('User is already registered. Please log in instead.');
       }
+
+      // Hash the password
+      const saltRounds = 12;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+      // Update user with password
+      const user = await this.prisma.user.update({
+        where: { email },
+        data: {
+          password: hashedPassword,
+          displayName: displayName || eligibilityCheck.user.displayName,
+        },
+      });
 
       // Generate JWT token
       const payload = { 
@@ -358,9 +370,16 @@ export class AuthService {
         throw new UnauthorizedException('Account is deactivated. Contact your admin.');
       }
 
-      // For now, we'll skip password verification and just check if user exists
-      // This is a simplified approach that works with the existing schema
-      // In a real implementation, you'd want to store and verify passwords
+      // Check if user has a password set
+      if (!user.password) {
+        throw new UnauthorizedException('Account not registered. Please register first.');
+      }
+
+      // Verify password
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        throw new UnauthorizedException('Invalid email or password');
+      }
 
       // Generate JWT token
       const payload = { 

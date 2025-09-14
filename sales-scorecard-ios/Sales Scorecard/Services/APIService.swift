@@ -2,6 +2,7 @@ import Foundation
 
 class APIService {
     private let baseURL = "https://salesscorecard-app-production.up.railway.app" // P
+    
     private let isDevelopmentMode = false // Production mode
     
     func sendMagicLink(email: String, completion: @escaping (Result<Void, Error>) -> Void) {
