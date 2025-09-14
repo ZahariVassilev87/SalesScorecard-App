@@ -450,11 +450,10 @@ export class SeedService {
   }
 
   async getPendingRegistrations() {
-    // Temporarily commented out to fix build
     return this.prisma.user.findMany({
-      // where: {
-      //   isRegistered: false,
-      // },
+      where: {
+        isRegistered: false,
+      },
       select: {
         id: true,
         email: true,
