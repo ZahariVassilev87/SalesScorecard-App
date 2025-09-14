@@ -450,10 +450,9 @@ export class SeedService {
   }
 
   async getPendingRegistrations() {
+    // For now, return all users as "pending" since we don't have isRegistered field
+    // This is a simplified approach that works with the existing schema
     return this.prisma.user.findMany({
-      where: {
-        isRegistered: false,
-      },
       select: {
         id: true,
         email: true,
