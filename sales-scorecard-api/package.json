@@ -1,6 +1,6 @@
 {
   "name": "sales-scorecard-api-v3",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "description": "Sales Scorecard Backend API",
   "main": "dist/main.js",
   "scripts": {
