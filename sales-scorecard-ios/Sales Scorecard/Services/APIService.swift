@@ -1,7 +1,7 @@
 import Foundation
 
 class APIService {
-    private let baseURL = "http://api.instorm.io" // AWS Production (HTTP for now)
+    private let baseURL = "https://api.instorm.io" // AWS Production (HTTPS)
     
     private let isDevelopmentMode = false // Production mode
     

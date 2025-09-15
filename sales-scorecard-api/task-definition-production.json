@@ -1,0 +1,59 @@
+{
+  "family": "sales-scorecard-task-production",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::221855463690:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "sales-scorecard-api",
+      "image": "221855463690.dkr.ecr.eu-north-1.amazonaws.com/sales-scorecard-api:latest",
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "PORT",
+          "value": "3000"
+        },
+        {
+          "name": "DATABASE_URL",
+          "value": "postgresql://postgres:SalesScorecard2024!@sales-scorecard-db.cvmwi48oaptu.eu-north-1.rds.amazonaws.com:5432/sales_scorecard"
+        },
+        {
+          "name": "JWT_SECRET",
+          "value": "sales-scorecard-super-secret-jwt-key-2024-production"
+        },
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "value": "AKIAIOSFODNN7EXAMPLE"
+        },
+        {
+          "name": "AWS_SECRET_ACCESS_KEY",
+          "value": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+        },
+        {
+          "name": "AWS_REGION",
+          "value": "eu-north-1"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/sales-scorecard",
+          "awslogs-region": "eu-north-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}

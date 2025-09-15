@@ -1,0 +1,34 @@
+{
+    "LoadBalancers": [
+        {
+            "LoadBalancerArn": "arn:aws:elasticloadbalancing:eu-north-1:221855463690:loadbalancer/app/sales-scorecard-alb/b3c3d238f826c716",
+            "DNSName": "sales-scorecard-alb-913927421.eu-north-1.elb.amazonaws.com",
+            "CanonicalHostedZoneId": "Z23TAZ6LKFMNIO",
+            "CreatedTime": "2025-09-14T21:11:05.994000+00:00",
+            "LoadBalancerName": "sales-scorecard-alb",
+            "Scheme": "internet-facing",
+            "VpcId": "vpc-0a31ab81dafef4473",
+            "State": {
+                "Code": "active"
+            },
+            "Type": "application",
+            "AvailabilityZones": [
+                {
+                    "ZoneName": "eu-north-1a",
+                    "SubnetId": "subnet-08e2e6f3d87ae2407",
+                    "LoadBalancerAddresses": []
+                },
+                {
+                    "ZoneName": "eu-north-1b",
+                    "SubnetId": "subnet-0cf7f08ec911e292f",
+                    "LoadBalancerAddresses": []
+                }
+            ],
+            "SecurityGroups": [
+                "sg-023ad82910d10d4ef"
+            ],
+            "IpAddressType": "ipv4",
+            "EnablePrefixForIpv6SourceNat": "off"
+        }
+    ]
+}

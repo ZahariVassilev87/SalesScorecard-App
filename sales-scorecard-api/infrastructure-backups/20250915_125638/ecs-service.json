@@ -1,0 +1,149 @@
+{
+    "services": [
+        {
+            "serviceArn": "arn:aws:ecs:eu-north-1:221855463690:service/sales-scorecard-cluster/sales-scorecard-service",
+            "serviceName": "sales-scorecard-service",
+            "clusterArn": "arn:aws:ecs:eu-north-1:221855463690:cluster/sales-scorecard-cluster",
+            "loadBalancers": [
+                {
+                    "targetGroupArn": "arn:aws:elasticloadbalancing:eu-north-1:221855463690:targetgroup/sales-scorecard-targets/08de804ec692dbf9",
+                    "containerName": "sales-scorecard-api",
+                    "containerPort": 3000
+                }
+            ],
+            "serviceRegistries": [],
+            "status": "ACTIVE",
+            "desiredCount": 1,
+            "runningCount": 0,
+            "pendingCount": 1,
+            "launchType": "FARGATE",
+            "platformVersion": "LATEST",
+            "platformFamily": "Linux",
+            "taskDefinition": "arn:aws:ecs:eu-north-1:221855463690:task-definition/sales-scorecard-task:18",
+            "deploymentConfiguration": {
+                "deploymentCircuitBreaker": {
+                    "enable": false,
+                    "rollback": false
+                },
+                "maximumPercent": 200,
+                "minimumHealthyPercent": 100,
+                "strategy": "ROLLING",
+                "bakeTimeInMinutes": 0
+            },
+            "deployments": [
+                {
+                    "id": "ecs-svc/0717870164351995546",
+                    "status": "PRIMARY",
+                    "taskDefinition": "arn:aws:ecs:eu-north-1:221855463690:task-definition/sales-scorecard-task:18",
+                    "desiredCount": 1,
+                    "pendingCount": 1,
+                    "runningCount": 0,
+                    "failedTasks": 10,
+                    "createdAt": "2025-09-15T12:47:11.473000+03:00",
+                    "updatedAt": "2025-09-15T12:50:09.931000+03:00",
+                    "launchType": "FARGATE",
+                    "platformVersion": "1.4.0",
+                    "platformFamily": "Linux",
+                    "networkConfiguration": {
+                        "awsvpcConfiguration": {
+                            "subnets": [
+                                "subnet-08e2e6f3d87ae2407",
+                                "subnet-0cf7f08ec911e292f"
+                            ],
+                            "securityGroups": [
+                                "sg-023ad82910d10d4ef"
+                            ],
+                            "assignPublicIp": "ENABLED"
+                        }
+                    },
+                    "rolloutState": "IN_PROGRESS",
+                    "rolloutStateReason": "ECS deployment ecs-svc/0717870164351995546 in progress."
+                }
+            ],
+            "roleArn": "arn:aws:iam::221855463690:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
+            "events": [
+                {
+                    "id": "a610807a-bb80-4527-8590-ec3e52b89c18",
+                    "createdAt": "2025-09-15T12:56:28.014000+03:00",
+                    "message": "(service sales-scorecard-service) has started 1 tasks: (task 807629da04884e6cabae9c3c470f055a)."
+                },
+                {
+                    "id": "773f932b-ce04-42d6-ba91-e6551511d12e",
+                    "createdAt": "2025-09-15T12:55:27.211000+03:00",
+                    "message": "(service sales-scorecard-service) has started 1 tasks: (task c675d68bfcea4278966e11f5cfed266d)."
+                },
+                {
+                    "id": "a9104734-447a-464f-8c60-0b800733ba23",
+                    "createdAt": "2025-09-15T12:54:25.808000+03:00",
+                    "message": "(service sales-scorecard-service) has started 1 tasks: (task c1afc1c6c3f5442c8fdf60d906225683)."
+                },
+                {
+                    "id": "0f1e0eab-4fe1-409f-9546-85ff466dd389",
+                    "createdAt": "2025-09-15T12:53:25.241000+03:00",
+                    "message": "(service sales-scorecard-service) has started 1 tasks: (task 4101832345fd4503991e05e7eaed5865)."
+                },
+                {
+                    "id": "307abddc-dc14-4171-9528-c47ecef7757f",
+                    "createdAt": "2025-09-15T12:52:23.178000+03:00",
+                    "message": "(service sales-scorecard-service) has started 1 tasks: (task afdbe21c925b41a2818132c54b274083)."
+                },
+                {
+                    "id": "bfdb5868-d67b-41d6-9845-b741a55fd987",
+                    "createdAt": "2025-09-15T12:51:20.863000+03:00",
+                    "message": "(service sales-scorecard-service) has started 1 tasks: (task aafa7700bc434dc0a83cf62e0393bba9)."
+                },
+                {
+                    "id": "eb9c3338-8423-4070-9a63-68097486b506",
+                    "createdAt": "2025-09-15T12:50:20.267000+03:00",
+                    "message": "(service sales-scorecard-service) has started 1 tasks: (task e64f613a9f7141d2b736092962f17c13)."
+                },
+                {
+                    "id": "76c4edb2-7bc6-4fad-b304-c9b6ea2a6ca7",
+                    "createdAt": "2025-09-15T12:49:50.258000+03:00",
+                    "message": "(service sales-scorecard-service) has started 1 tasks: (task eb317673d0e6411da8688d41b64407b9)."
+                },
+                {
+                    "id": "0f2199cd-23ab-47bd-843a-824013b7b731",
+                    "createdAt": "2025-09-15T12:48:49.551000+03:00",
+                    "message": "(service sales-scorecard-service) has started 1 tasks: (task e1ccdca5d9d749b48fd526e630b50c63)."
+                },
+                {
+                    "id": "ebd9574c-585a-41ee-b37c-d84c4cbcf4eb",
+                    "createdAt": "2025-09-15T12:47:47.413000+03:00",
+                    "message": "(service sales-scorecard-service) has started 1 tasks: (task c257ac47058d45e7b9067e753865c53a)."
+                },
+                {
+                    "id": "8187bb11-c0f9-4069-aa2c-e8aff9c0f0f2",
+                    "createdAt": "2025-09-15T12:47:23.204000+03:00",
+                    "message": "(service sales-scorecard-service) has started 1 tasks: (task e487cc8a6a50431ebc502abb3035b178)."
+                }
+            ],
+            "createdAt": "2025-09-15T12:47:11.473000+03:00",
+            "placementConstraints": [],
+            "placementStrategy": [],
+            "networkConfiguration": {
+                "awsvpcConfiguration": {
+                    "subnets": [
+                        "subnet-08e2e6f3d87ae2407",
+                        "subnet-0cf7f08ec911e292f"
+                    ],
+                    "securityGroups": [
+                        "sg-023ad82910d10d4ef"
+                    ],
+                    "assignPublicIp": "ENABLED"
+                }
+            },
+            "healthCheckGracePeriodSeconds": 0,
+            "schedulingStrategy": "REPLICA",
+            "deploymentController": {
+                "type": "ECS"
+            },
+            "createdBy": "arn:aws:iam::221855463690:root",
+            "enableECSManagedTags": false,
+            "propagateTags": "NONE",
+            "enableExecuteCommand": false,
+            "availabilityZoneRebalancing": "ENABLED"
+        }
+    ],
+    "failures": []
+}
