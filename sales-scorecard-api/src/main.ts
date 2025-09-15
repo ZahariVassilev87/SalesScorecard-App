@@ -3,7 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
-// RAILWAY DEPLOYMENT - DOCKERFILE APPROACH - v5.0.0 - FINAL FIX
+// Sales Scorecard API - Production Ready
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
