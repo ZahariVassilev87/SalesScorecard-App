@@ -1,6 +1,6 @@
 {
-  "name": "sales-scorecard-api-railway",
-  "version": "1.0.0-railway",
+  "name": "sales-scorecard-api-fixed",
+  "version": "5.0.0",
   "description": "Sales Scorecard Backend API",
   "main": "dist/main.js",
   "scripts": {
