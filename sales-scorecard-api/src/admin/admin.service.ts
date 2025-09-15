@@ -1,6 +1,6 @@
 import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service';
-// import * as bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AdminService {
@@ -104,13 +104,16 @@ export class AdminService {
       throw new ConflictException('User with this email already exists');
     }
 
-    // Create user (temporary - without password field)
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(userData.password, 12);
+
+    // Create user
     const user = await this.prisma.user.create({
       data: {
         email: userData.email,
         displayName: userData.displayName,
         role: userData.role,
-        // password: userData.password, // Temporarily disabled
+        password: hashedPassword,
         isActive: userData.isActive ?? true,
       },
       select: {
@@ -178,10 +181,10 @@ export class AdminService {
     // Prepare update data
     const updatePayload: any = { ...updateData };
 
-    // Password updates temporarily disabled
-    // if (updateData.password) {
-    //   updatePayload.password = updateData.password;
-    // }
+    // Hash password if provided
+    if (updateData.password) {
+      updatePayload.password = await bcrypt.hash(updateData.password, 12);
+    }
 
     // Update user
     const user = await this.prisma.user.update({
@@ -229,11 +232,14 @@ export class AdminService {
       throw new NotFoundException('User not found');
     }
 
-    // Password reset temporarily disabled
-    // await this.prisma.user.update({
-    //   where: { id },
-    //   data: { password: newPassword },
-    // });
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+    // Update password
+    await this.prisma.user.update({
+      where: { id },
+      data: { password: hashedPassword },
+    });
 
     return { message: 'Password reset successfully' };
   }

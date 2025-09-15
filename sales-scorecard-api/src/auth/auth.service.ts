@@ -4,7 +4,7 @@ import { PrismaService } from '../common/prisma/prisma.service';
 // UserRole enum removed for SQLite compatibility
 import * as nodemailer from 'nodemailer';
 import * as crypto from 'crypto';
-// import * as bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 
 @Injectable()
@@ -290,8 +290,8 @@ export class AuthService {
         };
       }
 
-      // Password check temporarily disabled
-      const isRegistered = false; // Always allow registration for now
+      // Check if user has a password (indicates they've registered)
+      const isRegistered = !!user.password;
 
       return {
         eligible: true,
@@ -328,17 +328,17 @@ export class AuthService {
         throw new BadRequestException('User is already registered. Please log in instead.');
       }
 
-      // Password registration temporarily disabled
-      // const user = await this.prisma.user.update({
-      //   where: { email },
-      //   data: {
-      //     password: password,
-      //     displayName: displayName || eligibilityCheck.user.displayName,
-      //   },
-      // });
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 12);
 
-      // For now, just return the existing user
-      const user = eligibilityCheck.user;
+      // Update user with password
+      const user = await this.prisma.user.update({
+        where: { email },
+        data: {
+          password: hashedPassword,
+          displayName: displayName || eligibilityCheck.user.displayName,
+        },
+      });
 
       // Generate JWT token
       const payload = { 
@@ -380,16 +380,16 @@ export class AuthService {
         throw new UnauthorizedException('Account is deactivated. Contact your admin.');
       }
 
-      // Password authentication temporarily disabled
-      // if (!user.password) {
-      //   throw new UnauthorizedException('Account not registered. Please register first.');
-      // }
+      // Check if user has a password set
+      if (!user.password) {
+        throw new UnauthorizedException('Account not registered. Please register first.');
+      }
 
-      // For now, allow any password for testing
-      // const isPasswordValid = password === user.password;
-      // if (!isPasswordValid) {
-      //   throw new UnauthorizedException('Invalid email or password');
-      // }
+      // Verify password
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        throw new UnauthorizedException('Invalid email or password');
+      }
 
       // Generate JWT token
       const payload = { 

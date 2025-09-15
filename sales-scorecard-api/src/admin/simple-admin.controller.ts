@@ -13,15 +13,33 @@ export class SimpleAdminController {
 
   @Get()
   async getAdminPanel() {
+    const users = await this.adminService.getAllUsers();
+    const stats = await this.adminService.getDashboardStats();
+    
     return {
-      message: "Sales Scorecard Simple Admin Interface",
-      version: "3.0.3",
+      message: "Sales Scorecard Admin Panel",
+      version: "3.0.7",
+      status: "operational",
+      stats: {
+        totalUsers: users.length,
+        activeUsers: users.filter(u => u.isActive).length,
+        ...stats
+      },
       endpoints: {
         createUser: "POST /simple-admin/users",
         listUsers: "GET /simple-admin/users",
-        resetPassword: "POST /simple-admin/users/:id/reset-password"
+        resetPassword: "POST /simple-admin/users/:id/reset-password",
+        createAdmin: "POST /simple-admin/create-admin"
       },
-      instructions: "Use the endpoints above to manage users. Create users with email, displayName, role, and password."
+      instructions: "Use the endpoints above to manage users. Create users with email, displayName, role, password, and sendEmail flag.",
+      roles: ["ADMIN", "REGIONAL_MANAGER", "SALES_LEAD", "SALESPERSON"],
+      features: {
+        userManagement: true,
+        roleBasedAccess: true,
+        emailNotifications: true,
+        passwordAuthentication: true,
+        adminPanel: true
+      }
     };
   }
 
@@ -100,6 +118,36 @@ export class SimpleAdminController {
       };
     } catch (error) {
       throw new Error(`Failed to create user: ${error.message}`);
+    }
+  }
+
+  @Post('create-admin')
+  async createAdminUser(@Body() body: {
+    email: string;
+    displayName: string;
+    password: string;
+  }) {
+    try {
+      const user = await this.adminService.createUser({
+        email: body.email,
+        displayName: body.displayName,
+        role: 'ADMIN',
+        password: body.password,
+        isActive: true,
+      });
+
+      return {
+        message: 'Admin user created successfully',
+        user: {
+          id: user.id,
+          email: user.email,
+          displayName: user.displayName,
+          role: user.role,
+          isActive: user.isActive,
+        },
+      };
+    } catch (error) {
+      throw new Error(`Failed to create admin user: ${error.message}`);
     }
   }
 
