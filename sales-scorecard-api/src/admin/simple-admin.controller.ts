@@ -12,9 +12,26 @@ export class SimpleAdminController {
   ) {}
 
   @Get()
-  async getAdminPanel(@Res() res: Response) {
-    const htmlPath = path.join(__dirname, 'simple-admin.html');
-    res.sendFile(htmlPath);
+  async getAdminPanel() {
+    return {
+      message: "Sales Scorecard Simple Admin Interface",
+      version: "3.0.3",
+      endpoints: {
+        createUser: "POST /simple-admin/users",
+        listUsers: "GET /simple-admin/users",
+        resetPassword: "POST /simple-admin/users/:id/reset-password"
+      },
+      instructions: "Use the endpoints above to manage users. Create users with email, displayName, role, and password."
+    };
+  }
+
+  @Get('test')
+  async testAdmin() {
+    return {
+      message: "Simple Admin is working!",
+      timestamp: new Date().toISOString(),
+      status: "ok"
+    };
   }
 
   @Get('users')
