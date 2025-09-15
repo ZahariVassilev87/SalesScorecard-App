@@ -8,6 +8,7 @@ import { AnalyticsModule } from './analytics/analytics.module';
 import { ScoringModule } from './scoring/scoring.module';
 import { AdminModule } from './admin/admin.module';
 import { PrismaModule } from './common/prisma/prisma.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PrismaModule } from './common/prisma/prisma.module';
       isGlobal: true,
     }),
     PrismaModule,
+    HealthModule,
     AuthModule,
     UsersModule,
     OrganizationsModule,

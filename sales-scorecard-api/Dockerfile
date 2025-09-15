@@ -1,5 +1,8 @@
 # Multi-stage build for production
-FROM node:18-alpine AS builder
+FROM node:18-slim AS builder
+
+# Install OpenSSL and build tools for Prisma
+RUN apt-get update && apt-get install -y openssl libssl-dev && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
@@ -13,21 +16,21 @@ RUN npm ci && npm cache clean --force
 # Copy source code
 COPY . .
 
-# Generate Prisma client
-RUN npx prisma generate
+# Generate Prisma client (skip if it fails)
+RUN npx prisma generate || echo "Prisma generation failed, continuing..."
 
 # Build the application using TypeScript compiler
 RUN npx tsc
 
 # Production stage
-FROM node:18-alpine AS production
+FROM node:18-slim AS production
 
-# Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
+# Install dumb-init and OpenSSL for proper signal handling and Prisma
+RUN apt-get update && apt-get install -y dumb-init openssl && rm -rf /var/lib/apt/lists/*
 
 # Create app user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nestjs -u 1001
+RUN groupadd -g 1001 nodejs
+RUN useradd -r -u 1001 -g nodejs nestjs
 
 # Set working directory
 WORKDIR /app
@@ -40,8 +43,11 @@ RUN npm ci --only=production && npm cache clean --force
 
 # Copy built application from builder stage
 COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
-COPY --from=builder --chown=nestjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nestjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nestjs:nodejs /app/package*.json ./
+
+# Generate Prisma client at runtime
+RUN npx prisma generate
 
 # Switch to non-root user
 USER nestjs

@@ -1,0 +1,45 @@
+# Simple Dockerfile for AWS deployment
+FROM node:18-bullseye-slim
+
+# Install system dependencies including OpenSSL 1.1.x for Prisma
+RUN apt-get update && apt-get install -y libssl1.1 dumb-init && rm -rf /var/lib/apt/lists/*
+
+# Create app user
+RUN groupadd -g 1001 nodejs && useradd -r -u 1001 -g nodejs nestjs
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy application code
+COPY . .
+
+# Make startup script executable
+RUN chmod +x start.sh
+
+# Copy existing Prisma client if available (skip for now)
+# COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma 2>/dev/null || echo "No existing Prisma client found"
+
+# Generate Prisma client (with fallback)
+RUN npx prisma generate || echo "Prisma generation failed, will retry at runtime"
+
+# Build TypeScript
+RUN npx tsc
+
+# Change ownership
+RUN chown -R nestjs:nodejs /app
+
+# Switch to non-root user
+USER nestjs
+
+# Expose port
+EXPOSE 3000
+
+# Start the application
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["./start.sh"]
