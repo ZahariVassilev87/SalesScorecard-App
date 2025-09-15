@@ -19,7 +19,10 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "postinstall": "npx prisma generate",
     "setup-env": "node setup-env.js",
-    "validate-env": "node validate-env.js"
+    "validate-env": "node validate-env.js",
+    "setup-db": "node setup-postgresql.js",
+    "db:migrate": "npx prisma migrate deploy",
+    "db:seed": "node setup-postgresql.js"
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.450.0",
