@@ -7,6 +7,7 @@ cmds = ["npm ci"]
 [phases.build]
 cmds = [
   "rm -rf node_modules/.prisma",
+  "rm -rf node_modules/@prisma",
   "npx prisma generate",
   "npx tsc"
 ]
