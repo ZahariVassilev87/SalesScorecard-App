@@ -1,11 +1,11 @@
 {
   "name": "sales-scorecard-api-v3",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Sales Scorecard Backend API",
   "main": "dist/main.js",
   "scripts": {
     "prisma:generate": "npx prisma generate",
-    "build": "echo 'RAILWAY BUILD v3.0.4 - FORCING PRISMA GENERATION' && rm -rf node_modules/.prisma && npx prisma generate && npx tsc",
+    "build": "npx tsc",
     "build:force": "echo 'Forcing rebuild with new schema' && chmod +x build.sh && ./build.sh",
     "start": "node dist/main.js",
     "start:dev": "ts-node src/main.ts",
