@@ -3,7 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
-// RAILWAY DEPLOYMENT - v3.0.1 with password auth and admin panel - CACHE INVALIDATION - FIXING TYPESCRIPT ERRORS
+// RAILWAY DEPLOYMENT - v3.0.2 with simple admin interface - CACHE INVALIDATION - FIXING PRISMA GENERATION
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
