@@ -74,9 +74,22 @@
 		DE9E2FC22E74EC49002AE610 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DECA90CF2E78140200A29D5C /* Exceptions for "Sales Scorecard" folder in "Sales Scorecard" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Sales-Scorecard-Info.plist",
+			);
+			target = DE9E2F5B2E74C181002AE610 /* Sales Scorecard */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		DE9E2F5E2E74C181002AE610 /* Sales Scorecard */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DECA90CF2E78140200A29D5C /* Exceptions for "Sales Scorecard" folder in "Sales Scorecard" target */,
+			);
 			path = "Sales Scorecard";
 			sourceTree = "<group>";
 		};
@@ -505,7 +518,9 @@
 				DEVELOPMENT_TEAM = 978WPZMFC4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Sales-Scorecard-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Sales Scorecard";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -545,7 +560,9 @@
 				DEVELOPMENT_TEAM = 978WPZMFC4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Sales-Scorecard-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Sales Scorecard";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
