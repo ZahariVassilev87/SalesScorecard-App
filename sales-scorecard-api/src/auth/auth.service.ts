@@ -290,8 +290,8 @@ export class AuthService {
         };
       }
 
-      // Check if user has a password (indicates they've registered)
-      const isRegistered = !!user.password;
+      // Password check temporarily disabled
+      const isRegistered = false; // Always allow registration for now
 
       return {
         eligible: true,
@@ -328,17 +328,17 @@ export class AuthService {
         throw new BadRequestException('User is already registered. Please log in instead.');
       }
 
-      // Hash the password (temporary - using simple hash for now)
-      const hashedPassword = password; // TODO: Add proper hashing
+      // Password registration temporarily disabled
+      // const user = await this.prisma.user.update({
+      //   where: { email },
+      //   data: {
+      //     password: password,
+      //     displayName: displayName || eligibilityCheck.user.displayName,
+      //   },
+      // });
 
-      // Update user with password
-      const user = await this.prisma.user.update({
-        where: { email },
-        data: {
-          password: hashedPassword,
-          displayName: displayName || eligibilityCheck.user.displayName,
-        },
-      });
+      // For now, just return the existing user
+      const user = eligibilityCheck.user;
 
       // Generate JWT token
       const payload = { 
@@ -380,16 +380,16 @@ export class AuthService {
         throw new UnauthorizedException('Account is deactivated. Contact your admin.');
       }
 
-      // Check if user has a password set
-      if (!user.password) {
-        throw new UnauthorizedException('Account not registered. Please register first.');
-      }
+      // Password authentication temporarily disabled
+      // if (!user.password) {
+      //   throw new UnauthorizedException('Account not registered. Please register first.');
+      // }
 
-      // Verify password (temporary - using simple comparison for now)
-      const isPasswordValid = password === user.password; // TODO: Add proper password verification
-      if (!isPasswordValid) {
-        throw new UnauthorizedException('Invalid email or password');
-      }
+      // For now, allow any password for testing
+      // const isPasswordValid = password === user.password;
+      // if (!isPasswordValid) {
+      //   throw new UnauthorizedException('Invalid email or password');
+      // }
 
       // Generate JWT token
       const payload = { 

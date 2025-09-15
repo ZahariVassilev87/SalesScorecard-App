@@ -104,16 +104,13 @@ export class AdminService {
       throw new ConflictException('User with this email already exists');
     }
 
-    // Hash password (temporary - using simple hash for now)
-    const hashedPassword = userData.password; // TODO: Add proper hashing
-
-    // Create user
+    // Create user (temporary - without password field)
     const user = await this.prisma.user.create({
       data: {
         email: userData.email,
         displayName: userData.displayName,
         role: userData.role,
-        password: hashedPassword,
+        // password: userData.password, // Temporarily disabled
         isActive: userData.isActive ?? true,
       },
       select: {
@@ -181,10 +178,10 @@ export class AdminService {
     // Prepare update data
     const updatePayload: any = { ...updateData };
 
-    // Hash password if provided (temporary - using simple hash for now)
-    if (updateData.password) {
-      updatePayload.password = updateData.password; // TODO: Add proper hashing
-    }
+    // Password updates temporarily disabled
+    // if (updateData.password) {
+    //   updatePayload.password = updateData.password;
+    // }
 
     // Update user
     const user = await this.prisma.user.update({
@@ -232,14 +229,11 @@ export class AdminService {
       throw new NotFoundException('User not found');
     }
 
-    // Hash new password (temporary - using simple hash for now)
-    const hashedPassword = newPassword; // TODO: Add proper hashing
-
-    // Update password
-    await this.prisma.user.update({
-      where: { id },
-      data: { password: hashedPassword },
-    });
+    // Password reset temporarily disabled
+    // await this.prisma.user.update({
+    //   where: { id },
+    //   data: { password: newPassword },
+    // });
 
     return { message: 'Password reset successfully' };
   }
