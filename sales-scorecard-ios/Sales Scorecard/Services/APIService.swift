@@ -1,7 +1,7 @@
 import Foundation
 
 class APIService {
-    private let baseURL = "https://api.instorm.io" // AWS Production (HTTPS)
+    private let baseURL = "https://sales-scorecard-api-production.up.railway.app" // Railway Production
     
     private let isDevelopmentMode = false // Production mode
     
