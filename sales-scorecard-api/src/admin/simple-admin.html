@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Scorecard - User Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .user-list {
+            margin-top: 30px;
+        }
+        .user-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .credentials {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Sales Scorecard - User Management</h1>
+        
+        <div id="message"></div>
+        
+        <form id="userForm">
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="displayName">Display Name:</label>
+                <input type="text" id="displayName" name="displayName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select id="role" name="role" required>
+                    <option value="SALES_DIRECTOR">Sales Director</option>
+                    <option value="SALES_LEAD">Sales Lead</option>
+                    <option value="SALESPERSON">Salesperson</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="text" id="password" name="password" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="sendEmail">Send credentials via email:</label>
+                <input type="checkbox" id="sendEmail" name="sendEmail" checked>
+            </div>
+            
+            <button type="submit">Create User</button>
+            <button type="button" onclick="loadUsers()">Refresh User List</button>
+        </form>
+        
+        <div class="user-list">
+            <h2>Current Users</h2>
+            <div id="usersList"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const userData = {
+                email: formData.get('email'),
+                displayName: formData.get('displayName'),
+                role: formData.get('role'),
+                password: formData.get('password'),
+                sendEmail: formData.get('sendEmail') === 'on'
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/public-admin/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage('User created successfully!', 'success');
+                    if (userData.sendEmail) {
+                        showMessage('Credentials sent via email!', 'success');
+                    }
+                    e.target.reset();
+                    loadUsers();
+                } else {
+                    showMessage(`Error: ${result.message}`, 'error');
+                }
+            } catch (error) {
+                showMessage(`Error: ${error.message}`, 'error');
+            }
+        });
+        
+        async function loadUsers() {
+            try {
+                const response = await fetch(`${API_BASE}/public-admin/users`);
+                const users = await response.json();
+                
+                const usersList = document.getElementById('usersList');
+                usersList.innerHTML = '';
+                
+                users.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.className = 'user-item';
+                    userDiv.innerHTML = `
+                        <h3>${user.displayName}</h3>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Role:</strong> ${user.role}</p>
+                        <p><strong>Status:</strong> ${user.isActive ? 'Active' : 'Inactive'}</p>
+                        <p><strong>Created:</strong> ${new Date(user.createdAt).toLocaleDateString()}</p>
+                    `;
+                    usersList.appendChild(userDiv);
+                });
+            } catch (error) {
+                showMessage(`Error loading users: ${error.message}`, 'error');
+            }
+        }
+        
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = type;
+            messageDiv.textContent = message;
+            setTimeout(() => {
+                messageDiv.textContent = '';
+                messageDiv.className = '';
+            }, 5000);
+        }
+        
+        // Load users on page load
+        loadUsers();
+    </script>
+</body>
+</html>
