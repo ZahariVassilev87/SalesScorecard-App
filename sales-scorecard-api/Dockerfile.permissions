@@ -1,0 +1,39 @@
+# Dockerfile with proper permissions for Prisma
+FROM node:18-bullseye-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y libssl1.1 dumb-init && rm -rf /var/lib/apt/lists/*
+
+# Create app user
+RUN groupadd -g 1001 nodejs && useradd -r -u 1001 -g nodejs nestjs
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies as root (to ensure proper permissions)
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy application code
+COPY . .
+
+# Generate Prisma client as root (to avoid permission issues)
+RUN npx prisma generate
+
+# Build TypeScript as root
+RUN npx tsc
+
+# Change ownership of the entire app directory to the nestjs user
+RUN chown -R nestjs:nodejs /app
+
+# Switch to non-root user
+USER nestjs
+
+# Expose port
+EXPOSE 3000
+
+# Start the application
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["node", "dist/main.js"]
