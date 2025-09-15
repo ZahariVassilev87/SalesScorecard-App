@@ -3,7 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
-// RAILWAY DEPLOYMENT - v4.0.0 MAJOR VERSION CHANGE - FORCE CACHE INVALIDATION
+// RAILWAY DEPLOYMENT - NEW BRANCH railway-deploy - BYPASS ALL CACHES
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
