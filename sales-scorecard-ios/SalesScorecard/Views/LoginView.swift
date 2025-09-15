@@ -3,7 +3,9 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject var authManager: AuthManager
     @State private var email = ""
-    @State private var showingMagicLinkSent = false
+    @State private var password = ""
+    @State private var displayName = ""
+    @State private var showRegistration = false
     
     var body: some View {
         VStack(spacing: 30) {
@@ -25,30 +27,101 @@ struct LoginView: View {
             
             // Login Form
             VStack(spacing: 20) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Email Address")
-                        .font(.headline)
-                    
-                    TextField("Enter your email", text: $email)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                }
-                
-                Button(action: sendMagicLink) {
-                    HStack {
-                        if authManager.isLoading {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .scaleEffect(0.8)
+                if showRegistration {
+                    // Registration Form
+                    VStack(spacing: 16) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Display Name")
+                                .font(.headline)
+                            
+                            TextField("Enter your name", text: $displayName)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
-                        Text(authManager.isLoading ? "Sending..." : "Send Magic Link")
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Email Address")
+                                .font(.headline)
+                            
+                            TextField("Enter your email", text: $email)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .keyboardType(.emailAddress)
+                                .autocapitalization(.none)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Password")
+                                .font(.headline)
+                            
+                            SecureField("Enter your password", text: $password)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        
+                        Button(action: registerWithPassword) {
+                            HStack {
+                                if authManager.isLoading {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                        .scaleEffect(0.8)
+                                }
+                                Text(authManager.isLoading ? "Registering..." : "Register")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                        }
+                        .disabled(email.isEmpty || password.isEmpty || displayName.isEmpty || authManager.isLoading)
+                        
+                        Button(action: { showRegistration = false }) {
+                            Text("Already have an account? Sign In")
+                                .foregroundColor(.blue)
+                        }
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                } else {
+                    // Password Login Form (Default)
+                    VStack(spacing: 16) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Email Address")
+                                .font(.headline)
+                            
+                            TextField("Enter your email", text: $email)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .keyboardType(.emailAddress)
+                                .autocapitalization(.none)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Password")
+                                .font(.headline)
+                            
+                            SecureField("Enter your password", text: $password)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        
+                        Button(action: loginWithPassword) {
+                            HStack {
+                                if authManager.isLoading {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                        .scaleEffect(0.8)
+                                }
+                                Text(authManager.isLoading ? "Signing In..." : "Sign In")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                        }
+                        .disabled(email.isEmpty || password.isEmpty || authManager.isLoading)
+                        
+                        Button(action: { showRegistration = true }) {
+                            Text("Don't have an account? Register")
+                                .foregroundColor(.blue)
+                        }
+                    }
                 }
-                .disabled(email.isEmpty || authManager.isLoading)
             }
             
             // Error Message
@@ -59,40 +132,17 @@ struct LoginView: View {
                     .multilineTextAlignment(.center)
             }
             
-            // Magic Link Sent Message
-            if showingMagicLinkSent {
-                VStack(spacing: 12) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 40))
-                        .foregroundColor(.green)
-                    
-                    Text("Magic Link Sent!")
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                    
-                    Text("Check your email and click the link to sign in")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-                .padding()
-                .background(Color.green.opacity(0.1))
-                .cornerRadius(12)
-            }
-            
             Spacer()
         }
         .padding()
-        .onChange(of: authManager.isAuthenticated) { isAuthenticated in
-            if isAuthenticated {
-                showingMagicLinkSent = false
-            }
-        }
     }
     
-    private func sendMagicLink() {
-        authManager.sendMagicLink(email: email)
-        showingMagicLinkSent = true
+    private func loginWithPassword() {
+        authManager.loginWithPassword(email: email, password: password)
+    }
+    
+    private func registerWithPassword() {
+        authManager.registerWithPassword(email: email, password: password, displayName: displayName)
     }
 }
 

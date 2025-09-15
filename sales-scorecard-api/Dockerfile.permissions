@@ -1,8 +1,8 @@
 # Dockerfile with proper permissions for Prisma
 FROM node:18-bullseye-slim
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y libssl1.1 dumb-init && rm -rf /var/lib/apt/lists/*
+# Install system dependencies including build tools for bcrypt
+RUN apt-get update && apt-get install -y libssl1.1 dumb-init python3 make g++ && rm -rf /var/lib/apt/lists/*
 
 # Create app user
 RUN groupadd -g 1001 nodejs && useradd -r -u 1001 -g nodejs nestjs
@@ -15,6 +15,9 @@ COPY package*.json ./
 
 # Install dependencies as root (to ensure proper permissions)
 RUN npm ci --only=production && npm cache clean --force
+
+# Install bcryptjs instead of bcrypt for better platform compatibility
+RUN npm uninstall bcrypt && npm install bcryptjs @types/bcryptjs
 
 # Copy application code
 COPY . .
@@ -36,4 +39,4 @@ EXPOSE 3000
 
 # Start the application
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["node", "dist/main.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]

@@ -3,6 +3,7 @@ import { Response } from 'express';
 import { ScoringService } from '../scoring/scoring.service';
 import { SeedService } from '../scoring/seed.service';
 import { AuthService } from '../auth/auth.service';
+import { AdminService } from './admin.service';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -12,6 +13,7 @@ export class PublicAdminController {
     private scoringService: ScoringService,
     private seedService: SeedService,
     private authService: AuthService,
+    private adminService: AdminService,
   ) {}
 
   @Get('panel')
@@ -146,5 +148,42 @@ export class PublicAdminController {
   @Get('pending-registrations')
   async getPendingRegistrations() {
     return this.seedService.getPendingRegistrations();
+  }
+
+  // Public User Management Endpoints (for initial setup)
+  @Get('users')
+  async getAllUsers() {
+    return this.adminService.getAllUsers();
+  }
+
+  @Post('users')
+  async createUser(@Body() userData: {
+    email: string;
+    displayName: string;
+    role: string;
+    password: string;
+    isActive?: boolean;
+  }) {
+    return this.adminService.createUser(userData);
+  }
+
+  @Post('users/:id/reset-password')
+  async resetUserPassword(@Param('id') id: string, @Body() body: { password: string }) {
+    return this.adminService.resetUserPassword(id, body.password);
+  }
+
+  @Post('create-admin')
+  async createAdminUser(@Body() body: {
+    email: string;
+    displayName: string;
+    password: string;
+  }) {
+    return this.adminService.createUser({
+      email: body.email,
+      displayName: body.displayName,
+      role: 'ADMIN',
+      password: body.password,
+      isActive: true,
+    });
   }
 }

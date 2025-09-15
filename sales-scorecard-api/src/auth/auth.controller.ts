@@ -95,4 +95,23 @@ export class AuthController {
   async loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.authService.loginUser(loginUserDto.email, loginUserDto.password);
   }
+
+  @Post('test-email')
+  @ApiOperation({ summary: 'Test email functionality with AWS SES' })
+  @ApiResponse({ status: 200, description: 'Test email sent successfully' })
+  async testEmail(@Body() body: { email: string }) {
+    const subject = 'Sales Scorecard API - Test Email';
+    const htmlContent = `
+      <h2>🎉 Email Test Successful!</h2>
+      <p>This is a test email from the Sales Scorecard API using AWS SES.</p>
+      <p><strong>Timestamp:</strong> ${new Date().toISOString()}</p>
+      <p><strong>From:</strong> zahari.vasilev@instorm.bg</p>
+      <p><strong>To:</strong> ${body.email}</p>
+      <hr>
+      <p><em>If you received this email, the AWS SES integration is working correctly!</em></p>
+    `;
+    
+    await this.authService.sendEmailWithSES(body.email, subject, htmlContent);
+    return { message: 'Test email sent successfully!', to: body.email };
+  }
 }

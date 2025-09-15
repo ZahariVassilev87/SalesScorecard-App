@@ -3,169 +3,146 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject var authManager: AuthManager
     @State private var email = ""
-    @State private var token = ""
-    @State private var showTokenInput = false
-    @State private var showAlert = false
-    @State private var alertMessage = ""
+    @State private var password = ""
+    @State private var displayName = ""
+    @State private var showRegistration = false
     
     var body: some View {
         VStack(spacing: 30) {
             // Header
             VStack(spacing: 16) {
-                Image(systemName: "person.circle.fill")
-                    .font(.system(size: 80))
+                Image(systemName: "chart.bar.fill")
+                    .font(.system(size: 60))
                     .foregroundColor(.blue)
                 
                 Text("Sales Scorecard")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
-                Text("Sign in to continue")
+                Text("Evaluate sales performance with precision")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-            .padding(.top, 50)
-            
-            Spacer()
-            
-            // Login Form
-            VStack(spacing: 20) {
-                if !showTokenInput {
-                    // Email Input
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Email Address")
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                        
-                        TextField("Enter your email", text: $email)
-                            .textFieldStyle(.roundedBorder)
-                    }
-                    
-                    // Send Magic Link Button
-                    Button(action: sendMagicLink) {
-                        HStack {
-                            if authManager.isLoading {
-                                ProgressView()
-                                    .scaleEffect(0.8)
-                            } else {
-                                Image(systemName: "envelope")
-                            }
-                            Text(authManager.isLoading ? "Sending..." : "Send Magic Link")
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                    }
-                    .disabled(authManager.isLoading || email.isEmpty)
-                    .opacity(authManager.isLoading || email.isEmpty ? 0.6 : 1.0)
-                } else {
-                    // Token Input
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Verification Code")
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                        
-                        TextField("Enter verification code", text: $token)
-                            .textFieldStyle(.roundedBorder)
-                    }
-                    
-                    // Verify Token Button
-                    Button(action: verifyToken) {
-                        HStack {
-                            if authManager.isLoading {
-                                ProgressView()
-                                    .scaleEffect(0.8)
-                            } else {
-                                Image(systemName: "checkmark.circle")
-                            }
-                            Text(authManager.isLoading ? "Verifying..." : "Verify Code")
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                    }
-                    .disabled(authManager.isLoading || token.isEmpty)
-                    .opacity(authManager.isLoading || token.isEmpty ? 0.6 : 1.0)
-                }
-                
-                // Back Button (when showing token input)
-                if showTokenInput {
-                    Button("Back to Email") {
-                        showTokenInput = false
-                        token = ""
-                    }
-                    .foregroundColor(.blue)
-                }
-                
-                // Test Mode Button (for simulator testing)
-                if !showTokenInput {
-                    Button("Test Mode - Use Real Data") {
-                        // Create a test user for development with real Sales Director data
-                        let testUser = User(
-                            id: "cmfjpdcka000c139kbbc4iglx", // Real Sales Director ID from admin panel
-                            email: "zahari.vasilev@instorm.bg",
-                            displayName: "Zahari",
-                            role: "SALES_DIRECTOR",
-                            isActive: true,
-                            createdAt: "2025-09-14T13:00:15.706Z",
-                            updatedAt: "2025-09-14T13:00:15.706Z",
-                            managedRegions: nil
-                        )
-                        authManager.currentUser = testUser
-                        authManager.authToken = "test-token" // Provide a dummy token for API calls
-                        authManager.isAuthenticated = true
-                    }
-                    .foregroundColor(.orange)
-                    .font(.caption)
-                }
-            }
-            .padding(.horizontal, 30)
-            
-            Spacer()
-            
-            // Footer
-            VStack(spacing: 8) {
-                Text("Magic Link Authentication")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                
-                Text("Check your email for the verification code")
-                    .font(.caption2)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
             }
-            .padding(.bottom, 30)
-        }
-        .alert("Error", isPresented: $showAlert) {
-            Button("OK") { }
-        } message: {
-            Text(alertMessage)
-        }
-        .onChange(of: authManager.errorMessage) { _, errorMessage in
-            if let error = errorMessage {
-                alertMessage = error
-                showAlert = true
+            
+            // Login Form
+            VStack(spacing: 20) {
+                if showRegistration {
+                    // Registration Form
+                    VStack(spacing: 16) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Display Name")
+                                .font(.headline)
+                            
+                            TextField("Enter your name", text: $displayName)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Email Address")
+                                .font(.headline)
+                            
+                            TextField("Enter your email", text: $email)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .keyboardType(.emailAddress)
+                                .autocapitalization(.none)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Password")
+                                .font(.headline)
+                            
+                            SecureField("Enter your password", text: $password)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        
+                        Button(action: registerWithPassword) {
+                            HStack {
+                                if authManager.isLoading {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                        .scaleEffect(0.8)
+                                }
+                                Text(authManager.isLoading ? "Registering..." : "Register")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                        }
+                        .disabled(email.isEmpty || password.isEmpty || displayName.isEmpty || authManager.isLoading)
+                        
+                        Button(action: { showRegistration = false }) {
+                            Text("Already have an account? Sign In")
+                                .foregroundColor(.blue)
+                        }
+                    }
+                } else {
+                    // Password Login Form (Default)
+                    VStack(spacing: 16) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Email Address")
+                                .font(.headline)
+                            
+                            TextField("Enter your email", text: $email)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .keyboardType(.emailAddress)
+                                .autocapitalization(.none)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Password")
+                                .font(.headline)
+                            
+                            SecureField("Enter your password", text: $password)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        }
+                        
+                        Button(action: loginWithPassword) {
+                            HStack {
+                                if authManager.isLoading {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                        .scaleEffect(0.8)
+                                }
+                                Text(authManager.isLoading ? "Signing In..." : "Sign In")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                        }
+                        .disabled(email.isEmpty || password.isEmpty || authManager.isLoading)
+                        
+                        Button(action: { showRegistration = true }) {
+                            Text("Don't have an account? Register")
+                                .foregroundColor(.blue)
+                        }
+                    }
+                }
             }
+            
+            // Error Message
+            if let errorMessage = authManager.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .font(.caption)
+                    .multilineTextAlignment(.center)
+            }
+            
+            Spacer()
         }
+        .padding()
     }
     
-    private func sendMagicLink() {
-        authManager.sendMagicLink(email: email)
-        
-        // Show token input after successful magic link send
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            if authManager.errorMessage == nil {
-                showTokenInput = true
-            }
-        }
+    private func loginWithPassword() {
+        authManager.loginWithPassword(email: email, password: password)
     }
     
-    private func verifyToken() {
-        authManager.verifyMagicLink(token: token)
+    private func registerWithPassword() {
+        authManager.registerWithPassword(email: email, password: password, displayName: displayName)
     }
 }
 

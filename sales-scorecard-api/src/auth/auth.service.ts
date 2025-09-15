@@ -4,11 +4,13 @@ import { PrismaService } from '../common/prisma/prisma.service';
 // UserRole enum removed for SQLite compatibility
 import * as nodemailer from 'nodemailer';
 import * as crypto from 'crypto';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
+import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 
 @Injectable()
 export class AuthService {
   private transporter: nodemailer.Transporter;
+  private sesClient: SESClient;
 
   constructor(
     private prisma: PrismaService,
@@ -26,6 +28,15 @@ export class AuthService {
       connectionTimeout: 10000, // 10 seconds
       greetingTimeout: 10000,   // 10 seconds
       socketTimeout: 10000,     // 10 seconds
+    });
+
+    // Configure AWS SES client
+    this.sesClient = new SESClient({
+      region: process.env.AWS_REGION || 'eu-north-1',
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+      },
     });
   }
 
@@ -404,6 +415,40 @@ export class AuthService {
     } catch (error) {
       console.error('Login error:', error);
       throw error;
+    }
+  }
+
+  // New method to send emails using AWS SES
+  async sendEmailWithSES(to: string, subject: string, htmlContent: string, textContent?: string): Promise<void> {
+    try {
+      const command = new SendEmailCommand({
+        Source: 'zahari.vasilev@instorm.bg',
+        Destination: {
+          ToAddresses: [to],
+        },
+        Message: {
+          Subject: {
+            Data: subject,
+            Charset: 'UTF-8',
+          },
+          Body: {
+            Html: {
+              Data: htmlContent,
+              Charset: 'UTF-8',
+            },
+            Text: {
+              Data: textContent || htmlContent.replace(/<[^>]*>/g, ''),
+              Charset: 'UTF-8',
+            },
+          },
+        },
+      });
+
+      await this.sesClient.send(command);
+      console.log(`Email sent successfully to ${to}`);
+    } catch (error) {
+      console.error('SES email error:', error);
+      throw new Error(`Failed to send email: ${error.message}`);
     }
   }
 }

@@ -1,7 +1,7 @@
 import Foundation
 
 class APIService {
-    private let baseURL = "https://salesscorecard-app-production.up.railway.app" // P
+    private let baseURL = "http://api.instorm.io" // AWS Production
     
     private let isDevelopmentMode = false // Production mode
     
@@ -116,6 +116,73 @@ class APIService {
             do {
                 let user = try JSONDecoder().decode(User.self, from: data)
                 completion(.success(user))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    
+    // Password Authentication Methods
+    func loginUser(email: String, password: String, completion: @escaping (Result<AuthResponse, Error>) -> Void) {
+        guard let url = URL(string: "\(baseURL)/auth/login") else {
+            completion(.failure(APIError.invalidURL))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body = ["email": email, "password": password]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(APIError.noData))
+                return
+            }
+            
+            do {
+                let authResponse = try JSONDecoder().decode(AuthResponse.self, from: data)
+                completion(.success(authResponse))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    
+    func registerUser(email: String, password: String, displayName: String, completion: @escaping (Result<AuthResponse, Error>) -> Void) {
+        guard let url = URL(string: "\(baseURL)/auth/register") else {
+            completion(.failure(APIError.invalidURL))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body = ["email": email, "password": password, "displayName": displayName]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(APIError.noData))
+                return
+            }
+            
+            do {
+                let authResponse = try JSONDecoder().decode(AuthResponse.self, from: data)
+                completion(.success(authResponse))
             } catch {
                 completion(.failure(error))
             }

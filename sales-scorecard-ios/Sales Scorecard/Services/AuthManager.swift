@@ -87,4 +87,45 @@ class AuthManager: ObservableObject {
         currentUser = nil
         isAuthenticated = false
     }
+    
+    // Password Authentication Methods
+    func loginWithPassword(email: String, password: String) {
+        isLoading = true
+        errorMessage = nil
+        
+        apiService.loginUser(email: email, password: password) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let authResponse):
+                    self?.keychainService.saveToken(authResponse.token)
+                    self?.authToken = authResponse.token
+                    self?.currentUser = authResponse.user
+                    self?.isAuthenticated = true
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                }
+            }
+        }
+    }
+    
+    func registerWithPassword(email: String, password: String, displayName: String) {
+        isLoading = true
+        errorMessage = nil
+        
+        apiService.registerUser(email: email, password: password, displayName: displayName) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                switch result {
+                case .success(let authResponse):
+                    self?.keychainService.saveToken(authResponse.token)
+                    self?.authToken = authResponse.token
+                    self?.currentUser = authResponse.user
+                    self?.isAuthenticated = true
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                }
+            }
+        }
+    }
 }
