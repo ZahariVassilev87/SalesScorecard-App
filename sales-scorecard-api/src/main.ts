@@ -21,6 +21,16 @@ async function bootstrap() {
     transform: true,
   }));
 
+  // Health check endpoint for Railway
+  app.getHttpAdapter().get('/health', (req, res) => {
+    res.status(200).json({
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      environment: process.env.NODE_ENV || 'development'
+    });
+  });
+
   // Swagger API documentation
   const config = new DocumentBuilder()
     .setTitle('Sales Scorecard API')
