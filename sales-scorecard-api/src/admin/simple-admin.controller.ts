@@ -71,7 +71,7 @@ export class SimpleAdminController {
         email: userData.email,
         displayName: userData.displayName,
         role: userData.role,
-        // password: userData.password, // Temporarily disabled for Railway
+        password: userData.password,
         isActive: true,
       });
 
@@ -132,7 +132,7 @@ export class SimpleAdminController {
         email: body.email,
         displayName: body.displayName,
         role: 'ADMIN',
-        // password: body.password, // Temporarily disabled for Railway
+        password: body.password,
         isActive: true,
       });
 

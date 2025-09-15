@@ -17,7 +17,7 @@ model User {
   email       String   @unique
   displayName String
   role        String
-  // password    String?  // Temporarily disabled for Railway deployment
+  password    String?  // Optional password field for invite-only registration
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

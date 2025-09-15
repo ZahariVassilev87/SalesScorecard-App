@@ -182,7 +182,7 @@ export class PublicAdminController {
       email: body.email,
       displayName: body.displayName,
       role: 'ADMIN',
-      // password: body.password, // Temporarily disabled for Railway
+      password: body.password,
       isActive: true,
     });
   }

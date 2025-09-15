@@ -4,7 +4,7 @@ import { PrismaService } from '../common/prisma/prisma.service';
 // UserRole enum removed for SQLite compatibility
 import * as nodemailer from 'nodemailer';
 import * as crypto from 'crypto';
-// import * as bcrypt from 'bcryptjs'; // Temporarily disabled for Railway
+import * as bcrypt from 'bcryptjs';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 
 @Injectable()
@@ -291,7 +291,7 @@ export class AuthService {
       }
 
       // Check if user has a password (indicates they've registered)
-      const isRegistered = true; // Temporarily assume all users are registered for Railway
+      const isRegistered = !!user.password;
 
       return {
         eligible: true,
@@ -328,10 +328,14 @@ export class AuthService {
         throw new BadRequestException('User is already registered. Please log in instead.');
       }
 
-      // Update user (password temporarily disabled for Railway)
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 12);
+
+      // Update user with password
       const user = await this.prisma.user.update({
         where: { email },
         data: {
+          password: hashedPassword,
           displayName: displayName || eligibilityCheck.user.displayName,
         },
       });
@@ -377,8 +381,16 @@ export class AuthService {
       }
 
       // Check if user has a password set
-      // Password validation temporarily disabled for Railway deployment
-      // All users can login without password for now
+      // Check if user has a password set
+      if (!user.password) {
+        throw new UnauthorizedException('Account not registered. Please register first.');
+      }
+
+      // Verify password
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        throw new UnauthorizedException('Invalid email or password');
+      }
 
       // Generate JWT token
       const payload = { 

@@ -1,6 +1,6 @@
 import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service';
-// import * as bcrypt from 'bcryptjs'; // Temporarily disabled for Railway
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AdminService {
@@ -92,7 +92,7 @@ export class AdminService {
     email: string;
     displayName: string;
     role: string;
-    // password: string; // Temporarily disabled for Railway
+    password: string;
     isActive?: boolean;
   }) {
     // Check if user already exists
@@ -104,12 +104,16 @@ export class AdminService {
       throw new ConflictException('User with this email already exists');
     }
 
-    // Create user (password temporarily disabled for Railway)
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(userData.password, 12);
+
+    // Create user
     const user = await this.prisma.user.create({
       data: {
         email: userData.email,
         displayName: userData.displayName,
         role: userData.role,
+        password: hashedPassword,
         isActive: userData.isActive ?? true,
       },
       select: {
@@ -151,7 +155,7 @@ export class AdminService {
     email?: string;
     displayName?: string;
     role?: string;
-    // password?: string; // Temporarily disabled for Railway
+    password?: string;
     isActive?: boolean;
   }) {
     // Check if user exists
@@ -177,7 +181,10 @@ export class AdminService {
     // Prepare update data
     const updatePayload: any = { ...updateData };
 
-    // Password update temporarily disabled for Railway
+    // Hash password if provided
+    if (updateData.password) {
+      updatePayload.password = await bcrypt.hash(updateData.password, 12);
+    }
 
     // Update user
     const user = await this.prisma.user.update({
@@ -225,7 +232,14 @@ export class AdminService {
       throw new NotFoundException('User not found');
     }
 
-    // Password update temporarily disabled for Railway
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+    // Update password
+    await this.prisma.user.update({
+      where: { id },
+      data: { password: hashedPassword },
+    });
 
     return { message: 'Password reset successfully' };
   }
