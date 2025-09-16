@@ -15,6 +15,25 @@ export class VerifyMagicLinkDto {
   token: string;
 }
 
+export class LoginDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  password: string;
+}
+
+export class RegisterDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  password: string;
+
+  @IsString()
+  displayName: string;
+}
+
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
@@ -38,6 +57,20 @@ export class AuthController {
   @ApiOperation({ summary: 'Test email configuration' })
   async testEmail(@Body() body: { email: string }) {
     return this.authService.testEmail(body.email);
+  }
+
+  @Post('login')
+  @ApiOperation({ summary: 'Login with email and password' })
+  @ApiResponse({ status: 200, description: 'Login successful' })
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.loginWithPassword(loginDto.email, loginDto.password);
+  }
+
+  @Post('register')
+  @ApiOperation({ summary: 'Register new user' })
+  @ApiResponse({ status: 201, description: 'User registered successfully' })
+  async register(@Body() registerDto: RegisterDto) {
+    return this.authService.registerUser(registerDto.email, registerDto.password, registerDto.displayName);
   }
 
   @Get('me')

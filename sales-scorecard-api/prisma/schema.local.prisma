@@ -1,0 +1,239 @@
+// Local Development Prisma schema with SQLite
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  displayName    String
+  firstName      String?
+  lastName       String?
+  role           String
+  password       String?
+  isActive       Boolean  @default(true)
+  organizationId String?
+  teamId         String?
+  lastLoginAt    DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  evaluations     Evaluation[]
+  managedTeams    Team[]       @relation("TeamManager")
+  managedRegions  Region[]     @relation("RegionManager")
+  userRegions     UserRegion[]
+  userTeams       UserTeam[]
+  auditLogs       AuditLog[]
+  organization    Organization? @relation(fields: [organizationId], references: [id])
+  team            Team?        @relation(fields: [teamId], references: [id])
+
+  @@map("users")
+}
+
+model Region {
+  id             String   @id @default(cuid())
+  name           String
+  organizationId String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  teams      Team[]
+  managers   User[]   @relation("RegionManager")
+  userRegions UserRegion[]
+  organization Organization? @relation(fields: [organizationId], references: [id])
+
+  @@map("regions")
+}
+
+model Team {
+  id             String   @id @default(cuid())
+  name           String
+  regionId       String
+  organizationId String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  region      Region    @relation(fields: [regionId], references: [id])
+  salespeople Salesperson[]
+  manager     User?     @relation("TeamManager", fields: [managerId], references: [id])
+  managerId   String?
+  userTeams   UserTeam[]
+  users       User[]
+  organization Organization? @relation(fields: [organizationId], references: [id])
+
+  @@map("teams")
+}
+
+model Salesperson {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  teamId    String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  team       Team         @relation(fields: [teamId], references: [id])
+  evaluations Evaluation[]
+
+  @@map("salespeople")
+}
+
+model Evaluation {
+  id             String    @id @default(cuid())
+  salespersonId  String
+  managerId      String
+  visitDate      DateTime
+  customerName   String?
+  location       String?
+  overallComment String?
+  overallScore   Float?
+  version        Int       @default(1)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Relations
+  salesperson Salesperson    @relation(fields: [salespersonId], references: [id])
+  manager     User           @relation(fields: [managerId], references: [id])
+  items       EvaluationItem[]
+
+  @@map("evaluations")
+}
+
+model BehaviorCategory {
+  id     String @id @default(cuid())
+  name   String
+  weight Float
+  order  Int
+  active Boolean @default(true)
+
+  // Relations
+  items BehaviorItem[]
+
+  @@map("behavior_categories")
+}
+
+model BehaviorItem {
+  id         String @id @default(cuid())
+  name       String
+  order      Int
+  isActive   Boolean @default(true)
+  categoryId String
+
+  // Relations
+  category     BehaviorCategory   @relation(fields: [categoryId], references: [id])
+  evaluations  EvaluationItem[]
+
+  @@map("behavior_items")
+}
+
+model EvaluationItem {
+  id             String @id @default(cuid())
+  evaluationId   String
+  behaviorItemId String
+  rating         Int
+  comment        String?
+
+  // Relations
+  evaluation   Evaluation   @relation(fields: [evaluationId], references: [id])
+  behaviorItem BehaviorItem @relation(fields: [behaviorItemId], references: [id])
+
+  @@unique([evaluationId, behaviorItemId])
+  @@map("evaluation_items")
+}
+
+model UserRegion {
+  id       String @id @default(cuid())
+  userId   String
+  regionId String
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  region Region @relation(fields: [regionId], references: [id])
+
+  @@unique([userId, regionId])
+  @@map("user_regions")
+}
+
+model UserTeam {
+  id     String @id @default(cuid())
+  userId String
+  teamId String
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])
+  @@map("user_teams")
+}
+
+model AuditLog {
+  id             String    @id @default(cuid())
+  userId         String?
+  organizationId String?
+  action         String
+  resource       String?
+  resourceId     String?
+  details        String?   // JSON string
+  ipAddress      String?
+  userAgent      String?
+  timestamp      DateTime  @default(now())
+  success        Boolean   @default(true)
+  errorMessage   String?
+
+  // Relations
+  user         User?         @relation(fields: [userId], references: [id])
+  organization Organization? @relation(fields: [organizationId], references: [id])
+
+  @@index([userId])
+  @@index([organizationId])
+  @@index([action])
+  @@index([timestamp])
+  @@index([success])
+  @@map("audit_logs")
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  users     User[]
+  teams     Team[]
+  regions   Region[]
+  auditLogs AuditLog[]
+
+  @@map("organizations")
+}
+
+model Invite {
+  id        String    @id @default(cuid())
+  email     String
+  role      String
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@map("invites")
+}
+
+// UserRole enum values as strings for PostgreSQL compatibility
+// ADMIN, SALES_DIRECTOR, REGIONAL_SALES_MANAGER, SALES_MANAGER, SALES_LEAD, SALESPERSON
+

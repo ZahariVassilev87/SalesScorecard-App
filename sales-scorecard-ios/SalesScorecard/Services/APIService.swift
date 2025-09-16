@@ -1,7 +1,7 @@
 import Foundation
 
 class APIService {
-    private let baseURL = "https://sales-scorecard-api-production.up.railway.app" // Railway Production
+    private let baseURL = "http://api.instorm.io" // AWS Production
     
     func sendMagicLink(email: String, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/auth/magic-link") else {

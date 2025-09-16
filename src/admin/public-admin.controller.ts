@@ -2,6 +2,7 @@ import { Controller, Get, Post, Delete, Body, Param, Query, Res } from '@nestjs/
 import { Response } from 'express';
 import { ScoringService } from '../scoring/scoring.service';
 import { SeedService } from '../scoring/seed.service';
+import { AdminService } from './admin.service';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -10,6 +11,7 @@ export class PublicAdminController {
   constructor(
     private scoringService: ScoringService,
     private seedService: SeedService,
+    private adminService: AdminService,
   ) {}
 
   @Get('test')
@@ -237,5 +239,78 @@ export class PublicAdminController {
   @Get('directors')
   async getAllDirectors() {
     return this.seedService.getAllDirectors();
+  }
+
+  // User Management Endpoints
+  @Get('users')
+  async getUsers() {
+    try {
+      const users = await this.adminService.getAllUsers();
+      return users;
+    } catch (error) {
+      throw new Error(`Failed to get users: ${error.message}`);
+    }
+  }
+
+  @Post('users')
+  async createUser(@Body() body: { email: string; displayName: string; role: string; password: string }) {
+    try {
+      const user = await this.adminService.createUser(body);
+      return user;
+    } catch (error) {
+      throw new Error(`Failed to create user: ${error.message}`);
+    }
+  }
+
+  @Post('create-admin')
+  async createAdmin(@Body() body: { email: string; displayName: string; password: string }) {
+    try {
+      const user = await this.adminService.createUser({
+        ...body,
+        role: 'ADMIN'
+      });
+      return user;
+    } catch (error) {
+      throw new Error(`Failed to create admin: ${error.message}`);
+    }
+  }
+
+  @Get('users/:id')
+  async getUserById(@Param('id') id: string) {
+    try {
+      const user = await this.adminService.getUserById(id);
+      return user;
+    } catch (error) {
+      throw new Error(`Failed to get user: ${error.message}`);
+    }
+  }
+
+  @Delete('users/:id')
+  async deleteUser(@Param('id') id: string) {
+    try {
+      await this.adminService.deleteUser(id);
+      return { message: 'User deleted successfully' };
+    } catch (error) {
+      throw new Error(`Failed to delete user: ${error.message}`);
+    }
+  }
+
+  @Post('users/:id/reset-password')
+  async resetPassword(@Param('id') id: string, @Body() body: { newPassword: string }) {
+    try {
+      await this.adminService.resetUserPassword(id, body.newPassword);
+      return { message: 'Password reset successfully' };
+    } catch (error) {
+      throw new Error(`Failed to reset password: ${error.message}`);
+    }
+  }
+
+  @Get('health')
+  async getHealth() {
+    return { 
+      status: 'healthy', 
+      timestamp: new Date().toISOString(),
+      message: 'Sales Scorecard API is running'
+    };
   }
 }
