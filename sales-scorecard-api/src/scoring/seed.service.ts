@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class SeedService {
@@ -152,10 +153,14 @@ export class SeedService {
 
       // Create regional manager user
       const [managerName, managerEmail] = this.parseNameAndEmail(data.regionalManager);
+      const tempPassword = 'TempPass123!';
+      const hashedPassword = await bcrypt.hash(tempPassword, 12);
+      
       const regionalManager = await this.prisma.user.create({
         data: {
           email: managerEmail || `${managerName.toLowerCase().replace(' ', '.')}@company.com`,
           displayName: managerName,
+          password: hashedPassword,
           role: 'REGIONAL_SALES_MANAGER',
         },
       });
@@ -176,10 +181,14 @@ export class SeedService {
       for (const teamAssignment of data.teamAssignments) {
         // Create sales lead for this team
         const [leadName, leadEmail] = this.parseNameAndEmail(teamAssignment.salesLead);
+        const leadPassword = 'TempPass123!';
+        const hashedLeadPassword = await bcrypt.hash(leadPassword, 12);
+        
         const salesLead = await this.prisma.user.create({
           data: {
             email: leadEmail || `${leadName.toLowerCase().replace(' ', '.')}@company.com`,
             displayName: leadName,
+            password: hashedLeadPassword,
             role: 'SALES_LEAD',
           },
         });
@@ -280,10 +289,14 @@ export class SeedService {
       };
     } else {
       // Create as user with specific role
+      const userPassword = 'TempPass123!';
+      const hashedUserPassword = await bcrypt.hash(userPassword, 12);
+      
       const user = await this.prisma.user.create({
         data: {
           email: memberData.email,
           displayName: memberData.name,
+          password: hashedUserPassword,
           role: memberData.role,
         },
       });

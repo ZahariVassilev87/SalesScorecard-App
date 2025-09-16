@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-1.1.x"]
 }
 
 datasource db {
@@ -15,11 +14,16 @@ model User {
   id          String   @id @default(cuid())
   email       String   @unique
   displayName String
+  password    String
   role        String
-  password    String?  // Optional password field for invite-only registration
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  // Manager hierarchy
+  managerId   String?
+  manager     User?    @relation("UserManager", fields: [managerId], references: [id])
+  subordinates User[]  @relation("UserManager")
 
   // Relations
   evaluations     Evaluation[]

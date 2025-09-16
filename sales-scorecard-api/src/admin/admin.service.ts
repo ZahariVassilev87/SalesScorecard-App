@@ -1,5 +1,6 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../common/prisma/prisma.service';
+import { UserRole } from '../auth/roles.enum';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -95,6 +96,11 @@ export class AdminService {
     password: string;
     isActive?: boolean;
   }) {
+    // Validate role
+    if (!Object.values(UserRole).includes(userData.role as UserRole)) {
+      throw new BadRequestException(`Invalid role. Valid roles are: ${Object.values(UserRole).join(', ')}`);
+    }
+
     // Check if user already exists
     const existingUser = await this.prisma.user.findUnique({
       where: { email: userData.email },
@@ -112,8 +118,8 @@ export class AdminService {
       data: {
         email: userData.email,
         displayName: userData.displayName,
-        role: userData.role,
         password: hashedPassword,
+        role: userData.role,
         isActive: userData.isActive ?? true,
       },
       select: {
@@ -222,25 +228,180 @@ export class AdminService {
     return { message: 'User deleted successfully' };
   }
 
+  // Password reset removed - using invite-only system
   async resetUserPassword(id: string, newPassword: string) {
+    throw new BadRequestException('Password reset not available - using invite-only system');
+  }
+
+  // User hierarchy management
+  async assignUserToManager(userId: string, managerId: string) {
     // Check if user exists
-    const existingUser = await this.prisma.user.findUnique({
-      where: { id },
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
     });
 
-    if (!existingUser) {
+    if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    // Hash new password
-    const hashedPassword = await bcrypt.hash(newPassword, 12);
-
-    // Update password
-    await this.prisma.user.update({
-      where: { id },
-      data: { password: hashedPassword },
+    // Check if manager exists
+    const manager = await this.prisma.user.findUnique({
+      where: { id: managerId },
     });
 
-    return { message: 'Password reset successfully' };
+    if (!manager) {
+      throw new NotFoundException('Manager not found');
+    }
+
+    // Validate hierarchy (manager must have higher role level)
+    const roleHierarchy = {
+      'ADMIN': 5,
+      'SALES_DIRECTOR': 4,
+      'REGIONAL_SALES_MANAGER': 3,
+      'SALES_LEAD': 2,
+      'SALESPERSON': 1
+    };
+
+    const userLevel = roleHierarchy[user.role] || 0;
+    const managerLevel = roleHierarchy[manager.role] || 0;
+
+    if (managerLevel <= userLevel) {
+      throw new BadRequestException('Manager must have a higher role level than the user');
+    }
+
+    // Check for circular references
+    if (userId === managerId) {
+      throw new BadRequestException('User cannot be their own manager');
+    }
+
+    // Update user's manager
+    const updatedUser = await this.prisma.user.update({
+      where: { id: userId },
+      data: { managerId },
+      select: {
+        id: true,
+        email: true,
+        displayName: true,
+        role: true,
+        managerId: true,
+        manager: {
+          select: {
+            id: true,
+            email: true,
+            displayName: true,
+            role: true
+          }
+        }
+      }
+    });
+
+    return updatedUser;
+  }
+
+  async removeUserFromManager(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: userId },
+      data: { managerId: null },
+      select: {
+        id: true,
+        email: true,
+        displayName: true,
+        role: true,
+        managerId: true
+      }
+    });
+
+    return updatedUser;
+  }
+
+  async getUserHierarchy(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        displayName: true,
+        role: true,
+        managerId: true,
+        manager: {
+          select: {
+            id: true,
+            email: true,
+            displayName: true,
+            role: true
+          }
+        },
+        subordinates: {
+          select: {
+            id: true,
+            email: true,
+            displayName: true,
+            role: true,
+            subordinates: {
+              select: {
+                id: true,
+                email: true,
+                displayName: true,
+                role: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
+
+  async getAvailableManagers(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const roleHierarchy = {
+      'ADMIN': 5,
+      'SALES_DIRECTOR': 4,
+      'REGIONAL_SALES_MANAGER': 3,
+      'SALES_LEAD': 2,
+      'SALESPERSON': 1
+    };
+
+    const userLevel = roleHierarchy[user.role] || 0;
+
+    // Get users with higher role levels
+    const availableManagers = await this.prisma.user.findMany({
+      where: {
+        role: {
+          in: Object.keys(roleHierarchy).filter(role => roleHierarchy[role] > userLevel)
+        },
+        isActive: true,
+        id: { not: userId } // Exclude the user themselves
+      },
+      select: {
+        id: true,
+        email: true,
+        displayName: true,
+        role: true
+      },
+      orderBy: { displayName: 'asc' }
+    });
+
+    return availableManagers;
   }
 }

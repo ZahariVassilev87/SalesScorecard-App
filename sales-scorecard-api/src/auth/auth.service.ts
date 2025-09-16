@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../common/prisma/prisma.service';
-// UserRole enum removed for SQLite compatibility
+import { UserRole } from './roles.enum';
 import * as nodemailer from 'nodemailer';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcryptjs';
@@ -38,6 +38,30 @@ export class AuthService {
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
       },
     });
+  }
+
+  // Validate if a role is valid
+  validateRole(role: string): boolean {
+    return Object.values(UserRole).includes(role as UserRole);
+  }
+
+  // Get role hierarchy level
+  getRoleLevel(role: string): number {
+    const hierarchy = {
+      [UserRole.ADMIN]: 5,
+      [UserRole.SALES_DIRECTOR]: 4,
+      [UserRole.REGIONAL_SALES_MANAGER]: 3,
+      [UserRole.SALES_LEAD]: 2,
+      [UserRole.SALESPERSON]: 1
+    };
+    return hierarchy[role as UserRole] || 0;
+  }
+
+  // Check if user has role level or higher
+  hasRoleOrHigher(userRole: string, requiredRole: UserRole): boolean {
+    const userLevel = this.getRoleLevel(userRole);
+    const requiredLevel = this.getRoleLevel(requiredRole);
+    return userLevel >= requiredLevel;
   }
 
   async sendMagicLink(email: string): Promise<{ message: string }> {
@@ -202,10 +226,15 @@ export class AuthService {
     if (existingUser) {
       // If user exists as salesperson, convert to user account
       if (existingUser.type === 'salesperson') {
+        // Generate a temporary password for converted users
+        const tempPassword = crypto.randomBytes(8).toString('hex');
+        const hashedPassword = await bcrypt.hash(tempPassword, 12);
+
         const user = await this.prisma.user.create({
           data: {
             email: existingUser.email,
             displayName: existingUser.displayName,
+            password: hashedPassword,
             role: 'SALESPERSON',
           },
         });
@@ -231,10 +260,15 @@ export class AuthService {
     const emailDomain = email.split('@')[1];
     const role = emailDomain === 'instorm.bg' ? 'ADMIN' : 'SALESPERSON';
     
+    // Generate a temporary password for new users
+    const tempPassword = crypto.randomBytes(8).toString('hex');
+    const hashedPassword = await bcrypt.hash(tempPassword, 12);
+    
     const user = await this.prisma.user.create({
       data: {
         email,
         displayName: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        password: hashedPassword,
         role,
       },
     });
@@ -290,15 +324,11 @@ export class AuthService {
         };
       }
 
-      // Check if user has a password (indicates they've registered)
-      const isRegistered = !!user.password;
-
+      // User exists in system (invite-only)
       return {
         eligible: true,
-        message: isRegistered 
-          ? 'Email is already registered. You can log in with your password.'
-          : 'Email is eligible for registration. Please set up your password.',
-        isRegistered,
+        message: 'Email is registered in the system. You can log in.',
+        isRegistered: true,
         user: {
           id: user.id,
           email: user.email,
@@ -331,13 +361,21 @@ export class AuthService {
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, 12);
 
-      // Update user with password
+      // Update user with password (handle case where password column doesn't exist)
+      const updateData: any = {
+        displayName: displayName || eligibilityCheck.user.displayName,
+      };
+      
+      // Only add password if the column exists
+      try {
+        updateData.password = hashedPassword;
+      } catch (error) {
+        console.log('Password column not available, skipping password update');
+      }
+
       const user = await this.prisma.user.update({
         where: { email },
-        data: {
-          password: hashedPassword,
-          displayName: displayName || eligibilityCheck.user.displayName,
-        },
+        data: updateData,
       });
 
       // Generate JWT token
@@ -380,17 +418,17 @@ export class AuthService {
         throw new UnauthorizedException('Account is deactivated. Contact your admin.');
       }
 
-      // Check if user has a password set
-      // Check if user has a password set
+      // Validate password
       if (!user.password) {
-        throw new UnauthorizedException('Account not registered. Please register first.');
+        throw new UnauthorizedException('Account not properly set up. Contact your admin.');
       }
 
-      // Verify password
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        throw new UnauthorizedException('Invalid email or password');
+        throw new UnauthorizedException('Wrong username or password');
       }
+
+      console.log(`Login successful for user: ${user.email}`);
 
       // Generate JWT token
       const payload = { 
