@@ -1,57 +1,100 @@
 {
-  "family": "sales-scorecard-task",
-  "networkMode": "awsvpc",
-  "requiresCompatibilities": ["FARGATE"],
-  "cpu": "256",
-  "memory": "512",
-  "executionRoleArn": "arn:aws:iam::221855463690:role/ecsTaskExecutionRole",
-  "containerDefinitions": [
-    {
-      "name": "sales-scorecard-api",
-      "image": "221855463690.dkr.ecr.eu-north-1.amazonaws.com/sales-scorecard-api:latest",
-      "portMappings": [
+    "taskDefinitionArn": "arn:aws:ecs:eu-north-1:221855463690:task-definition/sales-scorecard-task-final:1",
+    "containerDefinitions": [
         {
-          "containerPort": 3000,
-          "protocol": "tcp"
+            "name": "sales-scorecard-api",
+            "image": "221855463690.dkr.ecr.eu-north-1.amazonaws.com/sales-scorecard-api:latest",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "containerPort": 3000,
+                    "hostPort": 3000,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "AWS_REGION",
+                    "value": "eu-north-1"
+                },
+                {
+                    "name": "DATABASE_URL",
+                    "value": "postgresql://postgres:KmUCRaxEXXbOItxfKCxfHGKUYqxRUMUD@ballast.proxy.rlwy.net:28204/railway"
+                },
+                {
+                    "name": "PORT",
+                    "value": "3000"
+                },
+                {
+                    "name": "JWT_SECRET",
+                    "value": "sales-scorecard-super-secret-jwt-key-2024-production"
+                },
+                {
+                    "name": "AWS_ACCESS_KEY_ID",
+                    "value": "AKIAIOSFODNN7EXAMPLE"
+                },
+                {
+                    "name": "AWS_SECRET_ACCESS_KEY",
+                    "value": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+                },
+                {
+                    "name": "NODE_ENV",
+                    "value": "production"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/sales-scorecard",
+                    "awslogs-region": "eu-north-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "systemControls": []
         }
-      ],
-      "essential": true,
-      "environment": [
+    ],
+    "family": "sales-scorecard-task-final",
+    "executionRoleArn": "arn:aws:iam::221855463690:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "revision": 1,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
         {
-          "name": "NODE_ENV",
-          "value": "production"
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
         },
         {
-          "name": "PORT",
-          "value": "3000"
-        }
-      ],
-      "secrets": [
-        {
-          "name": "DATABASE_URL",
-          "valueFrom": "arn:aws:secretsmanager:eu-north-1:221855463690:secret:sales-scorecard-db-url"
+            "name": "ecs.capability.execution-role-awslogs"
         },
         {
-          "name": "JWT_SECRET",
-          "valueFrom": "arn:aws:secretsmanager:eu-north-1:221855463690:secret:sales-scorecard-jwt-secret"
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
         },
         {
-          "name": "AWS_ACCESS_KEY_ID",
-          "valueFrom": "arn:aws:secretsmanager:eu-north-1:221855463690:secret:sales-scorecard-aws-credentials"
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
         },
         {
-          "name": "AWS_SECRET_ACCESS_KEY",
-          "valueFrom": "arn:aws:secretsmanager:eu-north-1:221855463690:secret:sales-scorecard-aws-credentials"
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
         }
-      ],
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/sales-scorecard",
-          "awslogs-region": "eu-north-1",
-          "awslogs-stream-prefix": "ecs"
-        }
-      }
-    }
-  ]
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "512",
+    "registeredAt": "2025-09-15T14:01:38.768000+03:00",
+    "registeredBy": "arn:aws:iam::221855463690:root"
 }

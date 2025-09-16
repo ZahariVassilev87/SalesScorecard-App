@@ -7,6 +7,8 @@ import { EvaluationsModule } from './evaluations/evaluations.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { ScoringModule } from './scoring/scoring.module';
 import { AdminModule } from './admin/admin.module';
+import { ExportModule } from './export/export.module';
+// import { SecurityModule } from './security/security.module';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { HealthModule } from './health/health.module';
 
@@ -17,6 +19,7 @@ import { HealthModule } from './health/health.module';
     }),
     PrismaModule,
     HealthModule,
+    // SecurityModule,
     AuthModule,
     UsersModule,
     OrganizationsModule,
@@ -24,6 +27,7 @@ import { HealthModule } from './health/health.module';
     AnalyticsModule,
     ScoringModule,
     AdminModule,
+    ExportModule,
   ],
 })
 export class AppModule {}

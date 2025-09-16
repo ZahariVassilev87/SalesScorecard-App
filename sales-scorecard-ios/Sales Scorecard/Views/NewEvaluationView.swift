@@ -130,13 +130,13 @@ struct NewEvaluationView: View {
                                     .datePickerStyle(.compact)
                             }
                             
-                            // Location
+                            // Client visited
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Location")
+                                Text("Client visited")
                                     .font(.subheadline)
                                     .fontWeight(.medium)
                                 
-                                TextField("Enter location", text: $location)
+                                TextField("Enter client name", text: $location)
                                     .textFieldStyle(.roundedBorder)
                             }
                         }

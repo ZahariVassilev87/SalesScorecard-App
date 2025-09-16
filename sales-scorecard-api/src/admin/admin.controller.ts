@@ -78,8 +78,36 @@ export class AdminController {
   @Get('panel')
   @ApiOperation({ summary: 'Get admin panel HTML interface' })
   async getAdminPanel(@Res() res: Response) {
-    const htmlPath = path.join(__dirname, 'admin.html');
-    const html = fs.readFileSync(htmlPath, 'utf8');
+    const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Admin Panel - Sales Scorecard</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            .container { max-width: 800px; margin: 0 auto; }
+            .header { text-align: center; margin-bottom: 40px; }
+            .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+            .btn { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+            .btn:hover { background: #0056b3; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🔧 Admin Panel</h1>
+                <p>Sales Scorecard Management</p>
+            </div>
+            
+            <div class="section">
+                <h2>System Management</h2>
+                <p>Admin panel functionality coming soon...</p>
+                <button class="btn" onclick="window.location.href='/public-admin/panel'">Go to Public Admin</button>
+            </div>
+        </div>
+    </body>
+    </html>
+    `;
     res.setHeader('Content-Type', 'text/html');
     res.send(html);
   }

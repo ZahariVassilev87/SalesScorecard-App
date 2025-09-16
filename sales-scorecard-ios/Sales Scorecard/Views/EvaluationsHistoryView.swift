@@ -96,7 +96,7 @@ struct EvaluationHistoryRow: View {
                 
                 if let location = evaluation.location {
                     VStack(alignment: .trailing, spacing: 4) {
-                        Text("Location")
+                        Text("Client visited")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         
