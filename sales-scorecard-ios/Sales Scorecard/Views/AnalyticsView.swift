@@ -1,5 +1,4 @@
 import SwiftUI
-import Charts
 
 struct AnalyticsView: View {
     @State private var selectedTab = 0
@@ -150,7 +149,7 @@ struct OverviewTabView: View {
                         title: "Regions",
                         value: "\(analyticsData.totalRegions)",
                         icon: "globe",
-                        color: .teal
+                        color: .blue
                     )
                 }
                 
@@ -194,13 +193,18 @@ struct PerformanceTabView: View {
                             .font(.headline)
                             .fontWeight(.semibold)
                         
-                        Chart(trends.data, id: \.date) { point in
-                            LineMark(
-                                x: .value("Date", point.date),
-                                y: .value("Score", point.score)
-                            )
-                            .foregroundStyle(.green)
-                            .interpolationMethod(.catmullRom)
+                        // Simple list view for iOS 14 compatibility
+                        VStack(alignment: .leading, spacing: 8) {
+                            ForEach(trends.data.prefix(5), id: \.date) { point in
+                                HStack {
+                                    Text(point.date)
+                                        .font(.caption)
+                                    Spacer()
+                                    Text("\(point.score, specifier: "%.1f")")
+                                        .font(.caption)
+                                        .foregroundColor(.green)
+                                }
+                            }
                         }
                         .frame(height: 200)
                         .padding()
@@ -216,12 +220,18 @@ struct PerformanceTabView: View {
                             .font(.headline)
                             .fontWeight(.semibold)
                         
-                        Chart(categoryPerformance, id: \.name) { category in
-                            BarMark(
-                                x: .value("Score", category.averageScore),
-                                y: .value("Category", category.name)
-                            )
-                            .foregroundStyle(.blue)
+                        // Simple list view for iOS 14 compatibility
+                        VStack(alignment: .leading, spacing: 8) {
+                            ForEach(categoryPerformance, id: \.name) { category in
+                                HStack {
+                                    Text(category.name)
+                                        .font(.caption)
+                                    Spacer()
+                                    Text("\(category.averageScore, specifier: "%.1f")")
+                                        .font(.caption)
+                                        .foregroundColor(.blue)
+                                }
+                            }
                         }
                         .frame(height: 200)
                         .padding()

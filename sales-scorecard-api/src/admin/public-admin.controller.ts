@@ -497,6 +497,55 @@ export class PublicAdminController {
                       
                       <div id="systemStatus" class="status"></div>
                   </div>
+                  
+                  <!-- Scorecard Management -->
+                  <div class="section">
+                      <h2>📊 Scorecard Management</h2>
+                      <p>Create and manage different evaluation scorecards for different roles</p>
+                      
+                      <div class="form-group">
+                          <label>Scorecard Type:</label>
+                          <select id="scorecardType" onchange="loadScorecardTemplate()">
+                              <option value="">Select Scorecard Type</option>
+                              <option value="SALESPERSON">Salesperson Evaluation</option>
+                              <option value="SALES_LEAD">Sales Lead Evaluation</option>
+                              <option value="REGIONAL_MANAGER">Regional Manager Evaluation</option>
+                              <option value="SALES_DIRECTOR">Sales Director Evaluation</option>
+                              <option value="CUSTOM">Custom Scorecard</option>
+                          </select>
+                      </div>
+                      
+                      <div id="scorecardForm" style="display: none;">
+                          <div class="form-group">
+                              <label>Scorecard Name:</label>
+                              <input type="text" id="scorecardName" placeholder="e.g., Sales Skills Evaluation">
+                          </div>
+                          
+                          <div class="form-group">
+                              <label>Description:</label>
+                              <textarea id="scorecardDescription" rows="3" placeholder="Describe what this scorecard evaluates"></textarea>
+                          </div>
+                          
+                          <div id="categoriesContainer">
+                              <h3>Evaluation Categories</h3>
+                              <div id="categoriesList"></div>
+                              <button type="button" class="btn btn-secondary" onclick="addCategory()">+ Add Category</button>
+                          </div>
+                          
+                          <div style="margin-top: 20px;">
+                              <button class="btn btn-success" onclick="saveScorecard()">Save Scorecard</button>
+                              <button class="btn btn-secondary" onclick="previewScorecard()">Preview</button>
+                              <button class="btn" onclick="loadExistingScorecards()">Load Existing</button>
+                          </div>
+                      </div>
+                      
+                      <div id="scorecardStatus" class="status"></div>
+                      
+                      <div id="existingScorecards" style="display: none;">
+                          <h3>Existing Scorecards</h3>
+                          <div id="scorecardsList"></div>
+                      </div>
+                  </div>
               </div>
           </div>
           
@@ -828,6 +877,544 @@ export class PublicAdminController {
                   }
               }
               
+              // Scorecard Management Functions
+              const scorecardTemplates = {
+                  SALESPERSON: {
+                      name: 'Sales Skills Evaluation',
+                      description: 'Evaluates core sales skills and behaviors',
+                      categories: [
+                          {
+                              name: 'Discovery',
+                              weight: 25,
+                              items: [
+                                  'Asks open-ended questions',
+                                  'Uncovers customer pain points',
+                                  'Identifies decision makers',
+                                  'Understands customer needs',
+                                  'Confirms success criteria'
+                              ]
+                          },
+                          {
+                              name: 'Solution Positioning',
+                              weight: 25,
+                              items: [
+                                  'Tailors solution to customer context',
+                                  'Articulates clear value proposition',
+                                  'Demonstrates product knowledge',
+                                  'Handles objections effectively',
+                                  'Shows ROI and business impact'
+                              ]
+                          },
+                          {
+                              name: 'Closing & Next Steps',
+                              weight: 25,
+                              items: [
+                                  'Makes clear asks',
+                                  'Identifies next steps',
+                                  'Sets mutual commitments',
+                                  'Follows up appropriately',
+                                  'Manages timeline expectations'
+                              ]
+                          },
+                          {
+                              name: 'Professionalism',
+                              weight: 25,
+                              items: [
+                                  'Arrives prepared',
+                                  'Manages time effectively',
+                                  'Maintains professional demeanor',
+                                  'Listens actively',
+                                  'Communicates clearly'
+                              ]
+                          }
+                      ]
+                  },
+                  SALES_LEAD: {
+                      name: 'Coaching Skills Evaluation',
+                      description: 'Evaluates coaching and team development skills',
+                      categories: [
+                          {
+                              name: 'Coaching Skills',
+                              weight: 30,
+                              items: [
+                                  'Provides constructive feedback',
+                                  'Develops individual skills',
+                                  'Mentors team members',
+                                  'Identifies development opportunities',
+                                  'Supports career growth'
+                              ]
+                          },
+                          {
+                              name: 'Team Development',
+                              weight: 25,
+                              items: [
+                                  'Builds team cohesion',
+                                  'Facilitates team meetings',
+                                  'Encourages collaboration',
+                                  'Recognizes achievements',
+                                  'Manages team dynamics'
+                              ]
+                          },
+                          {
+                              name: 'Performance Management',
+                              weight: 25,
+                              items: [
+                                  'Sets clear expectations',
+                                  'Monitors performance metrics',
+                                  'Addresses performance issues',
+                                  'Conducts regular reviews',
+                                  'Implements improvement plans'
+                              ]
+                          },
+                          {
+                              name: 'Sales Process',
+                              weight: 20,
+                              items: [
+                                  'Ensures process compliance',
+                                  'Optimizes sales workflows',
+                                  'Shares best practices',
+                                  'Maintains quality standards',
+                                  'Drives continuous improvement'
+                              ]
+                          }
+                      ]
+                  },
+                  REGIONAL_MANAGER: {
+                      name: 'Management Skills Evaluation',
+                      description: 'Evaluates leadership and management capabilities',
+                      categories: [
+                          {
+                              name: 'Leadership',
+                              weight: 30,
+                              items: [
+                                  'Inspires and motivates teams',
+                                  'Sets strategic direction',
+                                  'Makes difficult decisions',
+                                  'Leads by example',
+                                  'Builds trust and respect'
+                              ]
+                          },
+                          {
+                              name: 'Strategic Planning',
+                              weight: 25,
+                              items: [
+                                  'Develops regional strategy',
+                                  'Aligns with company goals',
+                                  'Identifies market opportunities',
+                                  'Plans resource allocation',
+                                  'Monitors strategic execution'
+                              ]
+                          },
+                          {
+                              name: 'Team Building',
+                              weight: 25,
+                              items: [
+                                  'Recruits top talent',
+                                  'Develops leadership pipeline',
+                                  'Creates high-performing teams',
+                                  'Manages team conflicts',
+                                  'Retains key employees'
+                              ]
+                          },
+                          {
+                              name: 'Results Delivery',
+                              weight: 20,
+                              items: [
+                                  'Achieves revenue targets',
+                                  'Improves team performance',
+                                  'Drives operational efficiency',
+                                  'Manages budgets effectively',
+                                  'Delivers on commitments'
+                              ]
+                          }
+                      ]
+                  },
+                  SALES_DIRECTOR: {
+                      name: 'Executive Leadership Evaluation',
+                      description: 'Evaluates executive leadership and strategic vision',
+                      categories: [
+                          {
+                              name: 'Strategic Vision',
+                              weight: 30,
+                              items: [
+                                  'Develops long-term strategy',
+                                  'Anticipates market trends',
+                                  'Drives innovation',
+                                  'Aligns organization',
+                                  'Communicates vision clearly'
+                              ]
+                          },
+                          {
+                              name: 'Executive Leadership',
+                              weight: 25,
+                              items: [
+                                  'Leads organizational change',
+                                  'Builds executive relationships',
+                                  'Represents company externally',
+                                  'Makes high-stakes decisions',
+                                  'Maintains board relationships'
+                              ]
+                          },
+                          {
+                              name: 'Business Results',
+                              weight: 25,
+                              items: [
+                                  'Delivers revenue growth',
+                                  'Improves profitability',
+                                  'Expands market share',
+                                  'Optimizes operations',
+                                  'Drives shareholder value'
+                              ]
+                          },
+                          {
+                              name: 'Talent Development',
+                              weight: 20,
+                              items: [
+                                  'Develops leadership team',
+                                  'Succession planning',
+                                  'Talent acquisition',
+                                  'Performance management',
+                                  'Culture building'
+                              ]
+                          }
+                      ]
+                  }
+              };
+              
+              function loadScorecardTemplate() {
+                  const scorecardType = document.getElementById('scorecardType').value;
+                  const scorecardForm = document.getElementById('scorecardForm');
+                  
+                  if (!scorecardType) {
+                      scorecardForm.style.display = 'none';
+                      return;
+                  }
+                  
+                  scorecardForm.style.display = 'block';
+                  
+                  if (scorecardType === 'CUSTOM') {
+                      // Show empty form for custom scorecard
+                      document.getElementById('scorecardName').value = '';
+                      document.getElementById('scorecardDescription').value = '';
+                      document.getElementById('categoriesList').innerHTML = '';
+                      return;
+                  }
+                  
+                  const template = scorecardTemplates[scorecardType];
+                  if (template) {
+                      document.getElementById('scorecardName').value = template.name;
+                      document.getElementById('scorecardDescription').value = template.description;
+                      renderCategories(template.categories);
+                  }
+              }
+              
+              function renderCategories(categories) {
+                  const categoriesList = document.getElementById('categoriesList');
+                  categoriesList.innerHTML = '';
+                  
+                  categories.forEach((category, index) => {
+                      const categoryDiv = document.createElement('div');
+                      categoryDiv.className = 'category-item';
+                      categoryDiv.style.cssText = 'border: 1px solid #ddd; margin: 10px 0; padding: 15px; border-radius: 5px; background: #f9f9f9;';
+                      
+                      categoryDiv.innerHTML = \`
+                          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                              <h4 style="margin: 0;">\${category.name}</h4>
+                              <button type="button" class="btn btn-danger" onclick="removeCategory(\${index})" style="padding: 5px 10px; font-size: 12px;">Remove</button>
+                          </div>
+                          <div class="form-group">
+                              <label>Category Name:</label>
+                              <input type="text" value="\${category.name}" onchange="updateCategoryName(\${index}, this.value)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+                          </div>
+                          <div class="form-group">
+                              <label>Weight (%):</label>
+                              <input type="number" value="\${category.weight}" onchange="updateCategoryWeight(\${index}, this.value)" style="width: 100px; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+                          </div>
+                          <div class="form-group">
+                              <label>Evaluation Items:</label>
+                              <div id="items-\${index}"></div>
+                              <button type="button" class="btn btn-secondary" onclick="addItem(\${index})" style="padding: 5px 10px; font-size: 12px; margin-top: 5px;">+ Add Item</button>
+                          </div>
+                      \`;
+                      
+                      categoriesList.appendChild(categoryDiv);
+                      
+                      // Render items for this category
+                      renderItems(index, category.items);
+                  });
+              }
+              
+              function renderItems(categoryIndex, items) {
+                  const itemsContainer = document.getElementById(\`items-\${categoryIndex}\`);
+                  itemsContainer.innerHTML = '';
+                  
+                  items.forEach((item, itemIndex) => {
+                      const itemDiv = document.createElement('div');
+                      itemDiv.style.cssText = 'display: flex; align-items: center; margin: 5px 0;';
+                      itemDiv.innerHTML = \`
+                          <input type="text" value="\${item}" onchange="updateItem(\${categoryIndex}, \${itemIndex}, this.value)" style="flex: 1; padding: 6px; border: 1px solid #ddd; border-radius: 3px; margin-right: 5px;">
+                          <button type="button" class="btn btn-danger" onclick="removeItem(\${categoryIndex}, \${itemIndex})" style="padding: 4px 8px; font-size: 11px;">×</button>
+                      \`;
+                      itemsContainer.appendChild(itemDiv);
+                  });
+              }
+              
+              function addCategory() {
+                  const categoriesList = document.getElementById('categoriesList');
+                  const categoryIndex = categoriesList.children.length;
+                  
+                  const categoryDiv = document.createElement('div');
+                  categoryDiv.className = 'category-item';
+                  categoryDiv.style.cssText = 'border: 1px solid #ddd; margin: 10px 0; padding: 15px; border-radius: 5px; background: #f9f9f9;';
+                  
+                  categoryDiv.innerHTML = \`
+                      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                          <h4 style="margin: 0;">New Category</h4>
+                          <button type="button" class="btn btn-danger" onclick="removeCategory(\${categoryIndex})" style="padding: 5px 10px; font-size: 12px;">Remove</button>
+                      </div>
+                      <div class="form-group">
+                          <label>Category Name:</label>
+                          <input type="text" value="New Category" onchange="updateCategoryName(\${categoryIndex}, this.value)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+                      </div>
+                      <div class="form-group">
+                          <label>Weight (%):</label>
+                          <input type="number" value="25" onchange="updateCategoryWeight(\${categoryIndex}, this.value)" style="width: 100px; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+                      </div>
+                      <div class="form-group">
+                          <label>Evaluation Items:</label>
+                          <div id="items-\${categoryIndex}"></div>
+                          <button type="button" class="btn btn-secondary" onclick="addItem(\${categoryIndex})" style="padding: 5px 10px; font-size: 12px; margin-top: 5px;">+ Add Item</button>
+                      </div>
+                  \`;
+                  
+                  categoriesList.appendChild(categoryDiv);
+                  
+                  // Add initial item
+                  addItem(categoryIndex);
+              }
+              
+              function addItem(categoryIndex) {
+                  const itemsContainer = document.getElementById(\`items-\${categoryIndex}\`);
+                  const itemIndex = itemsContainer.children.length;
+                  
+                  const itemDiv = document.createElement('div');
+                  itemDiv.style.cssText = 'display: flex; align-items: center; margin: 5px 0;';
+                  itemDiv.innerHTML = \`
+                      <input type="text" value="New evaluation item" onchange="updateItem(\${categoryIndex}, \${itemIndex}, this.value)" style="flex: 1; padding: 6px; border: 1px solid #ddd; border-radius: 3px; margin-right: 5px;">
+                      <button type="button" class="btn btn-danger" onclick="removeItem(\${categoryIndex}, \${itemIndex})" style="padding: 4px 8px; font-size: 11px;">×</button>
+                  \`;
+                  itemsContainer.appendChild(itemDiv);
+              }
+              
+              function removeCategory(index) {
+                  const categoriesList = document.getElementById('categoriesList');
+                  categoriesList.removeChild(categoriesList.children[index]);
+              }
+              
+              function removeItem(categoryIndex, itemIndex) {
+                  const itemsContainer = document.getElementById(\`items-\${categoryIndex}\`);
+                  itemsContainer.removeChild(itemsContainer.children[itemIndex]);
+              }
+              
+              function updateCategoryName(index, value) {
+                  // Update category name in the UI
+                  const categoryDiv = document.getElementById('categoriesList').children[index];
+                  const title = categoryDiv.querySelector('h4');
+                  title.textContent = value;
+              }
+              
+              function updateCategoryWeight(index, value) {
+                  // Category weight is already updated via the input field
+              }
+              
+              function updateItem(categoryIndex, itemIndex, value) {
+                  // Item value is already updated via the input field
+              }
+              
+              function previewScorecard() {
+                  const scorecardData = collectScorecardData();
+                  if (!scorecardData) return;
+                  
+                  const preview = \`
+                      <h3>Scorecard Preview: \${scorecardData.name}</h3>
+                      <p><strong>Description:</strong> \${scorecardData.description}</p>
+                      <p><strong>Type:</strong> \${document.getElementById('scorecardType').value}</p>
+                      <h4>Categories:</h4>
+                      <ul>
+                          \${scorecardData.categories.map(cat => \`
+                              <li>
+                                  <strong>\${cat.name}</strong> (\${cat.weight}%)
+                                  <ul>
+                                      \${cat.items.map(item => \`<li>\${item}</li>\`).join('')}
+                                  </ul>
+                              </li>
+                          \`).join('')}
+                      </ul>
+                  \`;
+                  
+                  showStatus('scorecardStatus', preview, 'success');
+              }
+              
+              function collectScorecardData() {
+                  const name = document.getElementById('scorecardName').value;
+                  const description = document.getElementById('scorecardDescription').value;
+                  const type = document.getElementById('scorecardType').value;
+                  
+                  if (!name || !description || !type) {
+                      showStatus('scorecardStatus', 'Please fill in all required fields', 'error');
+                      return null;
+                  }
+                  
+                  const categories = [];
+                  const categoriesList = document.getElementById('categoriesList');
+                  
+                  for (let i = 0; i < categoriesList.children.length; i++) {
+                      const categoryDiv = categoriesList.children[i];
+                      const nameInput = categoryDiv.querySelector('input[type="text"]');
+                      const weightInput = categoryDiv.querySelector('input[type="number"]');
+                      const itemsContainer = document.getElementById(\`items-\${i}\`);
+                      
+                      const items = [];
+                      for (let j = 0; j < itemsContainer.children.length; j++) {
+                          const itemInput = itemsContainer.children[j].querySelector('input[type="text"]');
+                          if (itemInput && itemInput.value.trim()) {
+                              items.push(itemInput.value.trim());
+                          }
+                      }
+                      
+                      if (nameInput.value.trim() && items.length > 0) {
+                          categories.push({
+                              name: nameInput.value.trim(),
+                              weight: parseInt(weightInput.value) || 25,
+                              items: items
+                          });
+                      }
+                  }
+                  
+                  if (categories.length === 0) {
+                      showStatus('scorecardStatus', 'Please add at least one category with items', 'error');
+                      return null;
+                  }
+                  
+                  return {
+                      name,
+                      description,
+                      type,
+                      categories
+                  };
+              }
+              
+              async function saveScorecard() {
+                  const scorecardData = collectScorecardData();
+                  if (!scorecardData) return;
+                  
+                  try {
+                      const response = await fetch(API_BASE + '/public-admin/scorecards', {
+                          method: 'POST',
+                          headers: apiHeaders,
+                          body: JSON.stringify(scorecardData)
+                      });
+                      
+                      if (response.ok) {
+                          showStatus('scorecardStatus', 'Scorecard saved successfully!', 'success');
+                          loadExistingScorecards();
+                      } else {
+                          const error = await response.text();
+                          showStatus('scorecardStatus', 'Error saving scorecard: ' + error, 'error');
+                      }
+                  } catch (error) {
+                      showStatus('scorecardStatus', 'Error: ' + error.message, 'error');
+                  }
+              }
+              
+              async function loadExistingScorecards() {
+                  try {
+                      const response = await fetch(API_BASE + '/public-admin/scorecards', {
+                          headers: apiHeaders
+                      });
+                      
+                      if (response.ok) {
+                          const scorecards = await response.json();
+                          displayExistingScorecards(scorecards);
+                      } else {
+                          showStatus('scorecardStatus', 'Error loading scorecards', 'error');
+                      }
+                  } catch (error) {
+                      showStatus('scorecardStatus', 'Error: ' + error.message, 'error');
+                  }
+              }
+              
+              function displayExistingScorecards(scorecards) {
+                  const existingScorecards = document.getElementById('existingScorecards');
+                  const scorecardsList = document.getElementById('scorecardsList');
+                  
+                  if (scorecards.length === 0) {
+                      scorecardsList.innerHTML = '<p>No scorecards found.</p>';
+                  } else {
+                      scorecardsList.innerHTML = scorecards.map(scorecard => \`
+                          <div class="user-item">
+                              <div class="user-info">
+                                  <strong>\${scorecard.name}</strong><br>
+                                  <small>Type: \${scorecard.type} | Categories: \${scorecard.categories.length}</small><br>
+                                  <small>\${scorecard.description}</small>
+                              </div>
+                              <div class="user-actions">
+                                  <button class="btn btn-secondary" onclick="editScorecard('\${scorecard.id}')">Edit</button>
+                                  <button class="btn btn-danger" onclick="deleteScorecard('\${scorecard.id}')">Delete</button>
+                              </div>
+                          </div>
+                      \`).join('');
+                  }
+                  
+                  existingScorecards.style.display = 'block';
+              }
+              
+              async function editScorecard(scorecardId) {
+                  try {
+                      const response = await fetch(API_BASE + '/public-admin/scorecards/' + scorecardId, {
+                          headers: apiHeaders
+                      });
+                      
+                      if (response.ok) {
+                          const scorecard = await response.json();
+                          loadScorecardForEditing(scorecard);
+                      } else {
+                          showStatus('scorecardStatus', 'Error loading scorecard', 'error');
+                      }
+                  } catch (error) {
+                      showStatus('scorecardStatus', 'Error: ' + error.message, 'error');
+                  }
+              }
+              
+              function loadScorecardForEditing(scorecard) {
+                  document.getElementById('scorecardType').value = scorecard.type;
+                  document.getElementById('scorecardName').value = scorecard.name;
+                  document.getElementById('scorecardDescription').value = scorecard.description;
+                  
+                  document.getElementById('scorecardForm').style.display = 'block';
+                  renderCategories(scorecard.categories);
+              }
+              
+              async function deleteScorecard(scorecardId) {
+                  if (!confirm('Are you sure you want to delete this scorecard?')) return;
+                  
+                  try {
+                      const response = await fetch(API_BASE + '/public-admin/scorecards/' + scorecardId, {
+                          method: 'DELETE',
+                          headers: apiHeaders
+                      });
+                      
+                      if (response.ok) {
+                          showStatus('scorecardStatus', 'Scorecard deleted successfully!', 'success');
+                          loadExistingScorecards();
+                      } else {
+                          showStatus('scorecardStatus', 'Error deleting scorecard', 'error');
+                      }
+                  } catch (error) {
+                      showStatus('scorecardStatus', 'Error: ' + error.message, 'error');
+                  }
+              }
+              
               // Load users on page load
               window.onload = function() {
                   loadUsers();
@@ -1120,5 +1707,39 @@ export class PublicAdminController {
       timestamp: new Date().toISOString(),
       message: 'Sales Scorecard API is running'
     };
+  }
+
+  // Scorecard Management Endpoints
+  @Get('scorecards')
+  @UseGuards(AdminGuard)
+  async getAllScorecards() {
+    return this.adminService.getAllScorecards();
+  }
+
+  @Post('scorecards')
+  @UseGuards(AdminGuard)
+  async createScorecard(@Body() scorecardData: {
+    name: string;
+    description: string;
+    type: string;
+    categories: Array<{
+      name: string;
+      weight: number;
+      items: string[];
+    }>;
+  }) {
+    return this.adminService.createScorecard(scorecardData);
+  }
+
+  @Get('scorecards/:id')
+  @UseGuards(AdminGuard)
+  async getScorecardById(@Param('id') id: string) {
+    return this.adminService.getScorecardById(id);
+  }
+
+  @Delete('scorecards/:id')
+  @UseGuards(AdminGuard)
+  async deleteScorecard(@Param('id') id: string) {
+    return this.adminService.deleteScorecard(id);
   }
 }

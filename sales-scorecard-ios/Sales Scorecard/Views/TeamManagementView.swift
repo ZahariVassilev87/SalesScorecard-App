@@ -32,7 +32,10 @@ struct TeamManagementView: View {
                         Button("Retry") {
                             loadTeamData()
                         }
-                        .buttonStyle(.borderedProminent)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                     }
                     .padding()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -160,8 +163,9 @@ struct TeamCard: View {
                 Button("Manage") {
                     // Navigate to team management
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
+                .buttonStyle(DefaultButtonStyle())
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
             }
             
             // Regional Manager

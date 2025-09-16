@@ -404,4 +404,109 @@ export class AdminService {
 
     return availableManagers;
   }
+
+  // Scorecard Management Methods
+  async getAllScorecards() {
+    return this.prisma.scorecard.findMany({
+      include: {
+        categories: {
+          include: {
+            items: true
+          },
+          orderBy: { order: 'asc' }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+  }
+
+  async createScorecard(scorecardData: {
+    name: string;
+    description: string;
+    type: string;
+    categories: Array<{
+      name: string;
+      weight: number;
+      items: string[];
+    }>;
+  }) {
+    // Check if scorecard with same name already exists
+    const existingScorecard = await this.prisma.scorecard.findFirst({
+      where: { name: scorecardData.name }
+    });
+
+    if (existingScorecard) {
+      throw new ConflictException('Scorecard with this name already exists');
+    }
+
+    // Create scorecard with categories and items
+    const scorecard = await this.prisma.scorecard.create({
+      data: {
+        name: scorecardData.name,
+        description: scorecardData.description,
+        type: scorecardData.type,
+        categories: {
+          create: scorecardData.categories.map((category, categoryIndex) => ({
+            name: category.name,
+            weight: category.weight,
+            order: categoryIndex + 1,
+            items: {
+              create: category.items.map((item, itemIndex) => ({
+                name: item,
+                order: itemIndex + 1,
+                isActive: true
+              }))
+            }
+          }))
+        }
+      },
+      include: {
+        categories: {
+          include: {
+            items: true
+          },
+          orderBy: { order: 'asc' }
+        }
+      }
+    });
+
+    return scorecard;
+  }
+
+  async getScorecardById(id: string) {
+    const scorecard = await this.prisma.scorecard.findUnique({
+      where: { id },
+      include: {
+        categories: {
+          include: {
+            items: true
+          },
+          orderBy: { order: 'asc' }
+        }
+      }
+    });
+
+    if (!scorecard) {
+      throw new NotFoundException('Scorecard not found');
+    }
+
+    return scorecard;
+  }
+
+  async deleteScorecard(id: string) {
+    const scorecard = await this.prisma.scorecard.findUnique({
+      where: { id }
+    });
+
+    if (!scorecard) {
+      throw new NotFoundException('Scorecard not found');
+    }
+
+    // Delete scorecard (cascade will handle categories and items)
+    await this.prisma.scorecard.delete({
+      where: { id }
+    });
+
+    return { message: 'Scorecard deleted successfully' };
+  }
 }

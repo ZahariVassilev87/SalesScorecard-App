@@ -31,7 +31,7 @@ struct EvaluationsHistoryView: View {
                     List(evaluations) { evaluation in
                         EvaluationHistoryRow(evaluation: evaluation)
                     }
-                    .refreshable {
+                    .onAppear {
                         loadEvaluations()
                     }
                 }

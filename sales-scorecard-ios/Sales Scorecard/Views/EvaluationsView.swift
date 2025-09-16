@@ -28,7 +28,11 @@ struct EvaluationsView: View {
                         Button("Retry") {
                             loadEvaluations()
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(DefaultButtonStyle())
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                     }
                     .padding()
                 } else if evaluations.isEmpty {
@@ -47,7 +51,10 @@ struct EvaluationsView: View {
                         
                         NavigationLink(destination: NewEvaluationView()) {
                             Text("Create Evaluation")
-                                .buttonStyle(.borderedProminent)
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
                         }
                     }
                     .padding()
@@ -55,7 +62,7 @@ struct EvaluationsView: View {
                     List(evaluations) { evaluation in
                         EvaluationRow(evaluation: evaluation)
                     }
-                    .refreshable {
+                    .onAppear {
                         loadEvaluations()
                     }
                 }

@@ -97,8 +97,9 @@ struct NewEvaluationView: View {
                                 Button("Change") {
                                     showSalespersonPicker = true
                                 }
-                                .buttonStyle(.bordered)
-                                .controlSize(.small)
+                                .buttonStyle(DefaultButtonStyle())
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
                             }
                             .padding()
                             .background(Color.gray.opacity(0.1))
@@ -107,8 +108,11 @@ struct NewEvaluationView: View {
                             Button("Select Team Member") {
                                 showSalespersonPicker = true
                             }
-                            .buttonStyle(.borderedProminent)
-                            .controlSize(.large)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                            .padding(.vertical, 12)
                             .frame(maxWidth: .infinity)
                         }
                     }
@@ -160,9 +164,9 @@ struct NewEvaluationView: View {
                                     .font(.caption)
                                 RatingButtons(selectedRating: $discoveryOpenQuestions)
                                 
-                                TextField("Explain your rating...", text: $discoveryOpenQuestionsComment, axis: .vertical)
+                                TextField("Explain your rating...", text: $discoveryOpenQuestionsComment)
                                     .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
+                                    .frame(minHeight: 60)
                                     .font(.caption)
                             }
                             
@@ -171,9 +175,9 @@ struct NewEvaluationView: View {
                                     .font(.caption)
                                 RatingButtons(selectedRating: $discoveryPainPoints)
                                 
-                                TextField("Explain your rating...", text: $discoveryPainPointsComment, axis: .vertical)
+                                TextField("Explain your rating...", text: $discoveryPainPointsComment)
                                     .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
+                                    .frame(minHeight: 60)
                                     .font(.caption)
                             }
                             
@@ -182,9 +186,9 @@ struct NewEvaluationView: View {
                                     .font(.caption)
                                 RatingButtons(selectedRating: $discoveryDecisionMakers)
                                 
-                                TextField("Explain your rating...", text: $discoveryDecisionMakersComment, axis: .vertical)
+                                TextField("Explain your rating...", text: $discoveryDecisionMakersComment)
                                     .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
+                                    .frame(minHeight: 60)
                                     .font(.caption)
                             }
                         }
@@ -204,9 +208,9 @@ struct NewEvaluationView: View {
                                     .font(.caption)
                                 RatingButtons(selectedRating: $solutionTailors)
                                 
-                                TextField("Explain your rating...", text: $solutionTailorsComment, axis: .vertical)
+                                TextField("Explain your rating...", text: $solutionTailorsComment)
                                     .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
+                                    .frame(minHeight: 60)
                                     .font(.caption)
                             }
                             
@@ -215,9 +219,9 @@ struct NewEvaluationView: View {
                                     .font(.caption)
                                 RatingButtons(selectedRating: $solutionValueProp)
                                 
-                                TextField("Explain your rating...", text: $solutionValuePropComment, axis: .vertical)
+                                TextField("Explain your rating...", text: $solutionValuePropComment)
                                     .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
+                                    .frame(minHeight: 60)
                                     .font(.caption)
                             }
                             
@@ -226,9 +230,9 @@ struct NewEvaluationView: View {
                                     .font(.caption)
                                 RatingButtons(selectedRating: $solutionProductKnowledge)
                                 
-                                TextField("Explain your rating...", text: $solutionProductKnowledgeComment, axis: .vertical)
+                                TextField("Explain your rating...", text: $solutionProductKnowledgeComment)
                                     .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
+                                    .frame(minHeight: 60)
                                     .font(.caption)
                             }
                         }
@@ -248,9 +252,9 @@ struct NewEvaluationView: View {
                                     .font(.caption)
                                 RatingButtons(selectedRating: $closingClearAsks)
                                 
-                                TextField("Explain your rating...", text: $closingClearAsksComment, axis: .vertical)
+                                TextField("Explain your rating...", text: $closingClearAsksComment)
                                     .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
+                                    .frame(minHeight: 60)
                                     .font(.caption)
                             }
                             
@@ -259,9 +263,9 @@ struct NewEvaluationView: View {
                                     .font(.caption)
                                 RatingButtons(selectedRating: $closingNextSteps)
                                 
-                                TextField("Explain your rating...", text: $closingNextStepsComment, axis: .vertical)
+                                TextField("Explain your rating...", text: $closingNextStepsComment)
                                     .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
+                                    .frame(minHeight: 60)
                                     .font(.caption)
                             }
                             
@@ -270,9 +274,9 @@ struct NewEvaluationView: View {
                                     .font(.caption)
                                 RatingButtons(selectedRating: $closingCommitments)
                                 
-                                TextField("Explain your rating...", text: $closingCommitmentsComment, axis: .vertical)
+                                TextField("Explain your rating...", text: $closingCommitmentsComment)
                                     .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
+                                    .frame(minHeight: 60)
                                     .font(.caption)
                             }
                         }
@@ -292,9 +296,9 @@ struct NewEvaluationView: View {
                                     .font(.caption)
                                 RatingButtons(selectedRating: $professionalismPrepared)
                                 
-                                TextField("Explain your rating...", text: $professionalismPreparedComment, axis: .vertical)
+                                TextField("Explain your rating...", text: $professionalismPreparedComment)
                                     .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
+                                    .frame(minHeight: 60)
                                     .font(.caption)
                             }
                             
@@ -303,9 +307,9 @@ struct NewEvaluationView: View {
                                     .font(.caption)
                                 RatingButtons(selectedRating: $professionalismTime)
                                 
-                                TextField("Explain your rating...", text: $professionalismTimeComment, axis: .vertical)
+                                TextField("Explain your rating...", text: $professionalismTimeComment)
                                     .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
+                                    .frame(minHeight: 60)
                                     .font(.caption)
                             }
                             
@@ -314,9 +318,9 @@ struct NewEvaluationView: View {
                                     .font(.caption)
                                 RatingButtons(selectedRating: $professionalismDemeanor)
                                 
-                                TextField("Explain your rating...", text: $professionalismDemeanorComment, axis: .vertical)
+                                TextField("Explain your rating...", text: $professionalismDemeanorComment)
                                     .textFieldStyle(.roundedBorder)
-                                    .lineLimit(2...4)
+                                    .frame(minHeight: 60)
                                     .font(.caption)
                             }
                         }
@@ -331,9 +335,9 @@ struct NewEvaluationView: View {
                             .font(.headline)
                             .fontWeight(.semibold)
                         
-                        TextField("Enter overall notes", text: $notes, axis: .vertical)
+                        TextField("Enter overall notes", text: $notes)
                             .textFieldStyle(.roundedBorder)
-                            .lineLimit(3...6)
+                            .frame(minHeight: 80)
                     }
                     
                     // Submit Button
@@ -370,10 +374,12 @@ struct NewEvaluationView: View {
         .onAppear {
             loadTeamMembers()
         }
-        .alert("Success!", isPresented: $showSuccessAlert) {
-            Button("OK") { }
-        } message: {
-            Text("Evaluation submitted successfully!")
+        .alert(isPresented: $showSuccessAlert) {
+            Alert(
+                title: Text("Success!"),
+                message: Text("Evaluation submitted successfully!"),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
     
