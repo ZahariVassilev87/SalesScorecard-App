@@ -46,9 +46,7 @@ npm run start:dev
 - [ ] Update `FRONTEND_URL` with your Railway app URL
 - [ ] Deploy and test
 
-## 🔗 **Useful Links**
-
-- [Railway Dashboard](https://railway.app/dashboard)
+## 🔗 **Useful Linkshttps://railway.app/dashboard)
 - [SendGrid Setup](https://sendgrid.com/docs/for-developers/sending-email/api-getting-started/)
 - [Gmail App Passwords](https://support.google.com/accounts/answer/185833)
 

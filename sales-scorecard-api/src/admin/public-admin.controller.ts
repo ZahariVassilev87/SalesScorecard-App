@@ -930,51 +930,19 @@ export class PublicAdminController {
                       ]
                   },
                   SALES_LEAD: {
-                      name: 'Coaching Skills Evaluation',
-                      description: 'Evaluates coaching and team development skills',
+                      name: 'Sales Lead Coaching Evaluation',
+                      description: 'Evaluates Sales Lead coaching abilities in the field - for Regional Managers to assess Sales Leads',
                       categories: [
                           {
-                              name: 'Coaching Skills',
-                              weight: 30,
+                              name: 'Field Coaching Assessment',
+                              weight: 100,
                               items: [
-                                  'Provides constructive feedback',
-                                  'Develops individual skills',
-                                  'Mentors team members',
-                                  'Identifies development opportunities',
-                                  'Supports career growth'
-                              ]
-                          },
-                          {
-                              name: 'Team Development',
-                              weight: 25,
-                              items: [
-                                  'Builds team cohesion',
-                                  'Facilitates team meetings',
-                                  'Encourages collaboration',
-                                  'Recognizes achievements',
-                                  'Manages team dynamics'
-                              ]
-                          },
-                          {
-                              name: 'Performance Management',
-                              weight: 25,
-                              items: [
-                                  'Sets clear expectations',
-                                  'Monitors performance metrics',
-                                  'Addresses performance issues',
-                                  'Conducts regular reviews',
-                                  'Implements improvement plans'
-                              ]
-                          },
-                          {
-                              name: 'Sales Process',
-                              weight: 20,
-                              items: [
-                                  'Ensures process compliance',
-                                  'Optimizes sales workflows',
-                                  'Shares best practices',
-                                  'Maintains quality standards',
-                                  'Drives continuous improvement'
+                                  'Asks exploratory/diagnostic questions before offering feedback',
+                                  'Provides feedback on behavior, not just results',
+                                  'Involves rep in setting next steps for improvement',
+                                  'Goal links to a specific sales activity (e.g., opening visits, upselling, objection handling)',
+                                  'Manager identifies a specific behavior that needs improvement',
+                                  'The manager discusses what was the behavior effect over the customer'
                               ]
                           }
                       ]
